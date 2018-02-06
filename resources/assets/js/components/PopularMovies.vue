@@ -12,11 +12,11 @@
               <div class="row">
                 <div class="slider slider-nav">
 
-                  <a  href="#" class="smSlickItem" v-if="index < 5"
-                    v-for="(movie,index) in popular_movies">
+                  <a  v-if="index < 5"
+                    v-for="(movie,index) in popular_movies" href="#" class="smSlickItem" >
 
                     <img @click="showMovie(movie.id)"
-                      v-bind:src="image_prefix_url + movie.poster_path">
+                      v-bind:src="image_prefix_url + movie.poster_path" class="slickImage">
 
                     <!-- the drop-down list with for choosing rating -->
                     <!-- the rating of each film is linked to the corresponding array member -->
