@@ -46468,7 +46468,7 @@ var render = function() {
       _c("div", { staticClass: "col-md-12" }, [
         _c("div", { staticClass: "panel panel-default" }, [
           _c("div", { staticClass: "panel-heading" }, [
-            _vm._v("\r\n          Most Popular:\r\n        ")
+            _vm._v("\r\n          Most Popular test:\r\n        ")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "panel-body" }, [
