@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-heading">
-          Most Popular:asds
+          Most Popular:
         </div>
         <!-- popular movies table -->
         <div class="panel-body">
