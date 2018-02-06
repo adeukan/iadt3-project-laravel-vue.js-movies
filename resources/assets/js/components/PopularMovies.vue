@@ -11,23 +11,46 @@
           <table class="table table-bordered table-striped table-responsive">
             <tbody>
 
-              <!-- first row -->
+              <div class="row">
+                <div class="slider slider-nav">
+
+                  <a  href="#" class="smSlickItem" v-if="index < 5"
+                    v-for="(movie,index) in popular_movies">
+
+                    <img @click="showMovie(movie.id)"
+                      v-bind:src="image_prefix_url + movie.poster_path">
+
+                    <!-- the drop-down list with for choosing rating -->
+                    <!-- the rating of each film is linked to the corresponding array member -->
+                    <select v-model="new_ratings[index]">
+                      <!-- scores from 0 to 10 -->
+                      <option v-for="i in 11">{{i-1}}</option>
+                    </select>
+
+                  </a>
+
+                </div>
+              </div>
+
+              <!--
+              <!- - first row - ->
               <tr>
-                <!-- loop to display the first 5 movies -->
+                <!- - loop to display the first 5 movies - ->
                 <td v-if="index < 5"
                     v-for="(movie, index) in popular_movies">
-                  <!-- modal window with movie info appears by click on the poster -->
+                  <!- - modal window with movie info appears by click on the poster - ->
                   <img @click="showMovie(movie.id)"
                        v-bind:src="image_prefix_url + movie.poster_path">
 
-                  <!-- the drop-down list with for choosing rating -->
-                  <!-- the rating of each film is linked to the corresponding array member -->
+                  <!- - the drop-down list with for choosing rating - ->
+                  <!- - the rating of each film is linked to the corresponding array member - ->
                   <select v-model="new_ratings[index]">
-                    <!-- scores from 0 to 10 -->
+                    <!- - scores from 0 to 10 - ->
                     <option v-for="i in 11">{{i-1}}</option>
                   </select>
                 </td>
               </tr>
+              -->
 
               <!-- second row -->
               <tr>
