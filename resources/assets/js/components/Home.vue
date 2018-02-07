@@ -7,8 +7,11 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-default">
+
+        <!-- FIX IT -->
+        <!-- this heading is overlapped by the menu bar on the top -->
         <div class="panel-heading">
-          Most Popular Movies
+          Popular and High Rated Movies
         </div>
 
         <!-- modal window with the selected movie info -->
@@ -49,17 +52,13 @@
 
 
 
-
-
-
-
-
-        <!-- popular movies table -->
+        <!-- table with most popular and highest rated movies -->
         <div class="panel-body">
           <table class="table table-bordered table-striped table-responsive">
             <tbody>
 
-              <!-- first row -->
+              <!-- first row  -->
+              <tr><span> Popular Movies </span></tr>
               <tr>
                 <!-- loop to display 5 most popular movies -->
                 <td v-if="index < 5" v-for="(movie, index) in popular_movies">
@@ -81,7 +80,9 @@
 
 
               <!-- second row -->
+              <tr><span> Highest Rated Movies (should be replaced by New Releases) </span></tr>
               <tr>
+                
                 <!-- loop to display 5 highest rated movies -->
                 <td v-if="index < 5" v-for="(movie, index) in high_rated_movies">
                   
