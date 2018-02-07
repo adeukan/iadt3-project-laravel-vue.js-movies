@@ -12,51 +12,35 @@
                  v-if="TMDBmovies.length > 0">
             <tbody>
               <tr>
-                <th>
-                  Movie Title
-                </th>
-                <th>
-                  My Rating
-                </th>
-                <th>
-                  Overal Rating
-                </th>
-                <th>
-                  Hidden
-                </th>
-                <th>
-                  Watch Later
-                </th>
+                <th>Movie Title</th>
+                <th>My Rating</th>
+                <th>Overal Rating</th>
+                <th>Hidden</th>
+                <th>Watch Later</th>
               </tr>
               <!-- loop to display the movie data in the table -->
-              <tr v-for="(movie, index) in TMDBmovies">
-                <td>
-                  <!-- title is taken from TMDBmovies array -->
-                  <a @click="showMovieInfo(index)">{{ movie.title }}</a>
-                </td>
+              <tr v-for="(movie, i) in TMDBmovies">
+                <!-- title is taken from TMDBmovies array -->
+                <td><a @click="showMovieInfo(i)">{{ movie.title }}</a></td>
                 <!-- my rating is taken from MyDBmovies array -->
-                <td>{{ MyDBmovies[index].ratio }}</td>
+                <td>{{ MyDBmovies[i].ratio }}</td>
                 <!-- average rating is taken from TMDBmovies array -->
                 <td>{{ movie.vote_average }}</td>
                 <!-- show whether movie is hidden -->
                 <!-- information is taken from MyDBmovies array -->
-                <td v-if="MyDBmovies[index].hidden == 1">YES</td>
+                <td v-if="MyDBmovies[i].hidden == 1">YES</td>
                 <td v-else>NO</td>
                 <!-- show whether movie is in the watch later list -->
                 <!-- information is taken from MyDBmovies array -->
-                <td v-if="MyDBmovies[index].watchlater == 1">YES</td>
+                <td v-if="MyDBmovies[i].watchlater == 1">YES</td>
                 <td v-else>NO</td>
               </tr>
             </tbody>
           </table>
         </div>
         <!-- modal window, selected movie info -->
-        <div class="modal fade"
-             tabindex="-1"
-             role="dialog"
-             id="movie_info">
-          <div class="modal-dialog"
-               role="document">
+        <div class="modal fade" tabindex="-1" role="dialog" id="movie_info">
+          <div class="modal-dialog" role="document">
             <div class="modal-content">
               <ul>
                 <!-- poster -->
@@ -68,19 +52,19 @@
                 <!-- countries -->
                 <li><span class="li_header">Countries:</span>
                   <!-- loop to display all involved countries -->
-                  <span v-for="(country, index) in movie.production_countries">
+                  <span v-for="(country, i) in movie.production_countries">
                     {{country.name}}
                     <!-- display a comma if there is a following value -->
-                    <span v-if="movie.production_countries[index + 1] != null">,</span>
+                    <span v-if="movie.production_countries[i + 1] != null">,</span>
                   </span>
                 </li>
                 <!-- genres -->
                 <li><span class="li_header">Genres: </span>
                   <!-- loop to display all genres -->
-                  <span v-for="(genre, index) in movie.genres">
+                  <span v-for="(genre, i) in movie.genres">
                     {{genre.name}}
                     <!-- display a comma if there is a following value -->
-                    <span v-if="movie.genres[index + 1] != null">,</span>
+                    <span v-if="movie.genres[i + 1] != null">,</span>
                   </span>
                 </li>
                 <!-- runtime -->

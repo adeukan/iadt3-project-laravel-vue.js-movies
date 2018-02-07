@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>YouMovies</title>
-
-    <!-- Styles -->
+    <!-- Bootstrap CSS  -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <!-- Our local CSS -->
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    <title>MRS</title>
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
+        <nav class="navbar navbar-fixed-top navbar-inverse">
             <div class="container">
                 <div class="navbar-header">
 
@@ -28,9 +29,15 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        YouMovies
-                    </a>
+                    <a class="navbar-brand" href="{{ url('/') }}"> Movie Recommendation Site </a>
+
+                    <form class="navbar-form navbar-left col-md-12 col-xs-4" role="search">
+                        <div class="form-group">
+                            <input class="form-control" type="text" placeholder="Search">
+                        </div>
+                        <button type="button" class="btn btn-default">Go</button>
+                    </form>
+
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -44,12 +51,16 @@
 
                         <!-- Authentication Links -->
                         @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
+                            {{-- <li><a href="{{ route('login') }}">Login</a></li>
+                            <li><a href="{{ route('register') }}">Register</a></li> --}}
                         @else
-                            {{-- the link to the page (Vue component) with popular movies --}}
-                            <li><a href="{{ url('/popular') }}">Popular Movies</a></li>
-                            <li><a href="{{ url('/') }}">User Movies</a></li>
+                            <!-- links to all pages (Vue components) -->
+                            <li><a href="{{ url('/') }}">Home</a></li>
+                            <li><a href="{{ url('/profile') }}">Profile</a></li>
+                            <li><a href="{{ url('/later') }}">Watch Later</a></li>
+                            <li><a href="{{ url('/hidden') }}">Hidden</a></li>
+                            
+
                             <li class="dropdown">
 
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">

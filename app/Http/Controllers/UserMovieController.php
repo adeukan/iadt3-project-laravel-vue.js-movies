@@ -24,38 +24,59 @@ class UserMovieController extends Controller
             'all_rated_by_user'    => $all_rated_by_user,
         ], 200);
     }
+
+    public function getHighRatedMovies() {
+        
+    }
+
+    public function getUserMovieRatio(Request $request)
+    {
+        // $user_movie = UserMovie::where([
+
+        //     ['user_id' => Auth::user()->id],
+        //     ['tmdb_id' => $request->input("tmdb_id")]
+
+        // )->get();
+
+
+
+
+        // return response()->json([
+        //     'user_movie_ratio'    => $user_movie_ratio,
+        // ], 200);
+
+
+
+    }
+
     // add new movie with rating to DB
     public function store(Request $request)
     {
         // create new record in movie table
         $movie = new Movie();
-        $movie->tmdb_id = $request->a;
+        $movie->tmdb_id = $request->input("tmdb_id");
         $movie->save();
 
         // create new record in user_movies table
         $userMovie = new UserMovie();
         $userMovie->user_id = Auth::user()->id;
-        $userMovie->movie_id = $request->a;
-        $userMovie->ratio = $request->b;
+        $userMovie->movie_id = $request->input("tmdb_id");
+        $userMovie->ratio = $request->input("user_rating");
         $userMovie->save();     
     }
 
-    // DOESN'T WORK
     // update existing movie record in DB
     public function update(Request $request)
     {
         $userMovie = new UserMovie();
 
-        // UserMovie::where(['user_id' => Auth::user()->id,
-        //                   'movie_id' => $request->a])->get();
-
         // get the movie from junction table to update it
-        $userMovie = DB::table('user_movies')->where([
-            ['user_id', '=', 'Auth::user()->id'],
-            ['movie_id', '=', '$request->a'],
-        ])->get();
+        $userMovie = UserMovie::where([
+            'user_id' => Auth::user()->id,
+            'movie_id' => $request->input("tmdb_id")
+        ])->first();
 
-        $userMovie->ratio = $request->b;
+        $userMovie->ratio = $request->input("user_rating");
         $userMovie->save();
     }
 }

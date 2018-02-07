@@ -2,8 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // import Index from './components/Index.vue'
-import UserMovies from './components/UserMovies.vue'
-import PopularMovies from './components/PopularMovies.vue'
+import Profile from './components/Profile.vue'
+import Home from './components/Home.vue'
 // import MyWishlist from './components/MyWishlist.vue'
 
 // declare the using of VueRouter
@@ -13,8 +13,8 @@ Vue.use(VueRouter)
 const router = new VueRouter({
 	mode: 'history',
 	routes: [
-    { path: '/', component: UserMovies },
-	{ path: '/popular', component: PopularMovies },
+	{ path: '/', component: Home },
+	{ path: '/profile', component: Profile },
 
     // { path: '/popular', component: PopularMovies },
     // { path: '/wishlist', component: MyWishlist },

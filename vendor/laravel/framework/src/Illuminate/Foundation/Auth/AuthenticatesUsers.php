@@ -17,6 +17,7 @@ trait AuthenticatesUsers
      */
     public function showLoginForm()
     {
+        // представление с двумя формами Login и Register
         return view('auth/newRegLog');
     }
 
@@ -139,7 +140,7 @@ trait AuthenticatesUsers
      */
     public function username()
     {
-        return 'email';
+        return 'name';
     }
 
     /**

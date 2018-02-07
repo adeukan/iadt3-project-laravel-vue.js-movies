@@ -1,3 +1,7 @@
+<style src="../../../../public/css/home_page.css"></style>
+<style src="../../../../public/css/slick/slick.css"></style>
+<style src="../../../../public/css/slick/slick-theme.css"></style>
+
 <template>
 <div class="container">
   <div class="row">
@@ -6,59 +10,10 @@
         <div class="panel-heading">
           Most Popular Movies
         </div>
-        <!-- popular movies table -->
-        <div class="panel-body">
-          <table class="table table-bordered table-striped table-responsive">
-            <tbody>
-
-              <!-- first row -->
-              <tr>
-                <!-- loop to display the first 5 movies -->
-                <td v-if="index < 5"
-                    v-for="(movie, index) in popular_movies">
-                  <!-- modal window with movie info appears by click on the poster -->
-                  <img @click="showMovie(movie.id)"
-                       v-bind:src="image_prefix_url + movie.poster_path">
-
-                  <!-- the drop-down list with for choosing rating -->
-                  <!-- the rating of each film is linked to the corresponding array member -->
-                  <select v-model="new_ratings[index]">
-                    <!-- scores from 0 to 10 -->
-                    <option v-for="i in 11">{{i-1}}</option>
-                  </select>
-                </td>
-              </tr>
-
-              <!-- second row -->
-              <tr>
-                <!-- loop to display the next 5 movies -->
-                <td v-if="index > 5 && index < 11"
-                    v-for="(movie, index) in popular_movies">
-                  
-                  <!-- modal window with movie info appears by click on this poster -->
-									<img @click="showMovie(movie.id)"
-                       v-bind:src="image_prefix_url + movie.poster_path">
-
-                  <!-- the drop-down list with for choosing rating -->
-                  <!-- the rating of each film is linked to the corresponding array member -->
-                  <select v-model="new_ratings[index]">
-                    <!-- scores from 0 to 10 -->
-                    <option v-for="i in 11">{{i-1}}</option>
-                  </select>
-                </td>
-              </tr>
-
-            </tbody>
-          </table>
-        </div>
 
         <!-- modal window with the selected movie info -->
-        <div class="modal fade"
-             tabindex="-1"
-             role="dialog"
-             id="movie_info">
-          <div class="modal-dialog"
-               role="document">
+        <div class="modal fade" tabindex="-1" role="dialog" id="movie_info">
+          <div class="modal-dialog" role="document">
             <div class="modal-content">
               <ul>
                 <!-- poster -->
@@ -71,16 +26,16 @@
                 <li><span class="li_header">Countries: </span>
                 <!-- loop to display all involved countries -->
                 <li><span v-for="(country, index) in movie.production_countries">
-											{{country.name}}
-											<span v-if="movie.production_countries[index + 1] != null">,</span>
+                      {{country.name}}
+                      <span v-if="movie.production_countries[index + 1] != null">,</span>
                     </span>
                 </li>
                 <!-- genres -->
                 <li><span class="li_header">Genres: </span>
                   <!-- loop to display all genres -->
                   <span v-for="(genre, index) in movie.genres">
-											{{genre.name}}
-											<span v-if="movie.genres[index + 1] != null">,</span>
+                      {{genre.name}}
+                      <span v-if="movie.genres[index + 1] != null">,</span>
                   </span>
                 </li>
                 <!-- movie runtime -->
@@ -88,12 +43,66 @@
                 <!-- movie overview -->
                 <li><span class="li_header">Overview: </span> {{movie.overview}}</li>
               </ul>
-            </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+
+
+
+
+
+
+        <!-- popular movies table -->
+        <div class="panel-body">
+          <table class="table table-bordered table-striped table-responsive">
+            <tbody>
+
+              <!-- first row -->
+              <tr>
+                <!-- loop to display 5 most popular movies -->
+                <td v-if="index < 5" v-for="(movie, index) in popular_movies">
+                  <!-- modal window with movie info appears by click on the poster -->
+                  <img @click="showMovie(movie.id)" v-bind:src="image_prefix_url + movie.poster_path">
+
+                  <!-- the drop-down list for choosing rating -->
+                  <!-- the rating of each film is linked to the corresponding array member -->
+                  <select v-model="new_ratings[index]">
+                    <!-- scores from 0 to 10 -->
+                    <option v-for="i in 11">{{i-1}}</option>
+                  </select>
+                
+                <button @click="hideMovie(movie.id)">Hide</button>
+                <button @click="laterMovie(movie.id)">Watch Later</button>
+
+                </td>
+              </tr>
+
+
+              <!-- second row -->
+              <tr>
+                <!-- loop to display 5 highest rated movies -->
+                <td v-if="index < 5" v-for="(movie, index) in high_rated_movies">
+                  
+                  <!-- modal window with movie info appears by click on this poster -->
+									<img @click="showMovie(movie.id)" v-bind:src="image_prefix_url + movie.poster_path">
+
+                  <!-- the drop-down list with for choosing rating -->
+                  <!-- the rating of each film is linked to the corresponding array member -->
+                  <select v-model="new_ratings[index + 5]">
+                    <!-- scores from 0 to 10 -->
+                    <option v-for="i in 11">{{i-1}}</option>
+                  </select>
+                  <button @click="hideMovie(movie.id)">Hide</button>
+                <button @click="laterMovie(movie.id)">Watch Later</button>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
         </div>
-        <!-- /.modal -->
+
       </div>
     </div>
   </div>
@@ -121,8 +130,10 @@ export default {
       new_ratings: [],
       // array with the previous user ratings, used for comparison 
       old_ratings: [],
-      // contains all popular movies received on api request to TMDb
+      // contains all popular movies received from TMDb
       popular_movies: [],
+      // contains all highest rated movies received from TMDb
+      high_rated_movies: [],
       // tmdb api key value
       api_key: 'api_key=a3abe9699d800e588cb2a57107b4179c',
       // url prefix for getting posters
@@ -133,7 +144,8 @@ export default {
   },
   // functions triggered when Vue object is mounted
   mounted() {
-    this.getPopularMovies()
+    this.getPopularMovies(),
+    this.getHighRatedMovies()
   },
   methods: {
     getPopularMovies() {
@@ -148,6 +160,21 @@ export default {
           self.popular_movies = received_movies.results
         })
     },
+    getHighRatedMovies() {
+
+      // url query for all highest rated movies
+      var url = 'https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=a3abe9699d800e588cb2a57107b4179c'
+
+      // reference to Vue object
+      var self = this
+      // get all highest rated movies from TMDb
+      $.getJSON(url)
+        .done(function(response) {
+          // put the received movies into array
+          self.high_rated_movies = response.results
+        })
+    },
+
     // show selected movie info in modal window
     showMovie(movieId) {
       // url query to find movie by tmdb_id
@@ -162,45 +189,52 @@ export default {
           // show a modal window with information about the selected movie
           $('#movie_info').modal('show')
         })
+    },
+    hideMovie(movieId) {
+      // HIDE BUTTON HANDLER
     }
+
   },
+
   // function triggered when changing specified variables
   watch: {
     // reaction to a change in the rating of any film
-    new_ratings: function(newRatings) {
+    new_ratings: function(new_ratings) {
 
       // loop through all the values from the array with the updated ratings
-      for (var i = 0; i < newRatings.length; ++i) {
+      for (var i = 0; i < this.new_ratings.length; ++i) {
         // if the current element of the array has changed compared to the old value
-        if (newRatings[i] !== this.old_ratings[i]) {
+        if (this.new_ratings[i] !== this.old_ratings[i]) {
 
           // // show tmdb_id of the movie which changed rating
           // console.log(this.popular_movies[i].id);
           // // show the new rating
-          // console.log(newRatings[i]);
+          // console.log(new_ratings[i]);
           
+
           // if the previous rating is 0 or null, create new record
           if(this.old_ratings[i] == 0 || this.old_ratings[i] == null)
           {
             axios.post('/store', {
-              a: this.popular_movies[i].id,
-              b: newRatings[i]
+              "tmdb_id" : this.popular_movies[i].id,
+              "user_rating" : this.new_ratings[i]
             })
           }
+
           // DOESN'T WORK
           // if the previous rating is not 0 or null, update existing record
           else
           {
             axios.post('/update', {
-              a: this.popular_movies[i].id,
-              b: newRatings[i]
+              "tmdb_id": this.popular_movies[i].id,
+              "user_rating": this.new_ratings[i]
             }).then(function() {
               this.test = "works"
             });
           }
 
           // commit changes to the array with old values after DB updating (used for comparison)
-          this.old_ratings[i] = newRatings[i];
+          this.old_ratings[i] = new_ratings[i];
 
         } // end if
       }   // end loop
