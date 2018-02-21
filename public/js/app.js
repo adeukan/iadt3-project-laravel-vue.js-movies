@@ -46658,16 +46658,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // url prefix for getting posters
       image_prefix_url: 'http://image.tmdb.org/t/p/w185',
 
-      test: 'hello'
+      same_movie_users: []
     };
   },
 
   // functions triggered when Vue object is mounted
   mounted: function mounted() {
-    this.getPopularMovies(), this.getHighRatedMovies();
+
+    this.getSimilarUsers(), this.getPopularMovies(), this.getHighRatedMovies();
   },
 
   methods: {
+    getSimilarUsers: function getSimilarUsers() {
+      var _this = this;
+
+      axios.get('/same_movie_users').then(function (response) {
+
+        _this.same_movie_users = response.data.same_movie_users;
+      });
+    },
     getPopularMovies: function getPopularMovies() {
       // url query for all popular movies
       var url = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=a3abe9699d800e588cb2a57107b4179c';

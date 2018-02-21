@@ -6,6 +6,7 @@ use Auth;
 use App\Movie;
 use App\UserMovie;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserMovieController extends Controller
 {
@@ -15,11 +16,42 @@ class UserMovieController extends Controller
         $this->middleware('auth');
     }
 
+    // get top 50 IDs of users with similar movies
+    public function getSameMovieUsers() {
+
+        $sql = 'SELECT t1.user_id
+             FROM user_movies t1 INNER JOIN user_movies t2
+                ON t1.user_id != ' . Auth::user()->id . 
+                ' AND t2.user_id = ' . Auth::user()->id .
+                ' AND t1.movie_id = t2.movie_id 
+             GROUP BY t1.user_id 
+             ORDER BY COUNT(t2.movie_id) DESC
+             LIMIT 10';
+
+        // response is an array of Objects, but we need an array of IDs
+        $response = DB::select($sql);
+
+        // new array to store IDs
+        $same_movie_users = array();
+
+        // get user IDs from $response and put them into new array
+        foreach ($response as $user) {
+          array_push($same_movie_users, $user->user_id);
+        }
+
+        // return the array with IDs
+        return response()->json([
+            'same_movie_users'  => $same_movie_users,
+        ], 200);
+    }
+
+
     // get and return the movies rated by the current user
     // #return \Illuminate\Http\Response
     public function getUserMovies()
     {
         $all_rated_by_user = UserMovie::where(['user_id' => Auth::user()->id])->get();
+
         return response()->json([
             'all_rated_by_user'    => $all_rated_by_user,
         ], 200);

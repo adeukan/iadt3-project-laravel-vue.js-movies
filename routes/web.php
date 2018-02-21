@@ -36,6 +36,8 @@ Route::get('/usermovies', 'UserMovieController@getUserMovies');
 Route::post('/store', 'UserMovieController@store');
 Route::post('/update', 'UserMovieController@update');
 
+Route::get('/same_movie_users', 'UserMovieController@getSameMovieUsers');
+
 
 // return the home page on any type of request
 // Route::get('/{any}', function () {
