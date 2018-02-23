@@ -7,8 +7,32 @@
         <h2>Popular Movies:</h2>
         <div class="slider slider-nav">
 
-          <a  v-if="index < 10"
+          <a  v-if="index < 30"
             v-for="(movie,index) in popular_movies" href="#" class="smSlickItem" >
+
+            <img @click="showMovie(movie.id)"
+              v-bind:src="image_prefix_url + movie.poster_path" class="slickImage">
+
+            <!-- the drop-down list with for choosing rating -->
+            <!-- the rating of each film is linked to the corresponding array member -->
+            <div class="slickActions">
+              <select v-model="new_ratings[index]">
+                <!-- scores from 0 to 10 -->
+                <option v-for="i in 11">{{i-1}}</option>
+              </select>
+            </div>
+
+          </a>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <h2>Comedy Movies:</h2>
+        <div class="slider slider-nav">
+
+          <a  v-if="index < 30"
+            v-for="(movie,index) in comedy_movies" href="#" class="smSlickItem" >
 
             <img @click="showMovie(movie.id)"
               v-bind:src="image_prefix_url + movie.poster_path" class="slickImage">
@@ -97,6 +121,8 @@ export default {
       old_ratings: [],
       // contains all popular movies received on api request to TMDb
       popular_movies: [],
+      // contains all comedy movies received on api request to TMDb
+      comedy_movies: [],
       // tmdb api key value
       api_key: 'api_key=a3abe9699d800e588cb2a57107b4179c',
       // url prefix for getting posters
@@ -108,6 +134,7 @@ export default {
   // functions triggered when Vue object is mounted
   mounted() {
     this.getPopularMovies()
+    this.getComedyMovies()
   },
   methods: {
     getPopularMovies() {
@@ -120,6 +147,18 @@ export default {
         .done(function(received_movies) {
           // put the received movies into array
           self.popular_movies = received_movies.results
+        })
+    },
+    getComedyMovies() {
+      // url query for all popular movies
+      var url = 'https://api.themoviedb.org/3/discover/movie?with_genres=35&sort_by=popularity.desc&api_key=a3abe9699d800e588cb2a57107b4179c'
+      // reference to Vue object
+      var self = this
+      // get all popular movies from TMDb
+      $.getJSON(url)
+        .done(function(received_movies) {
+          // put the received movies into array
+          self.comedy_movies = received_movies.results
         })
     },
     // show selected movie info in modal window

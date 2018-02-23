@@ -46345,6 +46345,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -46366,6 +46390,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       old_ratings: [],
       // contains all popular movies received on api request to TMDb
       popular_movies: [],
+      // contains all comedy movies received on api request to TMDb
+      comedy_movies: [],
       // tmdb api key value
       api_key: 'api_key=a3abe9699d800e588cb2a57107b4179c',
       // url prefix for getting posters
@@ -46378,6 +46404,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   // functions triggered when Vue object is mounted
   mounted: function mounted() {
     this.getPopularMovies();
+    this.getComedyMovies();
   },
 
   methods: {
@@ -46390,6 +46417,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       $.getJSON(url).done(function (received_movies) {
         // put the received movies into array
         self.popular_movies = received_movies.results;
+      });
+    },
+    getComedyMovies: function getComedyMovies() {
+      // url query for all popular movies
+      var url = 'https://api.themoviedb.org/3/discover/movie?with_genres=35&sort_by=popularity.desc&api_key=a3abe9699d800e588cb2a57107b4179c';
+      // reference to Vue object
+      var self = this;
+      // get all popular movies from TMDb
+      $.getJSON(url).done(function (received_movies) {
+        // put the received movies into array
+        self.comedy_movies = received_movies.results;
       });
     },
 
@@ -46467,7 +46505,75 @@ var render = function() {
             "div",
             { staticClass: "slider slider-nav" },
             _vm._l(_vm.popular_movies, function(movie, index) {
-              return index < 10
+              return index < 30
+                ? _c(
+                    "a",
+                    { staticClass: "smSlickItem", attrs: { href: "#" } },
+                    [
+                      _c("img", {
+                        staticClass: "slickImage",
+                        attrs: {
+                          src: _vm.image_prefix_url + movie.poster_path
+                        },
+                        on: {
+                          click: function($event) {
+                            _vm.showMovie(movie.id)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "slickActions" }, [
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.new_ratings[index],
+                                expression: "new_ratings[index]"
+                              }
+                            ],
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.new_ratings,
+                                  index,
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          _vm._l(11, function(i) {
+                            return _c("option", [_vm._v(_vm._s(i - 1))])
+                          })
+                        )
+                      ])
+                    ]
+                  )
+                : _vm._e()
+            })
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("h2", [_vm._v("Comedy Movies:")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "slider slider-nav" },
+            _vm._l(_vm.comedy_movies, function(movie, index) {
+              return index < 30
                 ? _c(
                     "a",
                     { staticClass: "smSlickItem", attrs: { href: "#" } },
