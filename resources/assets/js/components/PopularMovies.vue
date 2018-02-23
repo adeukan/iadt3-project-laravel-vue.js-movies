@@ -2,35 +2,30 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          Most Popular test:
-        </div>
-        <!-- popular movies table -->
-        <div class="panel-body">
 
-              <div class="row">
-                <div class="slider slider-nav">
+      <div class="row">
+        <h2>Popular Movies:</h2>
+        <div class="slider slider-nav">
 
-                  <a  v-if="index < 5"
-                    v-for="(movie,index) in popular_movies" href="#" class="smSlickItem" >
+          <a  v-if="index < 10"
+            v-for="(movie,index) in popular_movies" href="#" class="smSlickItem" >
 
-                    <img @click="showMovie(movie.id)"
-                      v-bind:src="image_prefix_url + movie.poster_path" class="slickImage">
+            <img @click="showMovie(movie.id)"
+              v-bind:src="image_prefix_url + movie.poster_path" class="slickImage">
 
-                    <!-- the drop-down list with for choosing rating -->
-                    <!-- the rating of each film is linked to the corresponding array member -->
-                    <select v-model="new_ratings[index]">
-                      <!-- scores from 0 to 10 -->
-                      <option v-for="i in 11">{{i-1}}</option>
-                    </select>
+            <!-- the drop-down list with for choosing rating -->
+            <!-- the rating of each film is linked to the corresponding array member -->
+            <div class="slickActions">
+              <select v-model="new_ratings[index]">
+                <!-- scores from 0 to 10 -->
+                <option v-for="i in 11">{{i-1}}</option>
+              </select>
+            </div>
 
-                  </a>
-
-                </div>
-              </div>
+          </a>
 
         </div>
+      </div>
 
         <!-- modal window with the selected movie info -->
         <div class="modal fade"
@@ -74,7 +69,6 @@
           <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
-      </div>
     </div>
   </div>
 </div>

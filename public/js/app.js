@@ -46345,12 +46345,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -46466,174 +46460,169 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "panel panel-default" }, [
-          _c("div", { staticClass: "panel-heading" }, [
-            _vm._v("\r\n          Most Popular test:\r\n        ")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "panel-body" }, [
-            _c("div", { staticClass: "row" }, [
-              _c(
-                "div",
-                { staticClass: "slider slider-nav" },
-                _vm._l(_vm.popular_movies, function(movie, index) {
-                  return index < 5
-                    ? _c(
-                        "a",
-                        { staticClass: "smSlickItem", attrs: { href: "#" } },
-                        [
-                          _c("img", {
-                            staticClass: "slickImage",
-                            attrs: {
-                              src: _vm.image_prefix_url + movie.poster_path
-                            },
-                            on: {
-                              click: function($event) {
-                                _vm.showMovie(movie.id)
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "select",
-                            {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.new_ratings[index],
-                                  expression: "new_ratings[index]"
-                                }
-                              ],
-                              on: {
-                                change: function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.$set(
-                                    _vm.new_ratings,
-                                    index,
-                                    $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  )
-                                }
-                              }
-                            },
-                            _vm._l(11, function(i) {
-                              return _c("option", [_vm._v(_vm._s(i - 1))])
-                            })
-                          )
-                        ]
-                      )
-                    : _vm._e()
-                })
-              )
-            ])
-          ]),
+        _c("div", { staticClass: "row" }, [
+          _c("h2", [_vm._v("Popular Movies:")]),
           _vm._v(" "),
           _c(
             "div",
-            {
-              staticClass: "modal fade",
-              attrs: { tabindex: "-1", role: "dialog", id: "movie_info" }
-            },
-            [
-              _c(
-                "div",
-                { staticClass: "modal-dialog", attrs: { role: "document" } },
-                [
-                  _c("div", { staticClass: "modal-content" }, [
-                    _c("ul", [
+            { staticClass: "slider slider-nav" },
+            _vm._l(_vm.popular_movies, function(movie, index) {
+              return index < 10
+                ? _c(
+                    "a",
+                    { staticClass: "smSlickItem", attrs: { href: "#" } },
+                    [
                       _c("img", {
+                        staticClass: "slickImage",
                         attrs: {
-                          src: _vm.image_prefix_url + _vm.movie.poster_path
+                          src: _vm.image_prefix_url + movie.poster_path
+                        },
+                        on: {
+                          click: function($event) {
+                            _vm.showMovie(movie.id)
+                          }
                         }
                       }),
                       _vm._v(" "),
-                      _c("li", [
-                        _c("span", { staticClass: "li_header" }, [
-                          _vm._v("Title: ")
-                        ]),
-                        _vm._v(" " + _vm._s(_vm.movie.title))
+                      _c("div", { staticClass: "slickActions" }, [
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.new_ratings[index],
+                                expression: "new_ratings[index]"
+                              }
+                            ],
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.new_ratings,
+                                  index,
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          _vm._l(11, function(i) {
+                            return _c("option", [_vm._v(_vm._s(i - 1))])
+                          })
+                        )
+                      ])
+                    ]
+                  )
+                : _vm._e()
+            })
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "modal fade",
+            attrs: { tabindex: "-1", role: "dialog", id: "movie_info" }
+          },
+          [
+            _c(
+              "div",
+              { staticClass: "modal-dialog", attrs: { role: "document" } },
+              [
+                _c("div", { staticClass: "modal-content" }, [
+                  _c("ul", [
+                    _c("img", {
+                      attrs: {
+                        src: _vm.image_prefix_url + _vm.movie.poster_path
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("span", { staticClass: "li_header" }, [
+                        _vm._v("Title: ")
                       ]),
-                      _vm._v(" "),
-                      _c("li", [
-                        _c("span", { staticClass: "li_header" }, [
-                          _vm._v("Tagline: ")
-                        ]),
-                        _vm._v(" " + _vm._s(_vm.movie.tagline))
+                      _vm._v(" " + _vm._s(_vm.movie.title))
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("span", { staticClass: "li_header" }, [
+                        _vm._v("Tagline: ")
                       ]),
-                      _vm._v(" "),
-                      _vm._m(0),
-                      _c(
-                        "li",
-                        _vm._l(_vm.movie.production_countries, function(
-                          country,
-                          index
-                        ) {
+                      _vm._v(" " + _vm._s(_vm.movie.tagline))
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(0),
+                    _c(
+                      "li",
+                      _vm._l(_vm.movie.production_countries, function(
+                        country,
+                        index
+                      ) {
+                        return _c("span", [
+                          _vm._v(
+                            "\r\n\t\t\t\t\t\t\t\t\t\t\t" +
+                              _vm._s(country.name) +
+                              "\r\n\t\t\t\t\t\t\t\t\t\t\t"
+                          ),
+                          _vm.movie.production_countries[index + 1] != null
+                            ? _c("span", [_vm._v(",")])
+                            : _vm._e()
+                        ])
+                      })
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "li",
+                      [
+                        _c("span", { staticClass: "li_header" }, [
+                          _vm._v("Genres: ")
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.movie.genres, function(genre, index) {
                           return _c("span", [
                             _vm._v(
                               "\r\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                _vm._s(country.name) +
+                                _vm._s(genre.name) +
                                 "\r\n\t\t\t\t\t\t\t\t\t\t\t"
                             ),
-                            _vm.movie.production_countries[index + 1] != null
+                            _vm.movie.genres[index + 1] != null
                               ? _c("span", [_vm._v(",")])
                               : _vm._e()
                           ])
                         })
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        [
-                          _c("span", { staticClass: "li_header" }, [
-                            _vm._v("Genres: ")
-                          ]),
-                          _vm._v(" "),
-                          _vm._l(_vm.movie.genres, function(genre, index) {
-                            return _c("span", [
-                              _vm._v(
-                                "\r\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                  _vm._s(genre.name) +
-                                  "\r\n\t\t\t\t\t\t\t\t\t\t\t"
-                              ),
-                              _vm.movie.genres[index + 1] != null
-                                ? _c("span", [_vm._v(",")])
-                                : _vm._e()
-                            ])
-                          })
-                        ],
-                        2
-                      ),
-                      _vm._v(" "),
-                      _c("li", [
-                        _c("span", { staticClass: "li_header" }, [
-                          _vm._v("Runtime: ")
-                        ]),
-                        _vm._v(" " + _vm._s(_vm.movie.runtime) + " min")
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("span", { staticClass: "li_header" }, [
+                        _vm._v("Runtime: ")
                       ]),
-                      _vm._v(" "),
-                      _c("li", [
-                        _c("span", { staticClass: "li_header" }, [
-                          _vm._v("Overview: ")
-                        ]),
-                        _vm._v(" " + _vm._s(_vm.movie.overview))
-                      ])
+                      _vm._v(" " + _vm._s(_vm.movie.runtime) + " min")
+                    ]),
+                    _vm._v(" "),
+                    _c("li", [
+                      _c("span", { staticClass: "li_header" }, [
+                        _vm._v("Overview: ")
+                      ]),
+                      _vm._v(" " + _vm._s(_vm.movie.overview))
                     ])
                   ])
-                ]
-              )
-            ]
-          )
-        ])
+                ])
+              ]
+            )
+          ]
+        )
       ])
     ])
   ])

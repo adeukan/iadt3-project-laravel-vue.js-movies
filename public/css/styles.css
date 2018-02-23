@@ -1,4 +1,25 @@
-.li_header {
-	font-weight : bold;
-	color       : blue;
+body{
+	background-color:#636e72;
+	color:#2d3436;
+}
+.smSlickItem {
+    height:360px;
+    width:235px;
+}
+.slickImage {
+    height:330px;
+    width:215px;
+    margin: auto;
+}
+.slickActions{
+	padding-left:10px;
+}
+
+.navbar {
+	background-color:#dfe6e9;
+	color:#2d3436;
+}
+
+h2 {
+	color:#dfe6e9;
 }

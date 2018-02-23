@@ -11,7 +11,11 @@
     <title>YouMovies</title>
 
     <!-- Styles -->
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('slickfolder/slick/slick.css') }}" rel="stylesheet">
+    <link href="{{ asset('slickfolder/slick/slick-theme.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -81,5 +85,38 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.slim.min.js') }}"></script>
+    <script src="{{ asset('js/jquerymigrate.js') }}"></script>
+    <script src="{{ asset('js/tether.min.js') }}"></script>
+    <script src="{{ asset('slickfolder/slick/slick.min.js') }}"></script>
+
+      <script type="text/javascript">
+
+    $(document).ready(function(){
+      $('.slider-nav').slick({
+            slidesToShow: 5,
+            slidesToScroll: 4,
+            responsive: [
+                {
+                  breakpoint: 1300,
+                  settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 2,
+                  }
+                },
+                {
+                  breakpoint: 480,
+                  settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                  }
+                }
+            ]
+      });
+    });
+
+  </script>
+
 </body>
 </html>
