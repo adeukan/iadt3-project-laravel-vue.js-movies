@@ -46369,6 +46369,59 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -46524,38 +46577,19 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "slickActions" }, [
                         _c(
-                          "select",
+                          "div",
                           {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.new_ratings[index],
-                                expression: "new_ratings[index]"
-                              }
-                            ],
-                            on: {
-                              change: function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.$set(
-                                  _vm.new_ratings,
-                                  index,
-                                  $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                )
-                              }
+                            staticClass: "rating",
+                            model: {
+                              value: _vm.new_ratings[index],
+                              callback: function($$v) {
+                                _vm.$set(_vm.new_ratings, index, $$v)
+                              },
+                              expression: "new_ratings[index]"
                             }
                           },
-                          _vm._l(11, function(i) {
-                            return _c("option", [_vm._v(_vm._s(i - 1))])
+                          _vm._l(10, function(i) {
+                            return _c("a", [_vm._v("★")])
                           })
                         )
                       ])
@@ -46592,38 +46626,19 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "slickActions" }, [
                         _c(
-                          "select",
+                          "div",
                           {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.new_ratings[index],
-                                expression: "new_ratings[index]"
-                              }
-                            ],
-                            on: {
-                              change: function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.$set(
-                                  _vm.new_ratings,
-                                  index,
-                                  $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                )
-                              }
+                            staticClass: "rating",
+                            model: {
+                              value: _vm.new_ratings[index],
+                              callback: function($$v) {
+                                _vm.$set(_vm.new_ratings, index, $$v)
+                              },
+                              expression: "new_ratings[index]"
                             }
                           },
-                          _vm._l(11, function(i) {
-                            return _c("option", [_vm._v(_vm._s(i - 1))])
+                          _vm._l(10, function(i) {
+                            return _c("a", [_vm._v("★")])
                           })
                         )
                       ])

@@ -16,16 +16,53 @@
             <!-- the drop-down list with for choosing rating -->
             <!-- the rating of each film is linked to the corresponding array member -->
             <div class="slickActions">
-              <select v-model="new_ratings[index]">
+
+              <div class="rating" v-model="new_ratings[index]">
                 <!-- scores from 0 to 10 -->
-                <option v-for="i in 11">{{i-1}}</option>
-              </select>
+                <a v-for="i in 10">★</a>
+              </div>
+
             </div>
 
           </a>
 
         </div>
       </div>
+
+      <!--
+
+      Drop Down Genre Menu.
+
+        <div class="dropdown">
+          <button class="dropbtn">Genre</button>
+          <div class="dropdown-content">
+            <a href="#">Action</a>
+            <a href="#">Adventure</a>
+            <a href="#">Animation</a>
+            <a href="#">Biography</a>
+            <a href="#">Comedy</a>
+            <a href="#">Crime</a>
+            <a href="#">Documentary</a>
+            <a href="#">Drama</a>
+            <a href="#">Family</a>
+            <a href="#">Fantasy</a>
+            <a href="#">Film Noir</a>
+            <a href="#">History</a>
+            <a href="#">Horror</a>
+            <a href="#">Music</a>
+            <a href="#">Musical</a>
+            <a href="#">Mystery</a>
+            <a href="#">Romance</a>
+            <a href="#">Sci-Fi</a>
+            <a href="#">Short</a>
+            <a href="#">Sport</a>
+            <a href="#">Superhero</a>
+            <a href="#">Thriller</a>
+            <a href="#">War</a>
+            <a href="#">Western</a>
+          </div>
+        </div>
+      -->
 
       <div class="row">
         <h2>Comedy Movies:</h2>
@@ -40,10 +77,26 @@
             <!-- the drop-down list with for choosing rating -->
             <!-- the rating of each film is linked to the corresponding array member -->
             <div class="slickActions">
-              <select v-model="new_ratings[index]">
+
+              <div class="rating" v-model="new_ratings[index]">
                 <!-- scores from 0 to 10 -->
-                <option v-for="i in 11">{{i-1}}</option>
-              </select>
+                <a v-for="i in 10">★</a>
+              </div>
+
+              <!--
+              <div class="rating">
+                <a href="#10" title="Give 10 stars">★</a>
+                <a href="#9" title="Give 9 stars">★</a>
+                <a href="#8" title="Give 8 stars">★</a>
+                <a href="#7" title="Give 7 stars">★</a>
+                <a href="#6" title="Give 6 stars">★</a>
+                <a href="#5" title="Give 5 stars">★</a>
+                <a href="#4" title="Give 4 stars">★</a>
+                <a href="#3" title="Give 3 stars">★</a>
+                <a href="#2" title="Give 2 stars">★</a>
+                <a href="#1" title="Give 1 star">★</a>
+              </div>
+              -->
             </div>
 
           </a>
