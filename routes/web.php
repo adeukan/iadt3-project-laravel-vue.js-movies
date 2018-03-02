@@ -36,7 +36,9 @@ Route::get('/usermovies', 'UserMovieController@getUserMovies');
 Route::post('/store', 'UserMovieController@store');
 Route::post('/update', 'UserMovieController@update');
 
-Route::get('/same_movie_users', 'UserMovieController@getSameMovieUsers');
+Route::get('/get_friends', 'UserMovieController@getFriends');
+// Route::post('/compare_user', 'UserMovieController@compareUser');
+
 
 
 // return the home page on any type of request

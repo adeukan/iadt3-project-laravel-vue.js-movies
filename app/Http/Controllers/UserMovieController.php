@@ -7,6 +7,7 @@ use App\Movie;
 use App\UserMovie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use \stdClass;
 
 class UserMovieController extends Controller
 {
@@ -16,35 +17,71 @@ class UserMovieController extends Controller
         $this->middleware('auth');
     }
 
-    // get top 50 IDs of users with similar movies
-    public function getSameMovieUsers() {
+    // получение пользователей со схожими вкусами
+    public function getFriends() {
 
-        $sql = 'SELECT t1.user_id
+        // SQL для получения пользователей со схожим набором фильмов
+        $sql = 'SELECT t1.user_id, COUNT(t2.movie_id > 50) AS same_movies_num
              FROM user_movies t1 INNER JOIN user_movies t2
                 ON t1.user_id != ' . Auth::user()->id . 
                 ' AND t2.user_id = ' . Auth::user()->id .
-                ' AND t1.movie_id = t2.movie_id 
-             GROUP BY t1.user_id 
+                ' AND t1.movie_id = t2.movie_id
+             GROUP BY t1.user_id
              ORDER BY COUNT(t2.movie_id) DESC
-             LIMIT 10';
+             LIMIT 100';   
 
-        // response is an array of Objects, but we need an array of IDs
-        $response = DB::select($sql);
+        // выполнить и вернуть массив объектов, отсортированный по кол-ву общих фильмов
+        // каждый объект включает ID пользователя и количество общих фильмов с текущим пользователем
+        $same_movie_users = DB::select($sql);
 
-        // new array to store IDs
-        $same_movie_users = array();
+        // массив для пользователей со схожим вкусом
+        $friends_array = [];
 
-        // get user IDs from $response and put them into new array
-        foreach ($response as $user) {
-          array_push($same_movie_users, $user->user_id);
+        // отобрать из полученного массива пользователей с наиболее схожим вкусом
+        foreach ($same_movie_users as $user) {
+            
+            // SQL для получения количества оценок схожих с оценками текущего пользователя
+            $sql = 'SELECT COUNT(t1.movie_id) AS equal_ratios_num
+                    FROM user_movies t1 INNER JOIN user_movies t2
+                        ON t1.user_id = ' . Auth::user()->id .  
+                        ' AND t2.user_id = ' . $user->user_id .
+                        ' AND t1.movie_id = t2.movie_id
+                        AND (t1.ratio - t2.ratio) BETWEEN -1 AND 1';
+
+            // выполнение запроса для каждого пользователя из массива $same_movie_users
+            $response = DB::select($sql);
+
+            // коэффициент схожести  = количество фильмов с одинаковой оценкой / общее количество фильмов
+            $factor = ($response[0]->equal_ratios_num) / $user->same_movies_num;
+
+            // добавить пользователя в друзья если коэфициент схожести больше 0.7
+            if($factor >= 0.7) {
+
+                // создать объект
+                $friend = new stdClass();
+                // добавить поля ID и коэффициент схожести
+                $friend->user_id = $user->user_id;
+                $friend->factor = $factor;
+                // добавить объект в массив друзей
+                array_push($friends_array, $friend);
+            }
         }
 
-        // return the array with IDs
-        return response()->json([
-            'same_movie_users'  => $same_movie_users,
-        ], 200);
-    }
+        // отсортировать пользователей (объекты) в массиве по значению поля factor
+        usort($friends_array, function($f1, $f2)
+                                {
+                                    if ($f1->factor == $f2->factor)
+                                        return 0;
+                                    
+                                    return ($f1->factor > $f2->factor) ? -1 : 1;
+                                }
+        );
 
+        // вернуть отсортированный массив
+        return response()->json([
+                'friends_array' => $friends_array,
+            ], 200);
+    }
 
     // get and return the movies rated by the current user
     // #return \Illuminate\Http\Response
