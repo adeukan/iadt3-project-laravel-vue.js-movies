@@ -3,47 +3,53 @@
   <div class="row">
     <div class="col-md-12">
       <!-- modal window with the selected movie info -->
-      <div class="modal fade"
+      <div class="modal modal-lg fade"
            tabindex="-1"
            role="dialog"
            id="movie_info">
         <div class="modal-dialog"
              role="document">
           <div class="modal-content">
-            <ul>
-              <!-- poster -->
-              <img v-bind:src="image_prefix_url + movie.poster_path">
-              <!-- title -->
-              <li><span class="li_header">Title: </span> {{movie.title}}</li>
-              <!-- tagline -->
-              <li><span class="li_header">Tagline: </span> {{movie.tagline}}</li>
-              <!-- countries -->
-              <li><span class="li_header">Countries: </span>
-                <!-- loop to display all involved countries -->
-                <li><span v-for="(country, index) in movie.production_countries">
-										{{country.name}}
-										<span v-if="movie.production_countries[index + 1] != null">,</span>
-                  </span>
-                </li>
-                <!-- genres -->
-                <li><span class="li_header">Genres: </span>
-                  <!-- loop to display all genres -->
-                  <span v-for="(genre, index) in movie.genres">
-										{{genre.name}}
-										<span v-if="movie.genres[index + 1] != null">,</span>
-                  </span>
-                </li>
-                <!-- movie runtime -->
-                <li><span class="li_header">Runtime: </span> {{movie.runtime}} min</li>
-                <!-- movie overview -->
-                <li><span class="li_header">Overview: </span> {{movie.overview}}</li>
-            </ul>
-          </div>
+            <div class="modal-header">
+                  <h2 class="modal-title">Title: {{movie.title}} </h2>
+                  <button type="button" class="modal-close" data-dismiss="modal">
+                  </button>
+            </div>
+            <div class="modal-body">
+              <img class="modalImg" v-bind:src="image_prefix_url + movie.poster_path">
+                <ul class="list-group">
+                  <!-- tagline -->
+                  <li class="list-group-item"><span class="li_header">Tagline: </span> {{movie.tagline}}</li>
+                  <!-- countries -->
+                  <li class="list-group-item"><span class="li_header">Countries: </span>
+                    <!-- loop to display all involved countries -->
+                    <span v-for="(country, index) in movie.production_countries">
+    										{{country.name}}
+    										<span v-if="movie.production_countries[index + 1] != null">,</span>
+                    </span>
+                    <!-- genres -->
+                    <li class="list-group-item"><span class="li_header">Genres: </span>
+                      <!-- loop to display all genres -->
+                      <span v-for="(genre, index) in movie.genres">
+    										{{genre.name}}
+    										<span v-if="movie.genres[index + 1] != null">,</span>
+                      </span>
+                    </li>
+                    <!-- movie runtime -->
+                    <li class="list-group-item"><span class="li_header">Runtime: </span> {{movie.runtime}} min</li>
+                    <!-- movie overview -->
+                    <li class="list-group-item"><span class="li_header">Overview: </span> {{movie.overview}}</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
           <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
       </div>
       <!-- /.modal -->
+    </div>
             
       <div class="row">
         <h2 class="space">Popular Movies:</h2>
@@ -66,8 +72,9 @@
                 </div>
               </div>
               <div class="row btnHolder">
-                <button @click="hideMovie(movie.id)">Hide</button>
-                <button @click="laterMovie(movie.id)">Watch Later</button>
+                
+                <button @click="laterMovie(movie.id)"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+                <button @click="hideMovie(movie.id)"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
               </div>
 
             </div>
@@ -97,8 +104,8 @@
                 </div>
               </div>
               <div class="row btnHolder">
-                <button @click="hideMovie(movie.id)">Hide</button>
-                <button @click="laterMovie(movie.id)">Watch Later</button>
+                <button @click="hideMovie(movie.id)"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+                <button @click="laterMovie(movie.id)"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
               </div>
 
             </div>

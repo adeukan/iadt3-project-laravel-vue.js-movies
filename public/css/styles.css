@@ -2,6 +2,12 @@ body{
 	background-color:#636e72;
 	color:#dfe6e9;
 }
+* {
+    box-sizing: border-box;
+}
+
+
+/* SLICK */
 .smSlickItem {
     height:400px;
     width:235px;
@@ -15,23 +21,71 @@ body{
 	padding-left:5px;
 }
 
+
+/* NAV */
 .navbar {
 	background-color:#dfe6e9;
 	font-weight:bold;
 	color:#2d3436;
 }
 
+
+/* MODAL */
 .modal {
-    margin-top:20px;
-    border-radius:0px;
+    position: fixed;
+    width: 80%;
+    left: 10%;
+    height: 80%;
+    top: 10%;
+    background-color: #fff;
+    border-radius: 3px;
+    z-index: 10000;
+}
+.modal-close {
+    position:absolute;
+    top:-10px;
+    right:-10px;
+    width:20px;
+    height:20px;
+    background:#333;
+    border-radius:50%;
+}
+.modal-content {
+    position:absolute;
+    top:5%;
+    bottom:5%;
+    right:5%;
+    width:45%;
+}
+.modal-close {
+    position:absolute;
+    top:-10px;
+    right:-10px;
+    width:20px;
+    height:20px;
+    background:#333;
+    border-radius:50%;
+}
+.modal-image {
+    position:absolute;
+    top:5%;
+    bottom:5%;
+    left:5%;
+    width:45%;
+    background-size:contain;
+}
+.list-group-item {
+    background-color:#636e72;
+    border: 3px solid #dfe6e9;
+}
+.li_header{
+    font-size:1.6em;
 }
 
-.modal-content{
-    border-radius:0px;
-    background:#636e72;
-    color:#dfe6e9;
-}
 
+
+
+/* SPACING */
 .space{
     margin-top:60px;
 }
@@ -39,31 +93,35 @@ body{
     margin-top:-10px;
 }
 
+
+/* WATCH LATER/HIDE BUTTONS */
 .btnHolder{
     text-align:center;
 }
-
 .btnHolder button {
-    background-color: #dfe6e9;
+    background-color: #636e72;
     border: none;
-    color: #2d3436;
+    color: #dfe6e9;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    border-radius:5px;
-}
+    font-size:1.2em;
 }
 
+
+
+/* COLOURS */
 h2 {
 	color:#dfe6e9;
 }
+
+
 
 /*  
  * Rating styles
  */
 .rating {
 	width: 215px;
-	font-size: 20px;
+    margin-left:15px;
+	font-size: 25px;
 	overflow:hidden;
     text-decoration: none;
 }
@@ -105,6 +163,28 @@ h2 {
 	float:none
     text-decoration: none;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* NO DROPDOWN AT THE MOMENT */
+
+
+
+
+
+
+
+
 
 /* Dropdown Button */
 .dropbtn {
