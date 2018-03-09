@@ -15,8 +15,7 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->date('dob')->nullable();
             $table->string('password');
-            $table->string('name')->nullable();
-            $table->string('surname')->nullable();
+            $table->string('name')->unique();
             $table->string('email')->unique();
             $table->rememberToken();
             $table->timestamps();

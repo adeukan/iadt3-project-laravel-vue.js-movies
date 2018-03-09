@@ -1,9 +1,15 @@
 body{
 	background-color:#636e72;
-	color:#2d3436;
+	color:#dfe6e9;
 }
+* {
+    box-sizing: border-box;
+}
+
+
+/* SLICK */
 .smSlickItem {
-    height:360px;
+    height:400px;
     width:235px;
 }
 .slickImage {
@@ -15,59 +21,172 @@ body{
 	padding-left:5px;
 }
 
+
+/* NAV */
 .navbar {
 	background-color:#dfe6e9;
 	font-weight:bold;
 	color:#2d3436;
-	margin-bottom:10px;
 }
 
+
+/* MODAL */
+.modal {
+    position: fixed;
+    width: 80%;
+    left: 10%;
+    height: 80%;
+    top: 10%;
+    background-color: #fff;
+    border-radius: 3px;
+    z-index: 10000;
+}
+.modal-close {
+    position:absolute;
+    top:-10px;
+    right:-10px;
+    width:20px;
+    height:20px;
+    background:#333;
+    border-radius:50%;
+}
+.modal-content {
+    position:absolute;
+    top:5%;
+    bottom:5%;
+    right:5%;
+    width:45%;
+}
+.modal-close {
+    position:absolute;
+    top:-10px;
+    right:-10px;
+    width:20px;
+    height:20px;
+    background:#333;
+    border-radius:50%;
+}
+.modal-image {
+    position:absolute;
+    top:5%;
+    bottom:5%;
+    left:5%;
+    width:45%;
+    background-size:contain;
+}
+.list-group-item {
+    background-color:#636e72;
+    border: 3px solid #dfe6e9;
+}
+.li_header{
+    font-size:1.6em;
+}
+
+
+
+
+/* SPACING */
+.space{
+    margin-top:60px;
+}
+.noSpace{
+    margin-top:-10px;
+}
+
+
+/* WATCH LATER/HIDE BUTTONS */
+.btnHolder{
+    text-align:center;
+}
+.btnHolder button {
+    background-color: #636e72;
+    border: none;
+    color: #dfe6e9;
+    text-align: center;
+    font-size:1.2em;
+}
+
+
+
+/* COLOURS */
 h2 {
 	color:#dfe6e9;
 }
 
-		/*  
-		 * Rating styles
-		 */
-		.rating {
-			width: 215px;
-			font-size: 25px;
-			overflow:hidden;
-		}
+
+
+/*  
+ * Rating styles
+ */
+.rating {
+	width: 215px;
+    margin-left:15px;
+	font-size: 25px;
+	overflow:hidden;
+    text-decoration: none;
+}
 .rating input {
   float: right;
   opacity: 0;
   position: absolute;
+  text-decoration: none;
 }
-		.rating a,
-    .rating label {
-			float:right;
-			color: #dfe6e9;
-			text-decoration: none;
-			-webkit-transition: color .4s;
-			-moz-transition: color .4s;
-			-o-transition: color .4s;
-			transition: color .4s;
-		}
+.rating a,
+.rating label {
+	float:right;
+	color: #2d3436;
+	opacity:0.25;
+	text-decoration: none;
+	-webkit-transition: color .6s;
+	-moz-transition: color .6s;
+	-o-transition: color .6s;
+	transition: color .6s;
+    text-decoration: none;
+}
 .rating label:hover ~ label,
 .rating input:focus ~ label,
 .rating label:hover,
-		.rating a:hover,
-		.rating a:hover ~ a,
-		.rating a:focus,
-		.rating a:focus ~ a		{
-			opacity:1;
-			color: #2d3436;
-			cursor: pointer;
-		}
-		.rating {
-			direction: rtl;
-		}
-		.rating a {
-			float:none
-		}
+.rating a:hover,
+.rating a:hover ~ a,
+.rating a:focus,
+.rating a:focus ~ a		{
+	opacity:1;
+	color: #dfe6e9;
+	cursor: pointer;
+    text-decoration: none;
+}
+.rating {
+	direction: rtl;
+    text-decoration: none;
+}
+.rating a {
+	float:none
+    text-decoration: none;
+}
 
-/* Dropdown Button
+
+
+
+
+
+
+
+
+
+
+
+
+/* NO DROPDOWN AT THE MOMENT */
+
+
+
+
+
+
+
+
+
+/* Dropdown Button */
 .dropbtn {
     background-color: #2d3436;
     color: #dfe6e9;
@@ -76,13 +195,13 @@ h2 {
     border: none;
 }
 
-/* The container <div> - needed to position the dropdown content
+/* The container <div> - needed to position the dropdown content */
 .dropdown {
     position: relative;
     display: inline-block;
 }
 
-/* Dropdown Content (Hidden by Default)
+/* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
     position: absolute;
@@ -92,7 +211,7 @@ h2 {
     z-index: 1;
 }
 
-/* Links inside the dropdown
+/* Links inside the dropdown */
 .dropdown-content a {
     color: #dfe6e9;
     padding: 12px 16px;
@@ -100,16 +219,15 @@ h2 {
     display: block;
 }
 
-/* Change color of dropdown links on hover
+/* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #ddd}
 
-/* Show the dropdown menu on hover
+/* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
-/* Change the background color of the dropdown button when the dropdown content is shown
+/* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
     background-color: #636e72;
 }
-*/

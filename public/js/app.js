@@ -43128,10 +43128,10 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_UserMovies_vue__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_UserMovies_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_UserMovies_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_PopularMovies_vue__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_PopularMovies_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_PopularMovies_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Profile_vue__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_Profile_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_Profile_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Home_vue__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Home_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_Home_vue__);
 
 
 
@@ -43146,7 +43146,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 // define the VueRouter object
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
 	mode: 'history',
-	routes: [{ path: '/', component: __WEBPACK_IMPORTED_MODULE_2__components_UserMovies_vue___default.a }, { path: '/popular', component: __WEBPACK_IMPORTED_MODULE_3__components_PopularMovies_vue___default.a }]
+	routes: [{ path: '/', component: __WEBPACK_IMPORTED_MODULE_3__components_Home_vue___default.a }, { path: '/profile', component: __WEBPACK_IMPORTED_MODULE_2__components_Profile_vue___default.a }]
 });
 
 /* harmony default export */ __webpack_exports__["a"] = (router);
@@ -45807,7 +45807,8 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\UserMovies.vue"
+Component.options.__file = "resources\\assets\\js\\components\\Profile.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -45816,10 +45817,10 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6d13bea5", Component.options)
+    hotAPI.createRecord("data-v-22ef5402", Component.options)
   } else {
-    hotAPI.reload("data-v-6d13bea5", Component.options)
-  }
+    hotAPI.reload("data-v-22ef5402", Component.options)
+' + '  }
   module.hot.dispose(function (data) {
     disposed = true
   })
@@ -45834,22 +45835,6 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -46035,7 +46020,7 @@ var render = function() {
                       [
                         _vm._m(0),
                         _vm._v(" "),
-                        _vm._l(_vm.TMDBmovies, function(movie, index) {
+                        _vm._l(_vm.TMDBmovies, function(movie, i) {
                           return _c("tr", [
                             _c("td", [
                               _c(
@@ -46043,7 +46028,7 @@ var render = function() {
                                 {
                                   on: {
                                     click: function($event) {
-                                      _vm.showMovieInfo(index)
+                                      _vm.showMovieInfo(i)
                                     }
                                   }
                                 },
@@ -46051,17 +46036,15 @@ var render = function() {
                               )
                             ]),
                             _vm._v(" "),
-                            _c("td", [
-                              _vm._v(_vm._s(_vm.MyDBmovies[index].ratio))
-                            ]),
+                            _c("td", [_vm._v(_vm._s(_vm.MyDBmovies[i].ratio))]),
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(movie.vote_average))]),
                             _vm._v(" "),
-                            _vm.MyDBmovies[index].hidden == 1
+                            _vm.MyDBmovies[i].hidden == 1
                               ? _c("td", [_vm._v("YES")])
                               : _c("td", [_vm._v("NO")]),
                             _vm._v(" "),
-                            _vm.MyDBmovies[index].watchlater == 1
+                            _vm.MyDBmovies[i].watchlater == 1
                               ? _c("td", [_vm._v("YES")])
                               : _c("td", [_vm._v("NO")])
                           ])
@@ -46116,7 +46099,7 @@ var render = function() {
                           _vm._v(" "),
                           _vm._l(_vm.movie.production_countries, function(
                             country,
-                            index
+                            i
                           ) {
                             return _c("span", [
                               _vm._v(
@@ -46125,7 +46108,7 @@ var render = function() {
                                   "\r\n                    "
                               ),
                               _vm._v(" "),
-                              _vm.movie.production_countries[index + 1] != null
+                              _vm.movie.production_countries[i + 1] != null
                                 ? _c("span", [_vm._v(",")])
                                 : _vm._e()
                             ])
@@ -46141,7 +46124,7 @@ var render = function() {
                             _vm._v("Genres: ")
                           ]),
                           _vm._v(" "),
-                          _vm._l(_vm.movie.genres, function(genre, index) {
+                          _vm._l(_vm.movie.genres, function(genre, i) {
                             return _c("span", [
                               _vm._v(
                                 "\r\n                    " +
@@ -46149,7 +46132,7 @@ var render = function() {
                                   "\r\n                    "
                               ),
                               _vm._v(" "),
-                              _vm.movie.genres[index + 1] != null
+                              _vm.movie.genres[i + 1] != null
                                 ? _c("span", [_vm._v(",")])
                                 : _vm._e()
                             ])
@@ -46188,21 +46171,15 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("tr", [
-      _c("th", [
-        _vm._v("\r\n                  Movie Title\r\n                ")
-      ]),
+      _c("th", [_vm._v("Movie Title")]),
       _vm._v(" "),
-      _c("th", [_vm._v("\r\n                  My Rating\r\n                ")]),
+      _c("th", [_vm._v("My Rating")]),
       _vm._v(" "),
-      _c("th", [
-        _vm._v("\r\n                  Overal Rating\r\n                ")
-      ]),
+      _c("th", [_vm._v("Overal Rating")]),
       _vm._v(" "),
-      _c("th", [_vm._v("\r\n                  Hidden\r\n                ")]),
+      _c("th", [_vm._v("Hidden")]),
       _vm._v(" "),
-      _c("th", [
-        _vm._v("\r\n                  Watch Later\r\n                ")
-      ])
+      _c("th", [_vm._v("Watch Later")])
     ])
   }
 ]
@@ -46211,7 +46188,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-6d13bea5", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-22ef5402", module.exports)
   }
 }
 
@@ -46241,7 +46218,8 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\PopularMovies.vue"
+Component.options.__file = "resources\\assets\\js\\components\\Home.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -46250,10 +46228,10 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-55d9f395", Component.options)
+    hotAPI.createRecord("data-v-85ef4954", Component.options)
   } else {
-    hotAPI.reload("data-v-55d9f395", Component.options)
-  }
+    hotAPI.reload("data-v-85ef4954", Component.options)
+' + '  }
   module.hot.dispose(function (data) {
     disposed = true
   })
@@ -46268,38 +46246,6 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -46441,26 +46387,37 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       new_ratings: [],
       // array with the previous user ratings, used for comparison 
       old_ratings: [],
-      // contains all popular movies received on api request to TMDb
+      // contains all popular movies received from TMDb
       popular_movies: [],
-      // contains all comedy movies received on api request to TMDb
-      comedy_movies: [],
+      // contains all highest rated movies received from TMDb
+      high_rated_movies: [],
       // tmdb api key value
       api_key: 'api_key=a3abe9699d800e588cb2a57107b4179c',
       // url prefix for getting posters
       image_prefix_url: 'http://image.tmdb.org/t/p/w185',
-
-      test: 'hello'
+      // массив пользователей со схожими вкусами, отсортирован по степени схожести
+      friends_array: []
     };
   },
 
+
   // functions triggered when Vue object is mounted
   mounted: function mounted() {
-    this.getPopularMovies();
-    this.getComedyMovies();
+
+    this.getFriends(), this.getPopularMovies(), this.getHighRatedMovies();
   },
 
+
   methods: {
+    // получение пользователей со схожими вкусами
+    getFriends: function getFriends() {
+      var _this = this;
+
+      axios.get('/get_friends').then(function (response) {
+
+        _this.friends_array = response.data.friends_array;
+      });
+    },
     getPopularMovies: function getPopularMovies() {
       // url query for all popular movies
       var url = 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=a3abe9699d800e588cb2a57107b4179c';
@@ -46472,17 +46429,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         self.popular_movies = received_movies.results;
       });
     },
-    getComedyMovies: function getComedyMovies() {
-      // url query for all popular movies
-      var url = 'https://api.themoviedb.org/3/discover/movie?with_genres=35&sort_by=popularity.desc&api_key=a3abe9699d800e588cb2a57107b4179c';
+    getHighRatedMovies: function getHighRatedMovies() {
+
+      // url query for all highest rated movies
+      var url = 'https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=a3abe9699d800e588cb2a57107b4179c';
+
       // reference to Vue object
       var self = this;
-      // get all popular movies from TMDb
-      $.getJSON(url).done(function (received_movies) {
+      // get all highest rated movies from TMDb
+      $.getJSON(url).done(function (response) {
         // put the received movies into array
-        self.comedy_movies = received_movies.results;
+        self.high_rated_movies = response.results;
       });
     },
+
 
     // show selected movie info in modal window
     showMovie: function showMovie(movieId) {
@@ -46491,49 +46451,55 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // reference to Vue object
       var self = this;
       // search movie by tmdb_id
-      $.getJSON(url).done(function (received_movie) {
-        // put the received movie into object (temporary container)
-        self.movie = received_movie;
-        // show a modal window with information about the selected movie
-        $('#movie_info').modal('show');
+      fetch(url).then(function (r) {
+        return r.json();
+      }).then(function (json) {
+        self.movie = json;
       });
+
+      $('#movie_info').modal('show');
+    },
+    hideMovie: function hideMovie(movieId) {
+      // HIDE BUTTON HANDLER
     }
   },
+
   // function triggered when changing specified variables
   watch: {
     // reaction to a change in the rating of any film
-    new_ratings: function new_ratings(newRatings) {
+    new_ratings: function new_ratings(_new_ratings) {
 
       // loop through all the values from the array with the updated ratings
-      for (var i = 0; i < newRatings.length; ++i) {
+      for (var i = 0; i < this.new_ratings.length; ++i) {
         // if the current element of the array has changed compared to the old value
-        if (newRatings[i] !== this.old_ratings[i]) {
+        if (this.new_ratings[i] !== this.old_ratings[i]) {
 
           // // show tmdb_id of the movie which changed rating
           // console.log(this.popular_movies[i].id);
           // // show the new rating
-          // console.log(newRatings[i]);
+          // console.log(new_ratings[i]);
 
           // if the previous rating is 0 or null, create new record
-          if (this.old_ratings[i] == 0 || this.old_ratings[i] == null) {
+          if (this.old_ratings[i] === 0 || this.old_ratings[i] === null) {
             axios.post('/store', {
-              a: this.popular_movies[i].id,
-              b: newRatings[i]
+              'tmdb_id': this.popular_movies[i].id,
+              'user_rating': this.new_ratings[i]
             });
           }
+
           // DOESN'T WORK
           // if the previous rating is not 0 or null, update existing record
           else {
               axios.post('/update', {
-                a: this.popular_movies[i].id,
-                b: newRatings[i]
+                'tmdb_id': this.popular_movies[i].id,
+                'user_rating': this.new_ratings[i]
               }).then(function () {
-                this.test = "works";
+                this.test = 'works';
               });
             }
 
           // commit changes to the array with old values after DB updating (used for comparison)
-          this.old_ratings[i] = newRatings[i];
+          this.old_ratings[i] = _new_ratings[i];
         } // end if
       } // end loop
     } // end function
@@ -46551,8 +46517,120 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12" }, [
+        _c(
+          "div",
+          {
+            staticClass: "modal modal-lg fade",
+            attrs: { tabindex: "-1", role: "dialog", id: "movie_info" }
+          },
+          [
+            _c(
+              "div",
+              { staticClass: "modal-dialog", attrs: { role: "document" } },
+              [
+                _c("div", { staticClass: "modal-content" }, [
+                  _c("div", { staticClass: "modal-header" }, [
+                    _c("h2", { staticClass: "modal-title" }, [
+                      _vm._v("Title: " + _vm._s(_vm.movie.title) + " ")
+                    ]),
+                    _vm._v(" "),
+                    _c("button", {
+                      staticClass: "modal-close",
+                      attrs: { type: "button", "data-dismiss": "modal" }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c("img", {
+                      staticClass: "modalImg",
+                      attrs: {
+                        src: _vm.image_prefix_url + _vm.movie.poster_path
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("ul", { staticClass: "list-group" }, [
+                      _c("li", { staticClass: "list-group-item" }, [
+                        _c("span", { staticClass: "li_header" }, [
+                          _vm._v("Tagline: ")
+                        ]),
+                        _vm._v(" " + _vm._s(_vm.movie.tagline))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "li",
+                        { staticClass: "list-group-item" },
+                        [
+                          _c("span", { staticClass: "li_header" }, [
+                            _vm._v("Countries: ")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.movie.production_countries, function(
+                            country,
+                            index
+                          ) {
+                            return _c("span", [
+                              _vm._v(
+                                "\r\n    \t\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(country.name) +
+                                  "\r\n    \t\t\t\t\t\t\t\t\t\t"
+                              ),
+                              _vm.movie.production_countries[index + 1] != null
+                                ? _c("span", [_vm._v(",")])
+                                : _vm._e()
+                            ])
+                          })
+                        ],
+                        2
+                      ),
+                      _c(
+                        "li",
+                        { staticClass: "list-group-item" },
+                        [
+                          _c("span", { staticClass: "li_header" }, [
+                            _vm._v("Genres: ")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.movie.genres, function(genre, index) {
+                            return _c("span", [
+                              _vm._v(
+                                "\r\n    \t\t\t\t\t\t\t\t\t\t" +
+                                  _vm._s(genre.name) +
+                                  "\r\n    \t\t\t\t\t\t\t\t\t\t"
+                              ),
+                              _vm.movie.genres[index + 1] != null
+                                ? _c("span", [_vm._v(",")])
+                                : _vm._e()
+                            ])
+                          })
+                        ],
+                        2
+                      ),
+                      _vm._v(" "),
+                      _c("li", { staticClass: "list-group-item" }, [
+                        _c("span", { staticClass: "li_header" }, [
+                          _vm._v("Runtime: ")
+                        ]),
+                        _vm._v(" " + _vm._s(_vm.movie.runtime) + " min")
+                      ]),
+                      _vm._v(" "),
+                      _c("li", { staticClass: "list-group-item" }, [
+                        _c("span", { staticClass: "li_header" }, [
+                          _vm._v("Overview: ")
+                        ]),
+                        _vm._v(" " + _vm._s(_vm.movie.overview))
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(0, false, false)
+                ])
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
         _c("div", { staticClass: "row" }, [
-          _c("h2", [_vm._v("Popular Movies:")]),
+          _c("h2", { staticClass: "space" }, [_vm._v("Popular Movies:")]),
           _vm._v(" "),
           _c(
             "div",
@@ -46576,22 +46654,70 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("div", { staticClass: "slickActions" }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "rating",
-                            model: {
-                              value: _vm.new_ratings[index],
-                              callback: function($$v) {
-                                _vm.$set(_vm.new_ratings, index, $$v)
-                              },
-                              expression: "new_ratings[index]"
-                            }
-                          },
-                          _vm._l(10, function(i) {
-                            return _c("a", [_vm._v("★")])
-                          })
-                        )
+                        _c("div", { staticClass: "row" }, [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "rating",
+                              model: {
+                                value: _vm.new_ratings[index],
+                                callback: function($$v) {
+                                  _vm.$set(_vm.new_ratings, index, $$v)
+                                },
+                                expression: "new_ratings[index]"
+                              }
+                            },
+                            _vm._l(10, function(i) {
+                              return _c(
+                                "a",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      _vm.addRating(movie.id, i)
+                                    }
+                                  }
+                                },
+                                [_vm._v("★")]
+                              )
+                            })
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row btnHolder" }, [
+                          _c(
+                            "button",
+                            {
+                              on: {
+                                click: function($event) {
+                                  _vm.laterMovie(movie.id)
+                                }
+                              }
+                            },
+                            [
+                              _c("span", {
+                                staticClass: "glyphicon glyphicon-floppy-disk",
+                                attrs: { "aria-hidden": "true" }
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              on: {
+                                click: function($event) {
+                                  _vm.hideMovie(movie.id)
+                                }
+                              }
+                            },
+                            [
+                              _c("span", {
+                                staticClass: "glyphicon glyphicon-eye-close",
+                                attrs: { "aria-hidden": "true" }
+                              })
+                            ]
+                          )
+                        ])
                       ])
                     ]
                   )
@@ -46601,12 +46727,12 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
-          _c("h2", [_vm._v("Comedy Movies:")]),
+          _c("h2", { staticClass: "noSpace" }, [_vm._v("High Rated Movies:")]),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "slider slider-nav" },
-            _vm._l(_vm.comedy_movies, function(movie, index) {
+            _vm._l(_vm.high_rated_movies, function(movie, index) {
               return index < 30
                 ? _c(
                     "a",
@@ -46625,125 +46751,77 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("div", { staticClass: "slickActions" }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "rating",
-                            model: {
-                              value: _vm.new_ratings[index],
-                              callback: function($$v) {
-                                _vm.$set(_vm.new_ratings, index, $$v)
-                              },
-                              expression: "new_ratings[index]"
-                            }
-                          },
-                          _vm._l(10, function(i) {
-                            return _c("a", [_vm._v("★")])
-                          })
-                        )
+                        _c("div", { staticClass: "row" }, [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "rating",
+                              model: {
+                                value: _vm.new_ratings[index],
+                                callback: function($$v) {
+                                  _vm.$set(_vm.new_ratings, index, $$v)
+                                },
+                                expression: "new_ratings[index]"
+                              }
+                            },
+                            _vm._l(10, function(i) {
+                              return _c(
+                                "a",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      _vm.addRating(movie.id, i)
+                                    }
+                                  }
+                                },
+                                [_vm._v("★")]
+                              )
+                            })
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row btnHolder" }, [
+                          _c(
+                            "button",
+                            {
+                              on: {
+                                click: function($event) {
+                                  _vm.hideMovie(movie.id)
+                                }
+                              }
+                            },
+                            [
+                              _c("span", {
+                                staticClass: "glyphicon glyphicon-eye-close",
+                                attrs: { "aria-hidden": "true" }
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              on: {
+                                click: function($event) {
+                                  _vm.laterMovie(movie.id)
+                                }
+                              }
+                            },
+                            [
+                              _c("span", {
+                                staticClass: "glyphicon glyphicon-floppy-disk",
+                                attrs: { "aria-hidden": "true" }
+                              })
+                            ]
+                          )
+                        ])
                       ])
                     ]
                   )
                 : _vm._e()
             })
           )
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "modal fade",
-            attrs: { tabindex: "-1", role: "dialog", id: "movie_info" }
-          },
-          [
-            _c(
-              "div",
-              { staticClass: "modal-dialog", attrs: { role: "document" } },
-              [
-                _c("div", { staticClass: "modal-content" }, [
-                  _c("ul", [
-                    _c("img", {
-                      attrs: {
-                        src: _vm.image_prefix_url + _vm.movie.poster_path
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("li", [
-                      _c("span", { staticClass: "li_header" }, [
-                        _vm._v("Title: ")
-                      ]),
-                      _vm._v(" " + _vm._s(_vm.movie.title))
-                    ]),
-                    _vm._v(" "),
-                    _c("li", [
-                      _c("span", { staticClass: "li_header" }, [
-                        _vm._v("Tagline: ")
-                      ]),
-                      _vm._v(" " + _vm._s(_vm.movie.tagline))
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(0),
-                    _c(
-                      "li",
-                      _vm._l(_vm.movie.production_countries, function(
-                        country,
-                        index
-                      ) {
-                        return _c("span", [
-                          _vm._v(
-                            "\r\n\t\t\t\t\t\t\t\t\t\t\t" +
-                              _vm._s(country.name) +
-                              "\r\n\t\t\t\t\t\t\t\t\t\t\t"
-                          ),
-                          _vm.movie.production_countries[index + 1] != null
-                            ? _c("span", [_vm._v(",")])
-                            : _vm._e()
-                        ])
-                      })
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "li",
-                      [
-                        _c("span", { staticClass: "li_header" }, [
-                          _vm._v("Genres: ")
-                        ]),
-                        _vm._v(" "),
-                        _vm._l(_vm.movie.genres, function(genre, index) {
-                          return _c("span", [
-                            _vm._v(
-                              "\r\n\t\t\t\t\t\t\t\t\t\t\t" +
-                                _vm._s(genre.name) +
-                                "\r\n\t\t\t\t\t\t\t\t\t\t\t"
-                            ),
-                            _vm.movie.genres[index + 1] != null
-                              ? _c("span", [_vm._v(",")])
-                              : _vm._e()
-                          ])
-                        })
-                      ],
-                      2
-                    ),
-                    _vm._v(" "),
-                    _c("li", [
-                      _c("span", { staticClass: "li_header" }, [
-                        _vm._v("Runtime: ")
-                      ]),
-                      _vm._v(" " + _vm._s(_vm.movie.runtime) + " min")
-                    ]),
-                    _vm._v(" "),
-                    _c("li", [
-                      _c("span", { staticClass: "li_header" }, [
-                        _vm._v("Overview: ")
-                      ]),
-                      _vm._v(" " + _vm._s(_vm.movie.overview))
-                    ])
-                  ])
-                ])
-              ]
-            )
-          ]
-        )
+        ])
       ])
     ])
   ])
@@ -46753,8 +46831,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("span", { staticClass: "li_header" }, [_vm._v("Countries: ")])
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-default",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      )
     ])
   }
 ]
@@ -46763,7 +46848,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-55d9f395", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-85ef4954", module.exports)
   }
 }
 
