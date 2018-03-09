@@ -2,98 +2,109 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-default">
-        <!-- FIX IT -->
-        <!-- this heading is overlapped by the menu bar on the top -->
-        <div class="panel-heading">
-          Popular and High Rated Movies
-        </div>
-        <!-- modal window with the selected movie info -->
-        <div class="modal fade"
-             tabindex="-1"
-             role="dialog"
-             id="movie_info">
-          <div class="modal-dialog"
-               role="document">
-            <div class="modal-content">
-              <ul>
-                <!-- poster -->
-                <img v-bind:src="image_prefix_url + movie.poster_path">
-                <!-- title -->
-                <li><span class="li_header">Title: </span> {{movie.title}}</li>
-                <!-- tagline -->
-                <li><span class="li_header">Tagline: </span> {{movie.tagline}}</li>
-                <!-- countries -->
-                <li><span class="li_header">Countries: </span>
-                  <!-- loop to display all involved countries -->
-                  <li><span v-for="(country, index) in movie.production_countries">
-											{{country.name}}
-											<span v-if="movie.production_countries[index + 1] != null">,</span>
-                    </span>
-                  </li>
-                  <!-- genres -->
-                  <li><span class="li_header">Genres: </span>
-                    <!-- loop to display all genres -->
-                    <span v-for="(genre, index) in movie.genres">
-											{{genre.name}}
-											<span v-if="movie.genres[index + 1] != null">,</span>
-                    </span>
-                  </li>
-                  <!-- movie runtime -->
-                  <li><span class="li_header">Runtime: </span> {{movie.runtime}} min</li>
-                  <!-- movie overview -->
-                  <li><span class="li_header">Overview: </span> {{movie.overview}}</li>
-              </ul>
-            </div>
-            <!-- /.modal-content -->
+      <!-- modal window with the selected movie info -->
+      <div class="modal fade"
+           tabindex="-1"
+           role="dialog"
+           id="movie_info">
+        <div class="modal-dialog"
+             role="document">
+          <div class="modal-content">
+            <ul>
+              <!-- poster -->
+              <img v-bind:src="image_prefix_url + movie.poster_path">
+              <!-- title -->
+              <li><span class="li_header">Title: </span> {{movie.title}}</li>
+              <!-- tagline -->
+              <li><span class="li_header">Tagline: </span> {{movie.tagline}}</li>
+              <!-- countries -->
+              <li><span class="li_header">Countries: </span>
+                <!-- loop to display all involved countries -->
+                <li><span v-for="(country, index) in movie.production_countries">
+										{{country.name}}
+										<span v-if="movie.production_countries[index + 1] != null">,</span>
+                  </span>
+                </li>
+                <!-- genres -->
+                <li><span class="li_header">Genres: </span>
+                  <!-- loop to display all genres -->
+                  <span v-for="(genre, index) in movie.genres">
+										{{genre.name}}
+										<span v-if="movie.genres[index + 1] != null">,</span>
+                  </span>
+                </li>
+                <!-- movie runtime -->
+                <li><span class="li_header">Runtime: </span> {{movie.runtime}} min</li>
+                <!-- movie overview -->
+                <li><span class="li_header">Overview: </span> {{movie.overview}}</li>
+            </ul>
           </div>
-          <!-- /.modal-dialog -->
+          <!-- /.modal-content -->
         </div>
-        <!-- /.modal -->
-        <!-- table with most popular and highest rated movies -->
-        <div class="panel-body">
-          <table class="table table-bordered table-striped table-responsive">
-            <tbody>
-              <!-- first row  -->
-              <tr><span> Popular Movies </span></tr>
-              <tr>
-                <!-- loop to display 5 most popular movies -->
-                <td v-if="index < 5"
-                    v-for="(movie, index) in popular_movies">
-                  <!-- modal window with movie info appears by click on the poster -->
-                  <img @click="showMovie(movie.id)"
-                       v-bind:src="image_prefix_url + movie.poster_path">
-                  <!-- the drop-down list for choosing rating -->
-                  <!-- the rating of each film is linked to the corresponding array member -->
-                  <select v-model="new_ratings[index]">
-                    <!-- scores from 0 to 10 -->
-                    <option v-for="i in 11">{{i-1}}</option>
-                  </select>
-                  <button @click="hideMovie(movie.id)">Hide</button>
-                  <button @click="laterMovie(movie.id)">Watch Later</button>
-                </td>
-              </tr>
-              <!-- second row -->
-              <tr><span> Highest Rated Movies (should be replaced by New Releases) </span></tr>
-              <tr>
-                <!-- loop to display 5 highest rated movies -->
-                <td v-if="index < 5"
-                    v-for="(movie, index) in high_rated_movies">
-                  <!-- modal window with movie info appears by click on this poster -->
-                  <img @click="showMovie(movie.id)"
-                       v-bind:src="image_prefix_url + movie.poster_path">
-                  <!-- the drop-down list with for choosing rating -->
-                  <!-- the rating of each film is linked to the corresponding array member -->
-                  <select v-model="new_ratings[index + 5]">
-                    <!-- scores from 0 to 10 -->
-                    <option v-for="i in 11">{{i-1}}</option>
-                  </select>
-                  <button @click="hideMovie(movie.id)">Hide</button>
-                  <button @click="laterMovie(movie.id)">Watch Later</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+            
+      <div class="row">
+        <h2 class="space">Popular Movies:</h2>
+        <div class="slider slider-nav">
+
+            <a  v-if="index < 30"
+              v-for="(movie,index) in popular_movies" href="#" class="smSlickItem" >
+
+            <img
+                v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
+
+              <!-- the drop-down list with for choosing rating -->
+              <!-- the rating of each film is linked to the corresponding array member -->
+            <div class="slickActions">
+
+              <div class="row">
+                <div class="rating" v-model="new_ratings[index]">
+                  <!-- scores from 0 to 10 -->
+                  <a v-for="i in 10" @click="addRating(movie.id, i)">★</a>
+                </div>
+              </div>
+              <div class="row btnHolder">
+                <button @click="hideMovie(movie.id)">Hide</button>
+                <button @click="laterMovie(movie.id)">Watch Later</button>
+              </div>
+
+            </div>
+
+          </a>
+
+        </div>
+      </div>
+      <div class="row">
+        <h2 class="noSpace">High Rated Movies:</h2>
+        <div class="slider slider-nav">
+
+            <a  v-if="index < 30"
+              v-for="(movie,index) in high_rated_movies" href="#" class="smSlickItem" >
+
+            <img
+                v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
+
+              <!-- the drop-down list with for choosing rating -->
+              <!-- the rating of each film is linked to the corresponding array member -->
+            <div class="slickActions">
+
+              <div class="row">
+                <div class="rating" v-model="new_ratings[index]">
+                  <!-- scores from 0 to 10 -->
+                  <a v-for="i in 10" @click="addRating(movie.id, i)">★</a>
+                </div>
+              </div>
+              <div class="row btnHolder">
+                <button @click="hideMovie(movie.id)">Hide</button>
+                <button @click="laterMovie(movie.id)">Watch Later</button>
+              </div>
+
+            </div>
+
+          </a>
+
         </div>
       </div>
     </div>
@@ -140,7 +151,8 @@ export default {
 
     this.getFriends(),
     this.getPopularMovies(),
-    this.getHighRatedMovies()
+    this.getHighRatedMovies(),
+    this.addRating()
   },
 
   methods: {
