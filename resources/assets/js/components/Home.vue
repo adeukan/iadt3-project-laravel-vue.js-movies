@@ -151,8 +151,7 @@ export default {
 
     this.getFriends(),
     this.getPopularMovies(),
-    this.getHighRatedMovies(),
-    this.addRating()
+    this.getHighRatedMovies()
   },
 
   methods: {
@@ -201,13 +200,13 @@ export default {
       // reference to Vue object
       var self = this
       // search movie by tmdb_id
-      $.getJSON(url)
-        .done(function(received_movie) {
-          // put the received movie into object (temporary container)
-          self.movie = received_movie
-          // show a modal window with information about the selected movie
-          $('#movie_info').modal('show')
-        })
+      fetch(url)
+        .then(r => r.json())
+        .then(json => {
+          self.movie=json;
+      });
+
+      $('#movie_info').modal('show')
     },
     hideMovie(movieId) {
       // HIDE BUTTON HANDLER

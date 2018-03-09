@@ -46176,7 +46176,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   // functions triggered when Vue object is mounted
   mounted: function mounted() {
 
-    this.getFriends(), this.getPopularMovies(), this.getHighRatedMovies(), this.addRating();
+    this.getFriends(), this.getPopularMovies(), this.getHighRatedMovies();
   },
 
 
@@ -46223,12 +46223,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // reference to Vue object
       var self = this;
       // search movie by tmdb_id
-      $.getJSON(url).done(function (received_movie) {
-        // put the received movie into object (temporary container)
-        self.movie = received_movie;
-        // show a modal window with information about the selected movie
-        $('#movie_info').modal('show');
+      fetch(url).then(function (r) {
+        return r.json();
+      }).then(function (json) {
+        self.movie = json;
       });
+
+      $('#movie_info').modal('show');
     },
     hideMovie: function hideMovie(movieId) {
       // HIDE BUTTON HANDLER
