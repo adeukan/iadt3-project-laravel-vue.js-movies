@@ -56,7 +56,6 @@
                             <li><a href="{{ url('/') }}">Home</a></li>
                             <li><a href="{{ url('/profile') }}">Profile</a></li>
                             <li><a href="{{ url('/lists') }}">Lists</a></li>
-                            <li><a href="{{ url('/hidden') }}">Hidden</a></li>
                             
 
                             <li class="dropdown">
@@ -83,7 +82,7 @@
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav>  
 
         @yield('content')
     </div>
@@ -99,8 +98,10 @@
 
         $(document).ready(function(){
           $('.slider-nav').slick({
+                dots:false,
                 slidesToShow: 5,
                 slidesToScroll: 4,
+                infinite:true,
                 variableWidth: true,
                 responsive: [
                     {

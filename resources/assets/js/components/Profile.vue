@@ -2,83 +2,138 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          My Movies
-        </div>
-        <!-- rated movies table -->
-        <div class="panel-body">
-          <table class="table table-bordered table-striped table-responsive"
-                 v-if="TMDBmovies.length > 0">
-            <tbody>
-              <tr>
-                <th>Movie Title</th>
-                <th>My Rating</th>
-                <th>Overal Rating</th>
-                <th>Hidden</th>
-                <th>Watch Later</th>
-              </tr>
-              <!-- loop to display the movie data in the table -->
-              <tr v-for="(movie, i) in TMDBmovies">
-                <!-- title is taken from TMDBmovies array -->
-                <td><a @click="showMovieInfo(i)">{{ movie.title }}</a></td>
-                <!-- my rating is taken from MyDBmovies array -->
-                <td>{{ MyDBmovies[i].ratio }}</td>
-                <!-- average rating is taken from TMDBmovies array -->
-                <td>{{ movie.vote_average }}</td>
-                <!-- show whether movie is hidden -->
-                <!-- information is taken from MyDBmovies array -->
-                <td v-if="MyDBmovies[i].hidden == 1">YES</td>
-                <td v-else>NO</td>
-                <!-- show whether movie is in the watch later list -->
-                <!-- information is taken from MyDBmovies array -->
-                <td v-if="MyDBmovies[i].watchlater == 1">YES</td>
-                <td v-else>NO</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- modal window, selected movie info -->
-        <div class="modal fade" tabindex="-1" role="dialog" id="movie_info">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <ul>
-                <!-- poster -->
-                <img v-bind:src="image_prefix_url + movie.poster_path">
-                <!-- title -->
-                <li><span class="li_header">Title: </span> {{movie.title}}</li>
-                <!-- tagline -->
-                <li><span class="li_header">Tagline: </span> {{movie.tagline}}</li>
-                <!-- countries -->
-                <li><span class="li_header">Countries:</span>
-                  <!-- loop to display all involved countries -->
-                  <span v-for="(country, i) in movie.production_countries">
-                    {{country.name}}
-                    <!-- display a comma if there is a following value -->
-                    <span v-if="movie.production_countries[i + 1] != null">,</span>
-                  </span>
-                </li>
-                <!-- genres -->
-                <li><span class="li_header">Genres: </span>
-                  <!-- loop to display all genres -->
-                  <span v-for="(genre, i) in movie.genres">
-                    {{genre.name}}
-                    <!-- display a comma if there is a following value -->
-                    <span v-if="movie.genres[i + 1] != null">,</span>
-                  </span>
-                </li>
-                <!-- runtime -->
-                <li><span class="li_header">Runtime: </span> {{movie.runtime}} min</li>
-                <!-- overview -->
-                <li><span class="li_header">Overview: </span> {{movie.overview}}</li>
-              </ul>
+
+
+      <div class="row">
+        <h2 class="space">Movies You Have Rated:</h2>
+        <div class="slider slider-nav">
+
+            <a  v-if="TMDBmovies.length > 0"
+              v-for="(movie,i) in TMDBmovies" href="#" class="smSlickItem" >
+
+            <img
+                v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovieInfo(i)">
+
+              <!-- the drop-down list with for choosing rating -->
+              <!-- the rating of each film is linked to the corresponding array member -->
+            <div class="slickActions">
+
+              <div class="row">
+                <div class="rating" v-model="new_ratings[i]">
+                  <!-- scores from 0 to 10 -->
+                  <a v-for="i in 10" @click="addRating(movie.id, i)">★</a>
+                </div>
+              </div>
+              <div class="row btnHolder">
+                
+                <button @click="laterMovie(movie.id)"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+                <button @click="hideMovie(movie.id)"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+              </div>
+
             </div>
-            <!-- /.modal-content -->
-          </div>
-          <!-- /.modal-dialog -->
+
+          </a>
+
         </div>
-        <!-- /.modal -->
       </div>
+
+      <!-- modal window with the selected movie info -->
+      <div class="modal modal-lg fade"
+           tabindex="-1"
+           role="dialog"
+           id="movie_info">
+        <div class="modal-dialog"
+             role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                  <h2 class="modal-title">{{movie.title}} <button type="button" class="modal-close" data-dismiss="modal">
+                    Close
+                  </button></h2>
+            </div>
+            <div class="modal-body">
+              <div class="col-md-3">
+
+                                <!-- the drop-down list with for choosing rating -->
+                <!-- the rating of each film is linked to the corresponding array member -->
+              <div class="modalActions">
+
+                <div class="row btnHolder modalBtnHolder">
+                  
+                  <button @click="laterMovie(movie.id)"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+                  <button @click="hideMovie(movie.id)"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+                </div>
+
+                <div class="row">
+                  <div class="rating modalRating" v-model="new_ratings[index]">
+                    <!-- scores from 0 to 10 -->
+                    <a v-for="i in 10" @click="addRating(movie.id, i)">★</a>
+                  </div>
+                </div>
+
+              </div>
+
+                <img class="modal-image" v-bind:src="image_prefix_url + movie.poster_path">
+
+              </div>
+              <div class="col-md-9">
+                <div class="list-group">
+                  <div class="row">
+                    <!-- tagline -->
+                    <div class="list-group-item col-md-6">
+                      <span class="li_header">Tagline: </span>
+                      <p class="li_item"> {{movie.tagline}}</p>
+                    </div>
+
+                    <!-- countries -->
+                    <div class="list-group-item col-md-6">
+                      <span class="li_header">Countries: </span>
+                      <p class="li_item">
+                      <!-- loop to display all involved countries -->
+                      <span v-for="(country, index) in movie.production_countries">
+                          {{country.name}}
+                          <span v-if="movie.production_countries[index + 1] != null">,</span>
+                      </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <!-- genres -->
+                    <div class="list-group-item col-md-6">
+                      <span class="li_header">Genres: </span>
+                      <!-- loop to display all genres -->
+                      <p class="li_item">
+                      <span v-for="(genre, index) in movie.genres">
+                        {{genre.name}}
+                        <span v-if="movie.genres[index + 1] != null">,</span>
+                      </span>
+                      </p>
+                    </div>
+
+                    <!-- movie runtime -->
+                    <div class="list-group-item col-md-6">
+                      <span class="li_header">Runtime: </span>
+                      <p class="li_item">{{movie.runtime}} minutes.</p>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <!-- movie overview -->
+                    <div class="list-group-item">
+                      <span class="li_header">Overview: </span>
+                      <p class="li_item"> {{movie.overview}} </p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+    </div>
+        <!-- /.modal -->
+      </div> 
     </div>
   </div>
 </div>
@@ -110,7 +165,7 @@ export default {
       // TMDb api key url prefix
       api_key_prefix: 'https://api.themoviedb.org/3/movie/',
       // TMDb url prefix for posters
-      image_prefix_url: 'http://image.tmdb.org/t/p/w185'
+      image_prefix_url: 'http://image.tmdb.org/t/p/w500'
     }
   },
   // functions triggered when Vue object is mounted
@@ -141,6 +196,9 @@ export default {
               })
           }
         })
+    },
+    new_ratings() {
+
     },
     // show a modal window with information about the selected movie
     showMovieInfo(movieIndex) {
