@@ -8,27 +8,25 @@
 
 		<div class="site-wrapper-inner">
 			<div class="cover-container">
+				<div class="container">
 				<div class="masthead clearfix">
 					<div class="inner">
 						<div class="row text-center">
 							<div class="col-md-12">
-								<h1>Movie Recommendation Site</h1>
+								<h1 class="header">Movie Recommendation Site</h1>
 							</div>
 						</div>
 					</div>
 				</div>
 				
 				<div class="inner content cover">   
-					<div class="row align-items-center">
-
-						<!-- left indent-column -->
-						<div class="col-md-3 col"></div>
+					<div class="row">
 
 						<!-- LOGIN FORM -->
-						<div class="col-md-3 col">
+						<div class="col-md-6 col">
 							<div class="col-md-12 form-div">
 
-								<form method="POST" action="{{ route('login') }}">
+								<form class="loginForm" method="POST" action="{{ route('login') }}">
 									{{ csrf_field() }}
 
 									<!-- LOGIN LABEL -->
@@ -75,7 +73,7 @@
 										<div class="form-group col-md-12">  
 											<button type="submit" class="btn btn-primary btn-default btn-lg">Submit</button>
 					  						<!-- FORGOT PASSWORD LINK -->
-											<a class="btn btn-link" href="{{ route('password.request') }}">Forgot Password</a>
+											<a class="btn btn-link forgotPassword" href="{{ route('password.request') }}">Forgot Password</a>
 										</div>
 									</div>
 
@@ -85,9 +83,9 @@
 
 
 						<!-- REGISTRATION FORM -->
-						<div class="col-md-3 col">
+						<div class="col-md-6 col">
 							<div class="col-md-12 form-div">
-								<form method="POST" action="{{ route('register') }}">
+								<form class="registerForm" method="POST" action="{{ route('register') }}">
 									{{ csrf_field() }}
 
 									<!-- REGISTER LABEL -->
@@ -185,10 +183,12 @@
 				<!-- FOOTER -->
 				<div class="mastfoot">
 					<div class="inner">
-							<h3 class="footer"> Andrew Dunne & Vitalijs Komarovs - 2017 </h3>
+							<div class="container">
+								<h3 class="footerText"> Andrew Dunne & Vitalijs Komarovs - 2018 </h3>
+							</div>
 					</div>
 				</div>
-
+			</div>
 			</div>
 		</div>
 	</div>

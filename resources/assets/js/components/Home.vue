@@ -264,6 +264,10 @@ export default {
     },
     hideMovie(movieId) {
       // HIDE BUTTON HANDLER
+      
+    },
+    laterMovie(movieId) {
+      // WATCHLATER BUTTON HANDLER
     },
     // reaction to a change in the rating of any film
     new_ratings: function(new_ratings) {

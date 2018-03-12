@@ -27,6 +27,8 @@
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}"> Movie Recommendation Site </a>
 
+                    
+                    
                     <form class="navbar-form navbar-left col-md-12 col-xs-4" role="search">
                         <div class="form-group">
                             <input class="form-control" type="text" placeholder="Search">

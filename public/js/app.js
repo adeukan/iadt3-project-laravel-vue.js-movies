@@ -46287,6 +46287,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     hideMovie: function hideMovie(movieId) {
       // HIDE BUTTON HANDLER
+
+    },
+    laterMovie: function laterMovie(movieId) {
+      // WATCHLATER BUTTON HANDLER
     },
 
     // reaction to a change in the rating of any film
