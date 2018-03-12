@@ -11,38 +11,64 @@
              role="document">
           <div class="modal-content">
             <div class="modal-header">
-                  <h2 class="modal-title">Title: {{movie.title}} </h2>
-                  <button type="button" class="modal-close" data-dismiss="modal">
-                  </button>
+                  <h2 class="modal-title">{{movie.title}} <button type="button" class="modal-close" data-dismiss="modal">
+                    Close
+                  </button></h2>
             </div>
             <div class="modal-body">
-              <img class="modalImg" v-bind:src="image_prefix_url + movie.poster_path">
+              <div class="col-md-3">
+
+                                <!-- the drop-down list with for choosing rating -->
+                <!-- the rating of each film is linked to the corresponding array member -->
+              <div class="modalActions">
+
+                <div class="row btnHolder modalBtnHolder">
+                  
+                  <button @click="laterMovie(movie.id)"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
+                  <button @click="hideMovie(movie.id)"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+                </div>
+
+                <div class="row">
+                  <div class="rating modalRating" v-model="new_ratings[index]">
+                    <!-- scores from 0 to 10 -->
+                    <a v-for="i in 10" @click="addRating(movie.id, i)">★</a>
+                  </div>
+                </div>
+
+              </div>
+
+                <img class="modal-image" v-bind:src="image_prefix_url + movie.poster_path">
+
+              </div>
+              <div class="col-md-9">
                 <ul class="list-group">
                   <!-- tagline -->
-                  <li class="list-group-item"><span class="li_header">Tagline: </span> {{movie.tagline}}</li>
+                  <li class="list-group-item"><span class="li_header">Tagline: </span><p class="li_item"> {{movie.tagline}}</p></li>
                   <!-- countries -->
                   <li class="list-group-item"><span class="li_header">Countries: </span>
+                    <p class="li_item">
                     <!-- loop to display all involved countries -->
                     <span v-for="(country, index) in movie.production_countries">
     										{{country.name}}
     										<span v-if="movie.production_countries[index + 1] != null">,</span>
                     </span>
+                    </p>
                     <!-- genres -->
                     <li class="list-group-item"><span class="li_header">Genres: </span>
                       <!-- loop to display all genres -->
+                      <p class="li_item">
                       <span v-for="(genre, index) in movie.genres">
     										{{genre.name}}
     										<span v-if="movie.genres[index + 1] != null">,</span>
                       </span>
+                      </p>
                     </li>
                     <!-- movie runtime -->
-                    <li class="list-group-item"><span class="li_header">Runtime: </span> {{movie.runtime}} min</li>
+                    <li class="list-group-item"><span class="li_header">Runtime: </span> <p class="li_item">{{movie.runtime}} minutes.</p></li>
                     <!-- movie overview -->
-                    <li class="list-group-item"><span class="li_header">Overview: </span> {{movie.overview}}</li>
+                    <li class="list-group-item"><span class="li_header">Overview: </span> <p class="li_item"> {{movie.overview}} </p></li>
                 </ul>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
             </div>
           <!-- /.modal-content -->
         </div>
@@ -147,7 +173,7 @@ export default {
       // tmdb api key value
       api_key: 'api_key=a3abe9699d800e588cb2a57107b4179c',
       // url prefix for getting posters
-      image_prefix_url: 'http://image.tmdb.org/t/p/w185',
+      image_prefix_url: 'http://image.tmdb.org/t/p/w780',
       // массив пользователей со схожими вкусами, отсортирован по степени схожести
       friends_array: []
     }

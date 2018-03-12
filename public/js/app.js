@@ -46147,6 +46147,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -46173,7 +46199,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // tmdb api key value
       api_key: 'api_key=a3abe9699d800e588cb2a57107b4179c',
       // url prefix for getting posters
-      image_prefix_url: 'http://image.tmdb.org/t/p/w185',
+      image_prefix_url: 'http://image.tmdb.org/t/p/w780',
       // массив пользователей со схожими вкусами, отсортирован по степени схожести
       friends_array: []
     };
@@ -46310,98 +46336,186 @@ var render = function() {
                 _c("div", { staticClass: "modal-content" }, [
                   _c("div", { staticClass: "modal-header" }, [
                     _c("h2", { staticClass: "modal-title" }, [
-                      _vm._v("Title: " + _vm._s(_vm.movie.title) + " ")
-                    ]),
-                    _vm._v(" "),
-                    _c("button", {
-                      staticClass: "modal-close",
-                      attrs: { type: "button", "data-dismiss": "modal" }
-                    })
+                      _vm._v(_vm._s(_vm.movie.title) + " "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "modal-close",
+                          attrs: { type: "button", "data-dismiss": "modal" }
+                        },
+                        [
+                          _vm._v(
+                            "\r\n                    Close\r\n                  "
+                          )
+                        ]
+                      )
+                    ])
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "modal-body" }, [
-                    _c("img", {
-                      staticClass: "modalImg",
-                      attrs: {
-                        src: _vm.image_prefix_url + _vm.movie.poster_path
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("ul", { staticClass: "list-group" }, [
-                      _c("li", { staticClass: "list-group-item" }, [
-                        _c("span", { staticClass: "li_header" }, [
-                          _vm._v("Tagline: ")
-                        ]),
-                        _vm._v(" " + _vm._s(_vm.movie.tagline))
+                    _c("div", { staticClass: "col-md-3" }, [
+                      _c("div", { staticClass: "modalActions" }, [
+                        _c(
+                          "div",
+                          { staticClass: "row btnHolder modalBtnHolder" },
+                          [
+                            _c(
+                              "button",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    _vm.laterMovie(_vm.movie.id)
+                                  }
+                                }
+                              },
+                              [
+                                _c("span", {
+                                  staticClass:
+                                    "glyphicon glyphicon-floppy-disk",
+                                  attrs: { "aria-hidden": "true" }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    _vm.hideMovie(_vm.movie.id)
+                                  }
+                                }
+                              },
+                              [
+                                _c("span", {
+                                  staticClass: "glyphicon glyphicon-eye-close",
+                                  attrs: { "aria-hidden": "true" }
+                                })
+                              ]
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row" }, [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "rating modalRating",
+                              model: {
+                                value: _vm.new_ratings[_vm.index],
+                                callback: function($$v) {
+                                  _vm.$set(_vm.new_ratings, _vm.index, $$v)
+                                },
+                                expression: "new_ratings[index]"
+                              }
+                            },
+                            _vm._l(10, function(i) {
+                              return _c(
+                                "a",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      _vm.addRating(_vm.movie.id, i)
+                                    }
+                                  }
+                                },
+                                [_vm._v("★")]
+                              )
+                            })
+                          )
+                        ])
                       ]),
                       _vm._v(" "),
-                      _c(
-                        "li",
-                        { staticClass: "list-group-item" },
-                        [
+                      _c("img", {
+                        staticClass: "modal-image",
+                        attrs: {
+                          src: _vm.image_prefix_url + _vm.movie.poster_path
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-9" }, [
+                      _c("ul", { staticClass: "list-group" }, [
+                        _c("li", { staticClass: "list-group-item" }, [
+                          _c("span", { staticClass: "li_header" }, [
+                            _vm._v("Tagline: ")
+                          ]),
+                          _c("p", { staticClass: "li_item" }, [
+                            _vm._v(" " + _vm._s(_vm.movie.tagline))
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("li", { staticClass: "list-group-item" }, [
                           _c("span", { staticClass: "li_header" }, [
                             _vm._v("Countries: ")
                           ]),
                           _vm._v(" "),
-                          _vm._l(_vm.movie.production_countries, function(
-                            country,
-                            index
-                          ) {
-                            return _c("span", [
-                              _vm._v(
-                                "\r\n    \t\t\t\t\t\t\t\t\t\t" +
-                                  _vm._s(country.name) +
-                                  "\r\n    \t\t\t\t\t\t\t\t\t\t"
-                              ),
-                              _vm.movie.production_countries[index + 1] != null
-                                ? _c("span", [_vm._v(",")])
-                                : _vm._e()
-                            ])
-                          })
-                        ],
-                        2
-                      ),
-                      _c(
-                        "li",
-                        { staticClass: "list-group-item" },
-                        [
+                          _c(
+                            "p",
+                            { staticClass: "li_item" },
+                            _vm._l(_vm.movie.production_countries, function(
+                              country,
+                              index
+                            ) {
+                              return _c("span", [
+                                _vm._v(
+                                  "\r\n    \t\t\t\t\t\t\t\t\t\t" +
+                                    _vm._s(country.name) +
+                                    "\r\n    \t\t\t\t\t\t\t\t\t\t"
+                                ),
+                                _vm.movie.production_countries[index + 1] !=
+                                null
+                                  ? _c("span", [_vm._v(",")])
+                                  : _vm._e()
+                              ])
+                            })
+                          )
+                        ]),
+                        _c("li", { staticClass: "list-group-item" }, [
                           _c("span", { staticClass: "li_header" }, [
                             _vm._v("Genres: ")
                           ]),
                           _vm._v(" "),
-                          _vm._l(_vm.movie.genres, function(genre, index) {
-                            return _c("span", [
-                              _vm._v(
-                                "\r\n    \t\t\t\t\t\t\t\t\t\t" +
-                                  _vm._s(genre.name) +
-                                  "\r\n    \t\t\t\t\t\t\t\t\t\t"
-                              ),
-                              _vm.movie.genres[index + 1] != null
-                                ? _c("span", [_vm._v(",")])
-                                : _vm._e()
-                            ])
-                          })
-                        ],
-                        2
-                      ),
-                      _vm._v(" "),
-                      _c("li", { staticClass: "list-group-item" }, [
-                        _c("span", { staticClass: "li_header" }, [
-                          _vm._v("Runtime: ")
+                          _c(
+                            "p",
+                            { staticClass: "li_item" },
+                            _vm._l(_vm.movie.genres, function(genre, index) {
+                              return _c("span", [
+                                _vm._v(
+                                  "\r\n    \t\t\t\t\t\t\t\t\t\t" +
+                                    _vm._s(genre.name) +
+                                    "\r\n    \t\t\t\t\t\t\t\t\t\t"
+                                ),
+                                _vm.movie.genres[index + 1] != null
+                                  ? _c("span", [_vm._v(",")])
+                                  : _vm._e()
+                              ])
+                            })
+                          )
                         ]),
-                        _vm._v(" " + _vm._s(_vm.movie.runtime) + " min")
-                      ]),
-                      _vm._v(" "),
-                      _c("li", { staticClass: "list-group-item" }, [
-                        _c("span", { staticClass: "li_header" }, [
-                          _vm._v("Overview: ")
+                        _vm._v(" "),
+                        _c("li", { staticClass: "list-group-item" }, [
+                          _c("span", { staticClass: "li_header" }, [
+                            _vm._v("Runtime: ")
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "li_item" }, [
+                            _vm._v(_vm._s(_vm.movie.runtime) + " minutes.")
+                          ])
                         ]),
-                        _vm._v(" " + _vm._s(_vm.movie.overview))
+                        _vm._v(" "),
+                        _c("li", { staticClass: "list-group-item" }, [
+                          _c("span", { staticClass: "li_header" }, [
+                            _vm._v("Overview: ")
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "li_item" }, [
+                            _vm._v(" " + _vm._s(_vm.movie.overview) + " ")
+                          ])
+                        ])
                       ])
                     ])
-                  ]),
-                  _vm._v(" "),
-                  _vm._m(0, false, false)
+                  ])
                 ])
               ]
             )
@@ -46605,23 +46719,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-default",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("Close")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
