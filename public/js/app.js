@@ -46173,6 +46173,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -46199,7 +46220,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       // tmdb api key value
       api_key: 'api_key=a3abe9699d800e588cb2a57107b4179c',
       // url prefix for getting posters
-      image_prefix_url: 'http://image.tmdb.org/t/p/w780',
+      image_prefix_url: 'http://image.tmdb.org/t/p/w500',
       // массив пользователей со схожими вкусами, отсортирован по степени схожести
       friends_array: []
     };
@@ -46266,11 +46287,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     hideMovie: function hideMovie(movieId) {
       // HIDE BUTTON HANDLER
-    }
-  },
+    },
 
-  // function triggered when changing specified variables
-  watch: {
     // reaction to a change in the rating of any film
     new_ratings: function new_ratings(_new_ratings) {
 
@@ -46308,7 +46326,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         } // end if
       } // end loop
     } // end function
-  } // end watch
+
+  },
+
+  // function triggered when changing specified variables
+  watch: {} // end watch
 });
 
 /***/ }),
@@ -46435,82 +46457,109 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-md-9" }, [
-                      _c("ul", { staticClass: "list-group" }, [
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _c("span", { staticClass: "li_header" }, [
-                            _vm._v("Tagline: ")
-                          ]),
-                          _c("p", { staticClass: "li_item" }, [
-                            _vm._v(" " + _vm._s(_vm.movie.tagline))
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _c("span", { staticClass: "li_header" }, [
-                            _vm._v("Countries: ")
-                          ]),
+                      _c("div", { staticClass: "list-group" }, [
+                        _c("div", { staticClass: "row" }, [
+                          _c(
+                            "div",
+                            { staticClass: "list-group-item col-md-6" },
+                            [
+                              _c("span", { staticClass: "li_header" }, [
+                                _vm._v("Tagline: ")
+                              ]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "li_item" }, [
+                                _vm._v(" " + _vm._s(_vm.movie.tagline))
+                              ])
+                            ]
+                          ),
                           _vm._v(" "),
                           _c(
-                            "p",
-                            { staticClass: "li_item" },
-                            _vm._l(_vm.movie.production_countries, function(
-                              country,
-                              index
-                            ) {
-                              return _c("span", [
-                                _vm._v(
-                                  "\r\n    \t\t\t\t\t\t\t\t\t\t" +
-                                    _vm._s(country.name) +
-                                    "\r\n    \t\t\t\t\t\t\t\t\t\t"
-                                ),
-                                _vm.movie.production_countries[index + 1] !=
-                                null
-                                  ? _c("span", [_vm._v(",")])
-                                  : _vm._e()
-                              ])
-                            })
-                          )
-                        ]),
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _c("span", { staticClass: "li_header" }, [
-                            _vm._v("Genres: ")
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "p",
-                            { staticClass: "li_item" },
-                            _vm._l(_vm.movie.genres, function(genre, index) {
-                              return _c("span", [
-                                _vm._v(
-                                  "\r\n    \t\t\t\t\t\t\t\t\t\t" +
-                                    _vm._s(genre.name) +
-                                    "\r\n    \t\t\t\t\t\t\t\t\t\t"
-                                ),
-                                _vm.movie.genres[index + 1] != null
-                                  ? _c("span", [_vm._v(",")])
-                                  : _vm._e()
-                              ])
-                            })
+                            "div",
+                            { staticClass: "list-group-item col-md-6" },
+                            [
+                              _c("span", { staticClass: "li_header" }, [
+                                _vm._v("Countries: ")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "p",
+                                { staticClass: "li_item" },
+                                _vm._l(_vm.movie.production_countries, function(
+                                  country,
+                                  index
+                                ) {
+                                  return _c("span", [
+                                    _vm._v(
+                                      "\r\n      \t\t\t\t\t\t\t\t\t\t" +
+                                        _vm._s(country.name) +
+                                        "\r\n      \t\t\t\t\t\t\t\t\t\t"
+                                    ),
+                                    _vm.movie.production_countries[index + 1] !=
+                                    null
+                                      ? _c("span", [_vm._v(",")])
+                                      : _vm._e()
+                                  ])
+                                })
+                              )
+                            ]
                           )
                         ]),
                         _vm._v(" "),
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _c("span", { staticClass: "li_header" }, [
-                            _vm._v("Runtime: ")
-                          ]),
+                        _c("div", { staticClass: "row" }, [
+                          _c(
+                            "div",
+                            { staticClass: "list-group-item col-md-6" },
+                            [
+                              _c("span", { staticClass: "li_header" }, [
+                                _vm._v("Genres: ")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "p",
+                                { staticClass: "li_item" },
+                                _vm._l(_vm.movie.genres, function(
+                                  genre,
+                                  index
+                                ) {
+                                  return _c("span", [
+                                    _vm._v(
+                                      "\r\n      \t\t\t\t\t\t\t\t\t" +
+                                        _vm._s(genre.name) +
+                                        "\r\n      \t\t\t\t\t\t\t\t\t"
+                                    ),
+                                    _vm.movie.genres[index + 1] != null
+                                      ? _c("span", [_vm._v(",")])
+                                      : _vm._e()
+                                  ])
+                                })
+                              )
+                            ]
+                          ),
                           _vm._v(" "),
-                          _c("p", { staticClass: "li_item" }, [
-                            _vm._v(_vm._s(_vm.movie.runtime) + " minutes.")
-                          ])
+                          _c(
+                            "div",
+                            { staticClass: "list-group-item col-md-6" },
+                            [
+                              _c("span", { staticClass: "li_header" }, [
+                                _vm._v("Runtime: ")
+                              ]),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "li_item" }, [
+                                _vm._v(_vm._s(_vm.movie.runtime) + " minutes.")
+                              ])
+                            ]
+                          )
                         ]),
                         _vm._v(" "),
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _c("span", { staticClass: "li_header" }, [
-                            _vm._v("Overview: ")
-                          ]),
-                          _vm._v(" "),
-                          _c("p", { staticClass: "li_item" }, [
-                            _vm._v(" " + _vm._s(_vm.movie.overview) + " ")
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "list-group-item" }, [
+                            _c("span", { staticClass: "li_header" }, [
+                              _vm._v("Overview: ")
+                            ]),
+                            _vm._v(" "),
+                            _c("p", { staticClass: "li_item" }, [
+                              _vm._v(" " + _vm._s(_vm.movie.overview) + " ")
+                            ])
                           ])
                         ])
                       ])
@@ -46620,7 +46669,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
-          _c("h2", { staticClass: "noSpace" }, [_vm._v("High Rated Movies:")]),
+          _c("h2", [_vm._v("High Rated Movies:")]),
           _vm._v(" "),
           _c(
             "div",

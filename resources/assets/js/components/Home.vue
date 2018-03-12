@@ -41,33 +41,54 @@
 
               </div>
               <div class="col-md-9">
-                <ul class="list-group">
-                  <!-- tagline -->
-                  <li class="list-group-item"><span class="li_header">Tagline: </span><p class="li_item"> {{movie.tagline}}</p></li>
-                  <!-- countries -->
-                  <li class="list-group-item"><span class="li_header">Countries: </span>
-                    <p class="li_item">
-                    <!-- loop to display all involved countries -->
-                    <span v-for="(country, index) in movie.production_countries">
-    										{{country.name}}
-    										<span v-if="movie.production_countries[index + 1] != null">,</span>
-                    </span>
-                    </p>
+                <div class="list-group">
+                  <div class="row">
+                    <!-- tagline -->
+                    <div class="list-group-item col-md-6">
+                      <span class="li_header">Tagline: </span>
+                      <p class="li_item"> {{movie.tagline}}</p>
+                    </div>
+
+                    <!-- countries -->
+                    <div class="list-group-item col-md-6">
+                      <span class="li_header">Countries: </span>
+                      <p class="li_item">
+                      <!-- loop to display all involved countries -->
+                      <span v-for="(country, index) in movie.production_countries">
+      										{{country.name}}
+      										<span v-if="movie.production_countries[index + 1] != null">,</span>
+                      </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="row">
                     <!-- genres -->
-                    <li class="list-group-item"><span class="li_header">Genres: </span>
+                    <div class="list-group-item col-md-6">
+                      <span class="li_header">Genres: </span>
                       <!-- loop to display all genres -->
                       <p class="li_item">
                       <span v-for="(genre, index) in movie.genres">
-    										{{genre.name}}
-    										<span v-if="movie.genres[index + 1] != null">,</span>
+      									{{genre.name}}
+      									<span v-if="movie.genres[index + 1] != null">,</span>
                       </span>
                       </p>
-                    </li>
+                    </div>
+
                     <!-- movie runtime -->
-                    <li class="list-group-item"><span class="li_header">Runtime: </span> <p class="li_item">{{movie.runtime}} minutes.</p></li>
+                    <div class="list-group-item col-md-6">
+                      <span class="li_header">Runtime: </span>
+                      <p class="li_item">{{movie.runtime}} minutes.</p>
+                    </div>
+                  </div>
+                  <div class="row">
                     <!-- movie overview -->
-                    <li class="list-group-item"><span class="li_header">Overview: </span> <p class="li_item"> {{movie.overview}} </p></li>
-                </ul>
+                    <div class="list-group-item">
+                      <span class="li_header">Overview: </span>
+                      <p class="li_item"> {{movie.overview}} </p>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
           <!-- /.modal-content -->
@@ -110,7 +131,7 @@
         </div>
       </div>
       <div class="row">
-        <h2 class="noSpace">High Rated Movies:</h2>
+        <h2>High Rated Movies:</h2>
         <div class="slider slider-nav">
 
             <a  v-if="index < 30"
@@ -173,7 +194,7 @@ export default {
       // tmdb api key value
       api_key: 'api_key=a3abe9699d800e588cb2a57107b4179c',
       // url prefix for getting posters
-      image_prefix_url: 'http://image.tmdb.org/t/p/w780',
+      image_prefix_url: 'http://image.tmdb.org/t/p/w500',
       // массив пользователей со схожими вкусами, отсортирован по степени схожести
       friends_array: []
     }
@@ -243,12 +264,7 @@ export default {
     },
     hideMovie(movieId) {
       // HIDE BUTTON HANDLER
-    }
-
-  },
-
-  // function triggered when changing specified variables
-  watch: {
+    },
     // reaction to a change in the rating of any film
     new_ratings: function(new_ratings) {
 
@@ -287,6 +303,12 @@ export default {
         } // end if
       } // end loop
     } // end function
+
+  },
+
+  // function triggered when changing specified variables
+  watch: {
+
   }, // end watch
 }
 

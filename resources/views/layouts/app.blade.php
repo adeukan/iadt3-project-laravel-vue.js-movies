@@ -19,17 +19,9 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-fixed-top navbar-inverse">
+        <nav class="navbar navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse" aria-expanded="false">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}"> Movie Recommendation Site </a>
@@ -50,7 +42,7 @@
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav navbar-right navStyle">
 
                         <!-- Authentication Links -->
                         @guest
@@ -60,7 +52,7 @@
                             <!-- links to all pages (Vue components) -->
                             <li><a href="{{ url('/') }}">Home</a></li>
                             <li><a href="{{ url('/profile') }}">Profile</a></li>
-                            <li><a href="{{ url('/later') }}">Watch Later</a></li>
+                            <li><a href="{{ url('/lists') }}">Lists</a></li>
                             <li><a href="{{ url('/hidden') }}">Hidden</a></li>
                             
 
@@ -106,6 +98,7 @@
           $('.slider-nav').slick({
                 slidesToShow: 5,
                 slidesToScroll: 4,
+                variableWidth: true,
                 responsive: [
                     {
                       breakpoint: 1300,

@@ -7,12 +7,12 @@ body{
 
 /* SLICK */
 .smSlickItem {
-    height:400px;
+    height:380px;
     width:235px;
 }
 .slickImage {
-    height:330px;
-    width:215px;
+    height:310px;
+    width:210px;
     margin: auto;
 }
 .slickActions{
@@ -25,6 +25,20 @@ body{
 	background-color:#dfe6e9;
 	font-weight:bold;
 	color:#2d3436;
+    border-color:#636e72;
+}
+.navbar-brand {
+    color:#636e72;
+}
+.navbar-brand:hover {
+    color:#b2bec3;
+}
+.navStyle a{
+    color:#636e72;
+}
+.nav > li > a:hover, .nav > li > a:focus{
+    color:#dfe6e9;
+    background-color:#636e72;
 }
 
 
