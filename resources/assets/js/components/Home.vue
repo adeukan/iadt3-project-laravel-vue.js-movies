@@ -40,6 +40,7 @@
                 <img class="modal-image" v-bind:src="image_prefix_url + movie.poster_path">
 
               </div>
+              <div class="vl"></div>
               <div class="col-md-9">
                 <div class="list-group">
                   <div class="row">

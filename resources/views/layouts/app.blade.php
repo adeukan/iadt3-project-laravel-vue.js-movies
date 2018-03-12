@@ -14,6 +14,7 @@
     <link href="{{ asset('slickfolder/slick/slick-theme.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
     <title>MRS</title>
 </head>

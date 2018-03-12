@@ -46194,6 +46194,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -46455,6 +46456,8 @@ var render = function() {
                         }
                       })
                     ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "vl" }),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-md-9" }, [
                       _c("div", { staticClass: "list-group" }, [
