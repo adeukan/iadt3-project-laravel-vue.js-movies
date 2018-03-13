@@ -121,17 +121,18 @@ class UserMovieController extends Controller
     // add new movie with rating to DB
     public function store(Request $request)
     {
-        // create new record in movie table
-        $movie = new Movie();
-        $movie->tmdb_id = $request->input("tmdb_id");
-        $movie->save();
+        // таблица movies не нужна, она только усложняет код
+        // // create new record in movie table
+        // $movie = new Movie();
+        // $movie->tmdb_id = $request->input("tmdb_id");
+        // $movie->save();
 
         // create new record in user_movies table
         $userMovie = new UserMovie();
         $userMovie->user_id = Auth::user()->id;
         $userMovie->movie_id = $request->input("tmdb_id");
         $userMovie->ratio = $request->input("user_rating");
-        $userMovie->save();     
+        $userMovie->save();    
     }
 
     // update existing movie record in DB
