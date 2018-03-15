@@ -96,17 +96,18 @@ class UserMovieController extends Controller
         // убрать запятую после последнего ID
         $arguments = mb_substr($arguments, 0, -1);
 
-        // SQL - получить фильмы с самыми высокими рейтингами среди моих друзей, которые не видел я
+        // SQL - получить фильмы (которые  я не видел) с самыми высокими рейтингами среди группы моих друзей
+        // фильмы должны иметь рейтинг больше 3 и встречатьтся как минимум у 3 человек из группы
         $sql =  'SELECT t2.movie_id, AVG(t2.ratio) AS avg_ratio
-        FROM user_movies t1 INNER JOIN user_movies t2
-            ON t1.user_id = ' . Auth::user()->id . 
-            ' AND t2.user_id IN(' . $arguments . ')
-            AND t2.movie_id NOT IN (SELECT movie_id
-                                    FROM user_movies
-                                    WHERE user_id = '. Auth::user()->id .')
-        GROUP BY(t2.movie_id)
-        HAVING AVG(t2.ratio)>=3
-        ORDER BY AVG(t2.ratio) DESC';
+                FROM user_movies t1 INNER JOIN user_movies t2
+                    ON t1.user_id = ' . Auth::user()->id . 
+                    ' AND t2.user_id IN(' . $arguments . ')
+                    AND t2.movie_id NOT IN (SELECT movie_id
+                                            FROM user_movies
+                                            WHERE user_id = '. Auth::user()->id .')
+                GROUP BY(t2.movie_id)
+                HAVING AVG(t2.ratio) >= 3 AND COUNT(DISTINCT t2.user_id) > 3
+                ORDER BY AVG(t2.ratio) DESC';
 
         $response = DB::select($sql);
 
