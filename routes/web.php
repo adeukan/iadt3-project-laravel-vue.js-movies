@@ -35,8 +35,8 @@ Auth::routes();
 Route::get('/usermovies', 'UserMovieController@getUserMovies');
 Route::post('/store', 'UserMovieController@store');
 Route::post('/update', 'UserMovieController@update');
-
-Route::get('/get_friends', 'UserMovieController@getFriends');
+Route::get('/get_recommendations', 'UserMovieController@getRecommendations');
+Route::post('/save_recommendations', 'UserMovieController@saveRecommendations');
 // Route::post('/compare_user', 'UserMovieController@compareUser');
 
 

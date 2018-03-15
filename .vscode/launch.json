@@ -5,15 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch",
+            "name": "Launch Chrome",
             "type": "chrome",
             "request": "launch",
             "url": "http://localhost:8000",
             "webRoot": "${workspaceRoot}",
-            "sourceMaps": true,
+            // "sourceMaps": true,
+            "port": 9222,
             "runtimeArgs": [
             "--remote-debugging-port=9222"
             ]
-        },  
+        },
+        {
+            "name": "Listen for XDebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9000
+        },
     ]
 }

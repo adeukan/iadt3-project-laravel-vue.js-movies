@@ -197,22 +197,31 @@
                 // url prefix for getting posters
                 image_prefix_url: "http://image.tmdb.org/t/p/w500",
                 // массив пользователей со схожими вкусами, отсортирован по степени схожести
-                friends_array: []
+                recommended_array: {}
             };
         },
 
         // functions triggered when Vue object is mounted
         mounted() {
-            // this.getFriends(),
+            // this.getRecommendations(),
             this.getPopularMovies(),
             this.getHighRatedMovies();
         },
 
         methods: {
-            // получение пользователей со схожими вкусами
-            getFriends() {
-                axios.get("/get_friends").then(response => {
-                    this.friends_array = response.data.friends_array;
+            // получение рекомендованных фильмов
+            getRecommendations() {
+
+                // сначала получаем рекоммендации
+                axios.get("/get_recommendations")
+                     .then(response => {
+                                        // если рекомендации есть
+                                        if(response.data.recommended != 'nothing') {
+                                            // помещаем их в локальный массив
+                                            this.recommended_array = response.data.recommended;
+                                            // затем сохраняем в БД
+                                            axios.post("/save_recommendations", this.recommended_array);
+                                        }
                 });
             },
 
