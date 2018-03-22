@@ -37,7 +37,7 @@
                                         <div class="row">
                                             <div class="rating modalRating">
                                                 <!-- rating stars -->
-                                                <a v-for="i in 10" @click="addRating(movie.id, i)">★</a>
+                                                <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                                             </div>
                                         </div>
 
@@ -119,7 +119,7 @@
                                 <div class="row">
                                     <div class="rating">
                                         <!-- rating stars -->
-                                        <a v-for="i in 10" @click="addRating(movie.id, i)">★</a>
+                                        <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                                     </div>
                                 </div>
                                 <div class="row btnHolder">
@@ -134,12 +134,15 @@
                     </div>
                 </div><!-- ROW 1 -->
 
+                <!-- ROW 2 -->
                 <div class="row">
-                    <h2>High Rated Movies:</h2>
+                    <h2 v-if="final_recommendations.length == 0">High Rated Movies:</h2>
+                    <h2 v-else>Recommended Movies:</h2>
+
                     <div class="slider slider-nav">
 
                         <a v-if="index < 30"
-                           v-for="(movie,index) in high_rated_movies" href="#" class="smSlickItem">
+                           v-for="(movie,index) in second_line_movies" href="#" class="smSlickItem">
 
                             <img
                                     v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
@@ -152,7 +155,7 @@
                                 <div class="row">
                                     <div class="rating">
                                         <!-- rating stars -->
-                                        <a v-for="i in 10" @click="addRating(movie.id, i)">★</a>
+                                        <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                                     </div>
                                 </div>
                                 <div class="row btnHolder">
@@ -197,32 +200,96 @@
                 // url prefix for getting posters
                 image_prefix_url: "http://image.tmdb.org/t/p/w500",
                 // массив пользователей со схожими вкусами, отсортирован по степени схожести
-                recommended_array: {}
+                recommended_array: [],
+                final_recommendations: [],
+                second_line_movies: [],
             };
         },
 
         // functions triggered when Vue object is mounted
         mounted() {
-            // this.getRecommendations(),
-            this.getPopularMovies(),
-            this.getHighRatedMovies();
+
+            // check DB for previously saved recommendations
+            // depending on the checking result, run a function to fill the second line of movies
+            this.checkRecommendations(),
+            // get most popular movies to display them in the first line
+            this.getPopularMovies()
         },
 
         methods: {
-            // получение рекомендованных фильмов
+            
+            checkRecommendations() {
+
+                // PROBLEM !!!
+                if( this.final_recommendations.length > 0) {
+                    // get full info for each of recommended movies 
+                    this.getRecommendedMovies();
+                }
+                else {
+                // check DB for previously saved recommendations
+                axios.get("/check_recommendations")
+                     .then(response => {
+                                        // if there are no any previously saved recommendations
+                                        if(response.data.recommended == 'nothing') {
+
+                                            // if "I" have rated more than 50 movies - get new recommendations!
+                                            if(response.data.rated > 50) {
+                                                this.getRecommendations();
+                                            }
+                                            // or just get the list of highest rated movies
+                                            else {
+                                                this.getHighRatedMovies();
+                                            }
+                                        }
+                                        // if "I" have previously saved recommendations (movies)
+                                        else {
+                                            // put them into a local array (create reference to them)
+                                            this.recommended_array = response.data.recommended;
+                                            // and get full info for each of them
+                                            this.getRecommendedMovies();
+                                        }
+                    });
+                } // end else
+            },
+
+            // getting recommendations
             getRecommendations() {
 
-                // сначала получаем рекоммендации
+                // first, get the recommendations (list of movies)
                 axios.get("/get_recommendations")
                      .then(response => {
-                                        // если рекомендации есть
+                                        // if recommendations are present
                                         if(response.data.recommended != 'nothing') {
-                                            // помещаем их в локальный массив
+
+                                            // put them into a local array
                                             this.recommended_array = response.data.recommended;
-                                            // затем сохраняем в БД
+
+                                            // then store them in DB
                                             axios.post("/save_recommendations", this.recommended_array);
+
+                                            this.getRecommendedMovies();
                                         }
                 });
+            },
+
+            getRecommendedMovies() {
+
+                this.recommended_array.forEach(movie => {
+
+                    // url query to find movie by tmdb_id
+                    var url = "https://api.themoviedb.org/3/movie/" + movie.movie_id + "?" + this.api_key;
+                    // reference to Vue object
+                    var self = this;
+
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(json => {
+                                       // put the movie object to local object "movie"
+                                       self.final_recommendations.push(json);
+                        });
+                });
+
+                this.second_line_movies = this.final_recommendations;
             },
 
             getPopularMovies() {
@@ -250,6 +317,8 @@
                     // put the received movies into array
                     self.high_rated_movies = response.results;
                 });
+
+                this.second_line_movies = this.high_rated_movies;
             },
 
             // show selected movie info in modal window
@@ -263,11 +332,13 @@
                 fetch(url)
                     .then(r => r.json())
                     .then(json => {
+                        // put the movie object to local object "movie"
                         self.movie = json;
                     });
 
                 $("#movie_info").modal("show");
             },
+
             hideMovie(movieId) {
                 // HIDE BUTTON HANDLER
             },
@@ -278,8 +349,8 @@
             // ADD OR CHANGE RATING ---------------------------------------------------------
             addRating(tmdb_id, rating) {
 
-                // mirror the rating value (1 => 10, 2 => 9, ...)
-                rating = 11 - rating;
+                // mirror the rating value (1 => 5, 2 => 4, ...)
+                rating = 6 - rating;
 
                 // if the movie has not been rated yet, store new raiting in DB
                 if (this.ratings[tmdb_id] === undefined) {

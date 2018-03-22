@@ -36,6 +36,7 @@ Route::get('/usermovies', 'UserMovieController@getUserMovies');
 Route::post('/store', 'UserMovieController@store');
 Route::post('/update', 'UserMovieController@update');
 Route::get('/get_recommendations', 'UserMovieController@getRecommendations');
+Route::get('/check_recommendations', 'UserMovieController@checkRecommendations');
 Route::post('/save_recommendations', 'UserMovieController@saveRecommendations');
 // Route::post('/compare_user', 'UserMovieController@compareUser');
 

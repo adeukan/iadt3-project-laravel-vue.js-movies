@@ -46402,6 +46402,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -46428,32 +46431,97 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             // url prefix for getting posters
             image_prefix_url: "http://image.tmdb.org/t/p/w500",
             // массив пользователей со схожими вкусами, отсортирован по степени схожести
-            recommended_array: {}
+            recommended_array: [],
+            final_recommendations: [],
+            second_line_movies: []
         };
     },
 
 
     // functions triggered when Vue object is mounted
     mounted: function mounted() {
-        this.getRecommendations(), this.getPopularMovies(), this.getHighRatedMovies();
+
+        // check DB for previously saved recommendations
+        // depending on the checking result, run a function to fill the second line of movies
+        this.checkRecommendations(),
+        // get most popular movies to display them in the first line
+        this.getPopularMovies();
     },
 
 
     methods: {
-        // получение рекомендованных фильмов
-        getRecommendations: function getRecommendations() {
+        checkRecommendations: function checkRecommendations() {
             var _this = this;
 
-            // сначала получаем рекоммендации
+            // PROBLEM !!!
+            if (this.final_recommendations.length > 0) {
+                // get full info for each of recommended movies 
+                this.getRecommendedMovies();
+            } else {
+                // check DB for previously saved recommendations
+                axios.get("/check_recommendations").then(function (response) {
+                    // if there are no any previously saved recommendations
+                    if (response.data.recommended == 'nothing') {
+
+                        // if "I" have rated more than 50 movies - get new recommendations!
+                        if (response.data.rated > 50) {
+                            _this.getRecommendations();
+                        }
+                        // or just get the list of highest rated movies
+                        else {
+                                _this.getHighRatedMovies();
+                            }
+                    }
+                    // if "I" have previously saved recommendations (movies)
+                    else {
+                            // put them into a local array (create reference to them)
+                            _this.recommended_array = response.data.recommended;
+                            // and get full info for each of them
+                            _this.getRecommendedMovies();
+                        }
+                });
+            } // end else
+        },
+
+
+        // getting recommendations
+        getRecommendations: function getRecommendations() {
+            var _this2 = this;
+
+            // first, get the recommendations (list of movies)
             axios.get("/get_recommendations").then(function (response) {
-                // если рекомендации есть
+                // if recommendations are present
                 if (response.data.recommended != 'nothing') {
-                    // помещаем их в локальный массив
-                    _this.recommended_array = response.data.recommended;
-                    // затем сохраняем в БД
-                    axios.post("/save_recommendations", _this.recommended_array);
+
+                    // put them into a local array
+                    _this2.recommended_array = response.data.recommended;
+
+                    // then store them in DB
+                    axios.post("/save_recommendations", _this2.recommended_array);
+
+                    _this2.getRecommendedMovies();
                 }
             });
+        },
+        getRecommendedMovies: function getRecommendedMovies() {
+            var _this3 = this;
+
+            this.recommended_array.forEach(function (movie) {
+
+                // url query to find movie by tmdb_id
+                var url = "https://api.themoviedb.org/3/movie/" + movie.movie_id + "?" + _this3.api_key;
+                // reference to Vue object
+                var self = _this3;
+
+                fetch(url).then(function (response) {
+                    return response.json();
+                }).then(function (json) {
+                    // put the movie object to local object "movie"
+                    self.final_recommendations.push(json);
+                });
+            });
+
+            this.second_line_movies = this.final_recommendations;
         },
         getPopularMovies: function getPopularMovies() {
             // url query for all popular movies
@@ -46477,6 +46545,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // put the received movies into array
                 self.high_rated_movies = response.results;
             });
+
+            this.second_line_movies = this.high_rated_movies;
         },
 
 
@@ -46490,6 +46560,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             fetch(url).then(function (r) {
                 return r.json();
             }).then(function (json) {
+                // put the movie object to local object "movie"
                 self.movie = json;
             });
 
@@ -46505,10 +46576,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         // ADD OR CHANGE RATING ---------------------------------------------------------
         addRating: function addRating(tmdb_id, rating) {
-            var _this2 = this;
+            var _this4 = this;
 
-            // mirror the rating value (1 => 10, 2 => 9, ...)
-            rating = 11 - rating;
+            // mirror the rating value (1 => 5, 2 => 4, ...)
+            rating = 6 - rating;
 
             // if the movie has not been rated yet, store new raiting in DB
             if (this.ratings[tmdb_id] === undefined) {
@@ -46519,7 +46590,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 })
                 // reflect changes in the local array
                 .then(function (response) {
-                    _this2.ratings[tmdb_id] = rating;
+                    _this4.ratings[tmdb_id] = rating;
                 });
             }
             // if the rating has changed compared to the previous value, update rating in DB
@@ -46531,7 +46602,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     })
                     // reflect changes in the local array
                     .then(function (response) {
-                        _this2.ratings[tmdb_id] = rating;
+                        _this4.ratings[tmdb_id] = rating;
                     });
                 }
         } // addRating()
@@ -46631,7 +46702,7 @@ var render = function() {
                           _c(
                             "div",
                             { staticClass: "rating modalRating" },
-                            _vm._l(10, function(i) {
+                            _vm._l(5, function(i) {
                               return _c(
                                 "a",
                                 {
@@ -46800,7 +46871,7 @@ var render = function() {
                           _c(
                             "div",
                             { staticClass: "rating" },
-                            _vm._l(10, function(i) {
+                            _vm._l(5, function(i) {
                               return _c(
                                 "a",
                                 {
@@ -46860,12 +46931,14 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
-          _c("h2", [_vm._v("High Rated Movies:")]),
+          _vm.final_recommendations.length == 0
+            ? _c("h2", [_vm._v("High Rated Movies:")])
+            : _c("h2", [_vm._v("Recommended Movies:")]),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "slider slider-nav" },
-            _vm._l(_vm.high_rated_movies, function(movie, index) {
+            _vm._l(_vm.second_line_movies, function(movie, index) {
               return index < 30
                 ? _c(
                     "a",
@@ -46888,7 +46961,7 @@ var render = function() {
                           _c(
                             "div",
                             { staticClass: "rating" },
-                            _vm._l(10, function(i) {
+                            _vm._l(5, function(i) {
                               return _c(
                                 "a",
                                 {

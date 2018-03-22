@@ -17,31 +17,63 @@ class UserMovieController extends Controller
         $this->middleware('auth');
     }
 
-    // получение пользователей со схожими вкусами
+    // check the DB for existing recommendations
+    public function checkRecommendations() {
+        
+        // SQL - get (and count) previously saved recommendations for "me" 
+        $sql =  'SELECT movie_id, avg_ratio, COUNT(*) as qty
+                FROM recommendations
+                WHERE user_id = ' . Auth::user()->id ;
+
+        $response = DB::select($sql);
+
+        // return previously saved recommendations if they exist
+        if($response[0]->qty > 0) {
+            return response()->json([
+                'recommended' => $response,
+            ], 200);
+        }
+        // get number of movies rated by "me"
+        else {
+            $sql =  'SELECT COUNT(*) as qty
+                    FROM user_movies
+                    WHERE user_id = ' . Auth::user()->id;
+
+            $response = DB::select($sql);
+
+            // return falure response with the number of movies rated by "me"
+            return response()->json([
+                'recommended' => 'nothing',
+                'rated'       => $response[0]->qty,
+            ], 200);
+        }
+    }
+
+    // getting the recommendations
     public function getRecommendations() {
 
-        // SQL для получения пользователей со схожим набором фильмов
+        // SQL to get users with similar sets of movies
         $sql = 'SELECT t2.user_id, COUNT(t2.movie_id) AS same_movies_num
              FROM user_movies t1 INNER JOIN user_movies t2
                 ON t1.user_id = ' . Auth::user()->id . 
                 ' AND t2.user_id != ' . Auth::user()->id .
                 ' AND t1.movie_id = t2.movie_id
              GROUP BY t2.user_id
-             HAVING same_movies_num >= 50
+             HAVING same_movies_num >= 30
              ORDER BY COUNT(t2.movie_id) DESC
              LIMIT 100';  
-             
-        // выполнить и вернуть массив объектов, отсортированный по кол-ву общих фильмов
-        // каждый объект включает ID пользователя и количество общих фильмов с текущим пользователем
+        
+        // get the users with the set of movies most similar to mine (sorted by the number of same movies)
+        // each object includes the user_id and the number of same movies
         $same_movie_users = DB::select($sql);
 
-        // массив для пользователей со схожим вкусом
+        // array of friends
         $friends_array = [];
 
-        // отобрать из полученного массива пользователей с наиболее схожим вкусом
+        // check each user and possibly add to friends
         foreach ($same_movie_users as $user) {
             
-            // SQL - получить для каждого пользователя количество оценок схожих с моими
+            // SQL - for each user, count the number of similar ratings (for our common movies)
             $sql = 'SELECT COUNT(t1.movie_id) AS equal_ratios_num
                     FROM user_movies t1 INNER JOIN user_movies t2
                         ON t1.user_id = ' . Auth::user()->id .  
@@ -49,34 +81,33 @@ class UserMovieController extends Controller
                         ' AND t1.movie_id = t2.movie_id
                         AND (t1.ratio - t2.ratio) BETWEEN -1 AND 1';
 
-            // выполнение запроса для каждого пользователя из массива $same_movie_users
             $response = DB::select($sql);
 
-            // коэффициент схожести  = количество фильмов с одинаковой оценкой / общее количество фильмов
+            // similarity factor = the number of movies with similar rating / total number of common movies
             $factor = ($response[0]->equal_ratios_num) / $user->same_movies_num;
 
-            // добавить пользователя в друзья если коэфициент схожести больше 0.7
+            // add a user to "friend list" if the similarity factor is more than 0.7
             if($factor >= 0.7) {
 
-                // создать объект
+                // create a friend object
                 $friend = new stdClass();
-                // добавить поля ID и коэффициент схожести
+                // add the ID and Factor as fields of the object
                 $friend->user_id = $user->user_id;
                 $friend->factor = $factor;
-                // добавить объект в массив друзей
+                // add the object to "friend list"
                 array_push($friends_array, $friend);
             }
         }
 
-        // если друзей нет, то прервать работу
+        // interrupt the operation if the "friend list" is empty
         if($friends_array == null){
-            // вернуть отрицательный ответ
+            // return failure response
             return response()->json([
                 'recommended' => 'nothing',
             ], 200);
         }
 
-        // отсортировать пользователей (объекты) в массиве по значению поля factor (схожесть вкуса)
+        // sort the "friends" (objects) in the array by the Factor field (the similarity of taste)
         usort($friends_array, function($f1, $f2)
                                 {
                                     if ($f1->factor == $f2->factor)
@@ -86,18 +117,18 @@ class UserMovieController extends Controller
                                 }
         );
 
-        // взять первые 10 членов из $friends_array (пока пропускаю)
+        // take the first 10 members of the $friends_array (do it later)
 
-        // выстроить все ID самых похожих друзей в одну строку через запятую (для SQL)
+        // put all friends IDs in one line separated by commas (used as argument for SQL)
         $arguments = "";
         foreach ($friends_array as $friend) {
             $arguments = $arguments . $friend->user_id . ',';
         }
-        // убрать запятую после последнего ID
+        // remove the comma after the last friend ID
         $arguments = mb_substr($arguments, 0, -1);
 
-        // SQL - получить фильмы (которые  я не видел) с самыми высокими рейтингами среди группы моих друзей
-        // фильмы должны иметь рейтинг больше 3 и встречатьтся как минимум у 3 человек из группы
+        // SQL - get the movies (which I have not seen before) with the highest ratings among my friends
+        // the movies should have a rating greater than 3 and at least 3 "friends" should have it in their list
         $sql =  'SELECT t2.movie_id, AVG(t2.ratio) AS avg_ratio
                 FROM user_movies t1 INNER JOIN user_movies t2
                     ON t1.user_id = ' . Auth::user()->id . 
@@ -111,7 +142,7 @@ class UserMovieController extends Controller
 
         $response = DB::select($sql);
 
-        // вернуть отсортированный массив с рекоммендациями
+        // return a sorted array of movies (recommendations)
         return response()->json([
                 'recommended' => $response,
             ], 200);
@@ -119,22 +150,23 @@ class UserMovieController extends Controller
     } // getRecommendations()
 
 
-    // сохранить рекомендованные фильмы в БД --------------------------------------------------------
+    // save recommended movies in DB --------------------------------------------------------
     public function saveRecommendations(Request $request) {
 
-        // удалить все старые рекомендации из БД во избежание ошибок при перезаписи
+        // remove my all previous recommendations from DB to avoid errors when overwriting
         DB::table('recommendations')->where('user_id', '=',  Auth::user()->id)->delete();
 
-        // извлекаем полученный функцией массив с рекомендованными фильмами
+        // the array with the recommendations
         $recommended_array = $request->input();
-        // и сохраняем каждый фильм в БД
+
+        // save each recommended movie in DB
         for ($i = 0; $i < count($recommended_array); $i++) {
-            // извлекаем каждый следующий фильм из массива
+            // extract every next movie from the array
             $recommended_movie = $recommended_array[$i];
-            // и записываем в БД
+            // and record to DB
             DB::table('recommendations')->insert([
                                                 'user_id' => Auth::user()->id,
-                                                'tmdb_id' => $recommended_movie['movie_id'],
+                                                'movie_id' => $recommended_movie['movie_id'],
                                                 'avg_ratio' => $recommended_movie['avg_ratio']
                                                 ]);
         }                                     
@@ -155,6 +187,7 @@ class UserMovieController extends Controller
     // add new movie with rating to DB
     public function store(Request $request)
     {
+        // check if this movie is in the "movies" table
         $movie = Movie::where(["tmdb_id" => $request->input("tmdb_id")])->first();
 
         if($movie == null) {
@@ -169,7 +202,7 @@ class UserMovieController extends Controller
         $userMovie->user_id = Auth::user()->id;
         $userMovie->movie_id = $request->input("tmdb_id");
         $userMovie->ratio = $request->input("user_rating");
-        $userMovie->save();    
+        $userMovie->save();
     }
 
     // update existing movie record in DB

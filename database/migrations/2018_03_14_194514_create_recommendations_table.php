@@ -16,11 +16,11 @@ class CreateRecommendationsTable extends Migration
         Schema::create('recommendations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->integer('tmdb_id')->unsigned();
+            $table->integer('movie_id')->unsigned();
             $table->integer('avg_ratio')->unsigned();
 
             // make the combination of user_id and movie_id unique
-            $table->unique(['user_id', 'tmdb_id']);
+            $table->unique(['user_id', 'movie_id']);
             
             $table->timestamps();
         });
