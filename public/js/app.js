@@ -46566,11 +46566,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             $("#movie_info").modal("show");
         },
-        hideMovie: function hideMovie(movieId) {
+        hideMovie: function hideMovie(tmdb_id) {
             // HIDE BUTTON HANDLER
+            axios.post("/hide", {
+                tmdb_id: tmdb_id
+            });
         },
-        laterMovie: function laterMovie(movieId) {
+        laterMovie: function laterMovie(tmdb_id) {
             // WATCHLATER BUTTON HANDLER
+
+            axios.post("/watchlater", {
+                tmdb_id: tmdb_id
+            });
         },
 
 

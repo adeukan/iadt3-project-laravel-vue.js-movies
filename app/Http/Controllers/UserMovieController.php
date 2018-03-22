@@ -184,6 +184,28 @@ class UserMovieController extends Controller
         ], 200);
     }
 
+    // get and return the hidden movies
+    // #return \Illuminate\Http\Response
+    public function getHiddenMovies()
+    {
+        $all_rated_by_user = UserMovie::where(['user_id' => Auth::user()->id] && ['hide' => 1])->get();
+
+        return response()->json([
+            'all_rated_by_user'    => $all_rated_by_user,
+        ], 200);
+    }
+
+    // get and return the watch later movies
+    // #return \Illuminate\Http\Response
+    public function getWatchLaterMovies()
+    {
+        $all_rated_by_user = UserMovie::where(['user_id' => Auth::user()->id] && ['watchlater' => 1])->get();
+
+        return response()->json([
+            'all_rated_by_user'    => $all_rated_by_user,
+        ], 200);
+    }
+
     // add new movie with rating to DB
     public function store(Request $request)
     {
@@ -205,6 +227,48 @@ class UserMovieController extends Controller
         $userMovie->save();
     }
 
+    // add new movie to watch later to DB
+    public function watchlater(Request $request)
+    {
+        // check if this movie is in the "movies" table
+        $movie = Movie::where(["tmdb_id" => $request->input("tmdb_id")])->first();
+
+        if($movie == null) {
+            // create new record in movie table
+            $movie = new Movie();
+            $movie->tmdb_id = $request->input("tmdb_id");
+            $movie->save();
+        }
+
+        // create new record in user_movies table
+        $userMovie = new UserMovie();
+        $userMovie->user_id = Auth::user()->id;
+        $userMovie->movie_id = $request->input("tmdb_id");
+        $userMovie->watchlater = 1;
+        $userMovie->save();
+    }
+
+        // add new movie to watch later to DB
+    public function hide(Request $request)
+    {
+        // check if this movie is in the "movies" table
+        $movie = Movie::where(["tmdb_id" => $request->input("tmdb_id")])->first();
+
+        if($movie == null) {
+            // create new record in movie table
+            $movie = new Movie();
+            $movie->tmdb_id = $request->input("tmdb_id");
+            $movie->save();
+        }
+
+        // create new record in user_movies table
+        $userMovie = new UserMovie();
+        $userMovie->user_id = Auth::user()->id;
+        $userMovie->movie_id = $request->input("tmdb_id");
+        $userMovie->hide = 1;
+        $userMovie->save();
+    }
+
     // update existing movie record in DB
     public function update(Request $request)
     {
@@ -219,4 +283,5 @@ class UserMovieController extends Controller
         $userMovie->ratio = $request->input("user_rating");
         $userMovie->save();
     }
+
 }
