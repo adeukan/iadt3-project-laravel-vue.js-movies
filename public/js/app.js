@@ -46426,26 +46426,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             popular_movies: [],
             // contains all highest rated movies received from TMDb
             high_rated_movies: [],
+            // recommended movies (without )
+            recommended_array: [],
+            final_recommendations: [],
+            second_line_movies: [],
             // tmdb api key value
             api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
             // url prefix for getting posters
-            image_prefix_url: "http://image.tmdb.org/t/p/w500",
-            // массив пользователей со схожими вкусами, отсортирован по степени схожести
-            recommended_array: [],
-            final_recommendations: [],
-            second_line_movies: []
+            image_prefix_url: "http://image.tmdb.org/t/p/w500"
+
         };
     },
 
 
     // functions triggered when Vue object is mounted
     mounted: function mounted() {
-
+        // get most popular and highest rated movies to display them in the first line
+        this.getPopularMovies(), this.getHighRatedMovies(),
         // check DB for previously saved recommendations
         // depending on the checking result, run a function to fill the second line of movies
-        this.checkRecommendations(),
-        // get most popular movies to display them in the first line
-        this.getPopularMovies();
+        this.checkRecommendations();
     },
 
 
@@ -46453,34 +46453,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         checkRecommendations: function checkRecommendations() {
             var _this = this;
 
-            // PROBLEM !!!
-            if (this.final_recommendations.length > 0) {
-                // get full info for each of recommended movies 
-                this.getRecommendedMovies();
-            } else {
-                // check DB for previously saved recommendations
-                axios.get("/check_recommendations").then(function (response) {
-                    // if there are no any previously saved recommendations
-                    if (response.data.recommended == 'nothing') {
+            // check DB for previously saved recommendations
+            axios.get("/check_recommendations").then(function (response) {
+                // if there are no any previously saved recommendations
+                if (response.data.recommended == 'nothing') {
 
-                        // if "I" have rated more than 50 movies - get new recommendations!
-                        if (response.data.rated > 50) {
-                            _this.getRecommendations();
-                        }
-                        // or just get the list of highest rated movies
-                        else {
-                                _this.getHighRatedMovies();
-                            }
+                    // if "I" have rated more than 50 movies - try to get new recommendations!
+                    if (response.data.rated > 50) {
+                        _this.getRecommendations();
                     }
-                    // if "I" have previously saved recommendations (movies)
+                    // or just get the list of highest rated movies
                     else {
-                            // put them into a local array (create reference to them)
-                            _this.recommended_array = response.data.recommended;
-                            // and get full info for each of them
-                            _this.getRecommendedMovies();
+                            _this.getHighRatedMovies();
+                            _this.useHighRatedMovies();
                         }
-                });
-            } // end else
+                }
+                // if "I" have previously saved recommendations (movies)
+                else {
+                        // put them into a local array (create reference)
+                        _this.recommended_array = response.data.recommended;
+                        // and get full info for each of them
+                        _this.getRecommendedInfo();
+                    }
+            });
         },
 
 
@@ -46493,17 +46488,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // if recommendations are present
                 if (response.data.recommended != 'nothing') {
 
-                    // put them into a local array
+                    // put them into a local array (create reference)
                     _this2.recommended_array = response.data.recommended;
 
                     // then store them in DB
                     axios.post("/save_recommendations", _this2.recommended_array);
 
-                    _this2.getRecommendedMovies();
+                    _this2.getRecommendedInfo();
+                } else {
+                    _this2.useHighRatedMovies();
                 }
             });
         },
-        getRecommendedMovies: function getRecommendedMovies() {
+        getRecommendedInfo: function getRecommendedInfo() {
             var _this3 = this;
 
             this.recommended_array.forEach(function (movie) {
@@ -46518,10 +46515,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }).then(function (json) {
                     // put the movie object to local object "movie"
                     self.final_recommendations.push(json);
-                });
+                }).then(_this3.second_line_movies = _this3.final_recommendations);
             });
-
-            this.second_line_movies = this.final_recommendations;
+        },
+        useHighRatedMovies: function useHighRatedMovies() {
+            this.second_line_movies = this.high_rated_movies;
         },
         getPopularMovies: function getPopularMovies() {
             // url query for all popular movies
@@ -46535,6 +46533,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         getHighRatedMovies: function getHighRatedMovies() {
+
             // url query for all highest rated movies
             var url = "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=a3abe9699d800e588cb2a57107b4179c";
 
@@ -46545,8 +46544,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // put the received movies into array
                 self.high_rated_movies = response.results;
             });
-
-            this.second_line_movies = this.high_rated_movies;
         },
 
 

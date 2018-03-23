@@ -52,7 +52,7 @@ class UserMovieController extends Controller
     // getting the recommendations
     public function getRecommendations() {
 
-        // SQL to get users with similar sets of movies
+        // SQL - get users with similar set of movies
         $sql = 'SELECT t2.user_id, COUNT(t2.movie_id) AS same_movies_num
              FROM user_movies t1 INNER JOIN user_movies t2
                 ON t1.user_id = ' . Auth::user()->id . 
@@ -66,6 +66,8 @@ class UserMovieController extends Controller
         // get the users with the set of movies most similar to mine (sorted by the number of same movies)
         // each object includes the user_id and the number of same movies
         $same_movie_users = DB::select($sql);
+
+        // handle possible absence of users with similar set of movies (will do it later)
 
         // array of friends
         $friends_array = [];
@@ -117,9 +119,9 @@ class UserMovieController extends Controller
                                 }
         );
 
-        // take the first 10 members of the $friends_array (do it later)
+        // take the first 10 (or 100 ?) members of the $friends_array (not ready yet)
 
-        // put all friends IDs in one line separated by commas (used as argument for SQL)
+        // put all friends IDs in one line separated by commas (argument for SQL)
         $arguments = "";
         foreach ($friends_array as $friend) {
             $arguments = $arguments . $friend->user_id . ',';
@@ -128,7 +130,7 @@ class UserMovieController extends Controller
         $arguments = mb_substr($arguments, 0, -1);
 
         // SQL - get the movies (which I have not seen before) with the highest ratings among my friends
-        // the movies should have a rating greater than 3 and at least 3 "friends" should have it in their list
+        // the movies should have a rating from 3 to 5 (from 4 to 5 is better), and at least 3 "friends" should have it in their list
         $sql =  'SELECT t2.movie_id, AVG(t2.ratio) AS avg_ratio
                 FROM user_movies t1 INNER JOIN user_movies t2
                     ON t1.user_id = ' . Auth::user()->id . 
@@ -142,11 +144,19 @@ class UserMovieController extends Controller
 
         $response = DB::select($sql);
 
-        // return a sorted array of movies (recommendations)
-        return response()->json([
+        // if there are no recommendations for "me"
+        if(count($response) == 0) {
+            return response()->json([
+                'recommended' => 'nothing',
+            ], 200);
+        }
+        // if "I" have recommendations
+        else {
+            // return a sorted array of movies (recommendations)
+            return response()->json([
                 'recommended' => $response,
             ], 200);
-
+        }
     } // getRecommendations()
 
 

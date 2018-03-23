@@ -195,61 +195,56 @@
                 popular_movies: [],
                 // contains all highest rated movies received from TMDb
                 high_rated_movies: [],
+                // recommended movies (without )
+                recommended_array: [],
+                final_recommendations: [],
+                second_line_movies: [],
                 // tmdb api key value
                 api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
                 // url prefix for getting posters
                 image_prefix_url: "http://image.tmdb.org/t/p/w500",
-                // массив пользователей со схожими вкусами, отсортирован по степени схожести
-                recommended_array: [],
-                final_recommendations: [],
-                second_line_movies: [],
+                
             };
         },
 
         // functions triggered when Vue object is mounted
         mounted() {
-
+            // get most popular and highest rated movies to display them in the first line
+            this.getPopularMovies(),
+            this.getHighRatedMovies(),
             // check DB for previously saved recommendations
             // depending on the checking result, run a function to fill the second line of movies
-            this.checkRecommendations(),
-            // get most popular movies to display them in the first line
-            this.getPopularMovies()
+            this.checkRecommendations() 
         },
 
         methods: {
-            
+          
             checkRecommendations() {
 
-                // PROBLEM !!!
-                if( this.final_recommendations.length > 0) {
-                    // get full info for each of recommended movies 
-                    this.getRecommendedMovies();
-                }
-                else {
                 // check DB for previously saved recommendations
                 axios.get("/check_recommendations")
-                     .then(response => {
+                        .then(response => {
                                         // if there are no any previously saved recommendations
                                         if(response.data.recommended == 'nothing') {
 
-                                            // if "I" have rated more than 50 movies - get new recommendations!
+                                            // if "I" have rated more than 50 movies - try to get new recommendations!
                                             if(response.data.rated > 50) {
                                                 this.getRecommendations();
                                             }
                                             // or just get the list of highest rated movies
                                             else {
                                                 this.getHighRatedMovies();
+                                                this.useHighRatedMovies();
                                             }
                                         }
                                         // if "I" have previously saved recommendations (movies)
                                         else {
-                                            // put them into a local array (create reference to them)
+                                            // put them into a local array (create reference)
                                             this.recommended_array = response.data.recommended;
                                             // and get full info for each of them
-                                            this.getRecommendedMovies();
+                                            this.getRecommendedInfo();
                                         }
                     });
-                } // end else
             },
 
             // getting recommendations
@@ -261,18 +256,21 @@
                                         // if recommendations are present
                                         if(response.data.recommended != 'nothing') {
 
-                                            // put them into a local array
+                                            // put them into a local array (create reference)
                                             this.recommended_array = response.data.recommended;
 
                                             // then store them in DB
                                             axios.post("/save_recommendations", this.recommended_array);
 
-                                            this.getRecommendedMovies();
+                                            this.getRecommendedInfo();
+                                        }
+                                        else {
+                                            this.useHighRatedMovies();
                                         }
                 });
             },
 
-            getRecommendedMovies() {
+            getRecommendedInfo() {
 
                 this.recommended_array.forEach(movie => {
 
@@ -286,10 +284,13 @@
                         .then(json => {
                                        // put the movie object to local object "movie"
                                        self.final_recommendations.push(json);
-                        });
-                });
+                             })
+                        .then(this.second_line_movies = this.final_recommendations);
+                }); 
+            },
 
-                this.second_line_movies = this.final_recommendations;
+            useHighRatedMovies() {
+                this.second_line_movies = this.high_rated_movies;
             },
 
             getPopularMovies() {
@@ -306,6 +307,7 @@
             },
 
             getHighRatedMovies() {
+
                 // url query for all highest rated movies
                 var url =
                     "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=a3abe9699d800e588cb2a57107b4179c";
@@ -316,9 +318,7 @@
                 $.getJSON(url).done(function (response) {
                     // put the received movies into array
                     self.high_rated_movies = response.results;
-                });
-
-                this.second_line_movies = this.high_rated_movies;
+                });   
             },
 
             // show selected movie info in modal window
