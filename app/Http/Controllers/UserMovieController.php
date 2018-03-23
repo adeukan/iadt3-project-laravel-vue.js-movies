@@ -244,8 +244,14 @@ class UserMovieController extends Controller
         $userMovie = new UserMovie();
         $userMovie->user_id = Auth::user()->id;
         $userMovie->movie_id = $request->input("tmdb_id");
-        $userMovie->watchlater = 1;
-        $userMovie->save();
+        if($userMovie->hidden = '1') {
+            $userMovie->hidden = '0';
+            $userMovie->watchlater = '1';
+            $userMovie->save();
+        } else if($userMovie->hidden = '0') {
+            $userMovie->watchlater = '1';
+            $userMovie->save();
+        }
     }
 
         // add new movie to watch later to DB
@@ -261,12 +267,20 @@ class UserMovieController extends Controller
             $movie->save();
         }
 
-        // create new record in user_movies table
+
+        
+        // create new record in user_movies table check if they already have the movie as watchlater and replace it with hide
         $userMovie = new UserMovie();
         $userMovie->user_id = Auth::user()->id;
         $userMovie->movie_id = $request->input("tmdb_id");
-        $userMovie->hide = 1;
-        $userMovie->save();
+        if($userMovie->watchlater = '1') {
+            $userMovie->watchlater = '0';
+            $userMovie->hidden = '1';
+            $userMovie->save();
+        } else if($userMovie->watchlater = '0') {
+            $userMovie->hidden = '1';
+            $userMovie->save();
+        }
     }
 
     // update existing movie record in DB
