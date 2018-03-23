@@ -40,8 +40,8 @@ Route::post('/watchlater', 'UserMovieController@watchlater');
 Route::get('/get_recommendations', 'UserMovieController@getRecommendations');
 Route::get('/check_recommendations', 'UserMovieController@checkRecommendations');
 Route::post('/save_recommendations', 'UserMovieController@saveRecommendations');
-Route::post('/get_watchlater', 'UserMovieController@getWatchLaterMovies');
-Route::post('/get_hidden', 'UserMovieController@getHiddenMovies');
+Route::get('/get_watchlater', 'UserMovieController@getWatchLaterMovies');
+Route::get('/get_hidden', 'UserMovieController@getHiddenMovies');
 // Route::post('/compare_user', 'UserMovieController@compareUser');
 
 

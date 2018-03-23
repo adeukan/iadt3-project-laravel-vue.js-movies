@@ -205,30 +205,11 @@
         methods: {
 
             getWatchlater() {
-                // url query for all popular movies
-                var url =
-                    "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=a3abe9699d800e588cb2a57107b4179c";
-                // reference to Vue object
-                var self = this;
-                // get all popular movies from TMDb
-                $.getJSON(url).done(function (received_movies) {
-                    // put the received movies into array
-                    self.watchlater_movies = received_movies.results;
-                });
+                axios.get("/get_watchlater")
             },
 
             getHidden() {
-                // url query for all highest rated movies
-                var url =
-                    "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=a3abe9699d800e588cb2a57107b4179c";
-
-                // reference to Vue object
-                var self = this;
-                // get all highest rated movies from TMDb
-                $.getJSON(url).done(function (response) {
-                    // put the received movies into array
-                    self.hidden_movies = response.results;
-                });
+                axios.get("/get_hidden")
             },
 
             // show selected movie info in modal window
