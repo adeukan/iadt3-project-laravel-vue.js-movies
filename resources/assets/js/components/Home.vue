@@ -104,10 +104,7 @@
 
                 <!-- ROW 1  -->
                 <div class="row">
-                    <h2 class="space">Popular Movies:</h2>
-
-                    <router-link to="/profile">Go to Profile</router-link>
-
+                    <h2>Popular Movies:</h2>
                     
                     <div class="slider slider-nav">
 

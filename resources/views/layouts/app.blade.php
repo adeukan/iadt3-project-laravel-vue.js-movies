@@ -20,48 +20,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
 
-                    <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}"> Movie Recommendation Site </a>
-
-                    
-                    <!--
-                    <form class="navbar-form navbar-left col-md-12 col-xs-4" role="search">
-                        <div class="form-group">
-                            <input class="form-control" type="text" placeholder="Search">
-                        </div>
-                        <button type="button" class="btn btn-default">Go</button>
-                    </form>
-                    -->
-                </div>
-
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right navStyle">
-
-                        <!-- Authentication Links -->
-                        @guest
-                            {{-- <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li> --}}
-                        @else
-                            <!-- links to all pages (Vue components) -->
-                            <li><a href="{{ url('/') }}">Home</a></li>
-                            <li><a href="{{ url('/profile') }}">Profile</a></li>
-                            <li><a href="{{ url('/lists') }}">Lists</a></li>
-                            <li><a href="{{ url('logout') }}">Logout</a></li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>  
 
         @yield('content')
     </div>

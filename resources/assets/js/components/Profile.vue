@@ -3,9 +3,6 @@
   <div class="row">
     <div class="col-md-12">
 
-
-      
-
       <!-- modal window with the selected movie info -->
       <div class="modal modal-lg fade"
            tabindex="-1"
@@ -34,7 +31,7 @@
 
                 <div class="row">
                   <div class="rating modalRating" v-model="new_ratings[index]">
-                    <!-- scores from 0 to 10 -->
+                    <!-- scores from 0 to 5 -->
                     <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                   </div>
                 </div>

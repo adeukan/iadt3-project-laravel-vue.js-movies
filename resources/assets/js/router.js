@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 // import Index from './components/Index.vue'
 import Profile from './components/Profile.vue'
+import Lists from './components/lists.vue'
 import Home from './components/Home.vue'
 // import MyWishlist from './components/MyWishlist.vue'
 
@@ -15,6 +16,7 @@ const router = new VueRouter({
 	routes: [
 	{ path: '/', component: Home },
 	{ path: '/profile', component: Profile },
+	{ path: '/lists', component: Lists },
 
     // { path: '/popular', component: PopularMovies },
     // { path: '/wishlist', component: MyWishlist },

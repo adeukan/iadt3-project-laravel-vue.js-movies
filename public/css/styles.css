@@ -41,6 +41,10 @@ body{
     color:#dfe6e9;
     background-color:#636e72;
 }
+.router-link-active{
+    color:#dfe6e9;
+    background-color:#636e72;
+}
 
 
 /* MODAL */
