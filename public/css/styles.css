@@ -7,7 +7,7 @@ body{
 
 /* SLICK */
 .smSlickItem {
-    height:380px;
+    height:390px;
     width:235px;
 }
 .slickImage {
@@ -131,14 +131,21 @@ h2.modal-title{
     text-align:center;
 }
 .btnHolder button {
-    background-color: #636e72;
-    border: none;
-    color: #dfe6e9;
-    text-align: center;
-    font-size:1.2em;
+    width:3vw;
+    background-color:#dfe6e9;
+    border:1px solid #636e72;
+    border-radius:5px;
+    color:#636e72;
+    padding-top:0px;
+    margin-top:0px;
+}
+.btnHolder button:hover {
+    background-color:#b2bec3;
+    color:#636e72;
 }
 .modalBtnHolder button {
-    font-size:2em;
+    width:5vw;
+    font-size:1.6em;
 }
 
 
@@ -156,9 +163,9 @@ h2 {
  * Rating styles
  */
 .rating {
-	width: 90%;
+	width: 75%;
     text-align:center;
-	font-size: 1.8em;
+	font-size: 2.2em;
 	overflow:hidden;
     text-decoration: none;
 }

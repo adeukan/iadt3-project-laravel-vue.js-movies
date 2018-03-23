@@ -42860,6 +42860,9 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MyNav_vue__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MyNav_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__MyNav_vue__);
+//
 //
 //
 //
@@ -42867,16 +42870,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
-    data: function data() {
-        return {
-            // ???
-            new: {
-                // ???
-                newVar: ''
-            }
-        };
-    }
+
+	components: {
+		MyNav: __WEBPACK_IMPORTED_MODULE_0__MyNav_vue___default.a
+	},
+
+	data: function data() {
+		return {
+			// ???
+			new: {
+				// ???
+				newVar: ''
+			}
+		};
+	}
 });
 
 /***/ }),
@@ -42887,7 +42898,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_c("router-view")], 1)
+  return _c("div", [_c("my-nav"), _vm._v(" "), _c("router-view")], 1)
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -45756,6 +45767,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -45814,7 +45828,54 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
     },
     new_ratings: function new_ratings() {},
+    hideMovie: function hideMovie(tmdb_id) {
+      // HIDE BUTTON HANDLER
+      axios.post("/hide", {
+        tmdb_id: tmdb_id
+      });
+    },
+    laterMovie: function laterMovie(tmdb_id) {
+      // WATCHLATER BUTTON HANDLER
 
+      axios.post("/watchlater", {
+        tmdb_id: tmdb_id
+      });
+    },
+
+
+    // ADD OR CHANGE RATING ---------------------------------------------------------
+    addRating: function addRating(tmdb_id, rating) {
+      var _this2 = this;
+
+      // mirror the rating value (1 => 5, 2 => 4, ...)
+      rating = 6 - rating;
+
+      // if the movie has not been rated yet, store new raiting in DB
+      if (this.ratings[tmdb_id] === undefined) {
+
+        axios.post("/store", {
+          tmdb_id: tmdb_id,
+          user_rating: rating
+        })
+        // reflect changes in the local array
+        .then(function (response) {
+          _this2.ratings[tmdb_id] = rating;
+        });
+      }
+      // if the rating has changed compared to the previous value, update rating in DB
+      else if (this.ratings[tmdb_id] !== rating) {
+
+          axios.post("/update", {
+            tmdb_id: tmdb_id,
+            user_rating: rating
+          })
+          // reflect changes in the local array
+          .then(function (response) {
+            _this2.ratings[tmdb_id] = rating;
+          });
+        }
+    },
+    // addRating()
     // show a modal window with information about the selected movie
     showMovieInfo: function showMovieInfo(movieIndex) {
       // put the selected movie into object (temporary container)
@@ -45836,105 +45897,6 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-12" }, [
-        _c("div", { staticClass: "row" }, [
-          _c("h2", { staticClass: "space" }, [
-            _vm._v("Movies You Have Rated:")
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "slider slider-nav" },
-            _vm._l(_vm.TMDBmovies, function(movie, i) {
-              return _vm.TMDBmovies.length > 0
-                ? _c(
-                    "a",
-                    { staticClass: "smSlickItem", attrs: { href: "#" } },
-                    [
-                      _c("img", {
-                        staticClass: "slickImage",
-                        attrs: {
-                          src: _vm.image_prefix_url + movie.poster_path
-                        },
-                        on: {
-                          click: function($event) {
-                            _vm.showMovieInfo(i)
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "slickActions" }, [
-                        _c("div", { staticClass: "row" }, [
-                          _c(
-                            "div",
-                            {
-                              staticClass: "rating",
-                              model: {
-                                value: _vm.new_ratings[i],
-                                callback: function($$v) {
-                                  _vm.$set(_vm.new_ratings, i, $$v)
-                                },
-                                expression: "new_ratings[i]"
-                              }
-                            },
-                            _vm._l(10, function(i) {
-                              return _c(
-                                "a",
-                                {
-                                  on: {
-                                    click: function($event) {
-                                      _vm.addRating(movie.id, i)
-                                    }
-                                  }
-                                },
-                                [_vm._v("★")]
-                              )
-                            })
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "row btnHolder" }, [
-                          _c(
-                            "button",
-                            {
-                              on: {
-                                click: function($event) {
-                                  _vm.laterMovie(movie.id)
-                                }
-                              }
-                            },
-                            [
-                              _c("span", {
-                                staticClass: "glyphicon glyphicon-floppy-disk",
-                                attrs: { "aria-hidden": "true" }
-                              })
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              on: {
-                                click: function($event) {
-                                  _vm.hideMovie(movie.id)
-                                }
-                              }
-                            },
-                            [
-                              _c("span", {
-                                staticClass: "glyphicon glyphicon-eye-close",
-                                attrs: { "aria-hidden": "true" }
-                              })
-                            ]
-                          )
-                        ])
-                      ])
-                    ]
-                  )
-                : _vm._e()
-            })
-          )
-        ]),
-        _vm._v(" "),
         _c(
           "div",
           {
@@ -45981,13 +45943,7 @@ var render = function() {
                                   }
                                 }
                               },
-                              [
-                                _c("span", {
-                                  staticClass:
-                                    "glyphicon glyphicon-floppy-disk",
-                                  attrs: { "aria-hidden": "true" }
-                                })
-                              ]
+                              [_vm._v("Save")]
                             ),
                             _vm._v(" "),
                             _c(
@@ -45999,12 +45955,7 @@ var render = function() {
                                   }
                                 }
                               },
-                              [
-                                _c("span", {
-                                  staticClass: "glyphicon glyphicon-eye-close",
-                                  attrs: { "aria-hidden": "true" }
-                                })
-                              ]
+                              [_vm._v("Hide")]
                             )
                           ]
                         ),
@@ -46022,7 +45973,7 @@ var render = function() {
                                 expression: "new_ratings[index]"
                               }
                             },
-                            _vm._l(10, function(i) {
+                            _vm._l(5, function(i) {
                               return _c(
                                 "a",
                                 {
@@ -46160,7 +46111,96 @@ var render = function() {
               ]
             )
           ]
-        )
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("h2", { staticClass: "space" }, [
+            _vm._v("Movies You Have Rated:")
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "slider slider-nav" },
+            _vm._l(_vm.TMDBmovies, function(movie, i) {
+              return _vm.TMDBmovies.length > 0
+                ? _c(
+                    "a",
+                    { staticClass: "smSlickItem", attrs: { href: "#" } },
+                    [
+                      _c("img", {
+                        staticClass: "slickImage",
+                        attrs: {
+                          src: _vm.image_prefix_url + movie.poster_path
+                        },
+                        on: {
+                          click: function($event) {
+                            _vm.showMovieInfo(i)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "slickActions" }, [
+                        _c("div", { staticClass: "row" }, [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "rating",
+                              model: {
+                                value: _vm.new_ratings[i],
+                                callback: function($$v) {
+                                  _vm.$set(_vm.new_ratings, i, $$v)
+                                },
+                                expression: "new_ratings[i]"
+                              }
+                            },
+                            _vm._l(5, function(i) {
+                              return _c(
+                                "a",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      _vm.addRating(movie.id, i)
+                                    }
+                                  }
+                                },
+                                [_vm._v("★")]
+                              )
+                            })
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row btnHolder" }, [
+                          _c(
+                            "button",
+                            {
+                              on: {
+                                click: function($event) {
+                                  _vm.laterMovie(movie.id)
+                                }
+                              }
+                            },
+                            [_vm._v("Save")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              on: {
+                                click: function($event) {
+                                  _vm.hideMovie(movie.id)
+                                }
+                              }
+                            },
+                            [_vm._v("Hide")]
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                : _vm._e()
+            })
+          )
+        ])
       ])
     ])
   ])
@@ -46229,6 +46269,10 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
 //
 //
 //
@@ -46563,11 +46607,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             $("#movie_info").modal("show");
         },
-        hideMovie: function hideMovie(movieId) {
+        hideMovie: function hideMovie(tmdb_id) {
             // HIDE BUTTON HANDLER
+            axios.post("/hide", {
+                tmdb_id: tmdb_id
+            });
         },
-        laterMovie: function laterMovie(movieId) {
+        laterMovie: function laterMovie(tmdb_id) {
             // WATCHLATER BUTTON HANDLER
+
+            axios.post("/watchlater", {
+                tmdb_id: tmdb_id
+            });
         },
 
 
@@ -46668,11 +46719,9 @@ var render = function() {
                                 }
                               },
                               [
-                                _c("span", {
-                                  staticClass:
-                                    "glyphicon glyphicon-floppy-disk",
-                                  attrs: { "aria-hidden": "true" }
-                                })
+                                _vm._v(
+                                  "Save\n                                            "
+                                )
                               ]
                             ),
                             _vm._v(" "),
@@ -46686,10 +46735,9 @@ var render = function() {
                                 }
                               },
                               [
-                                _c("span", {
-                                  staticClass: "glyphicon glyphicon-eye-close",
-                                  attrs: { "aria-hidden": "true" }
-                                })
+                                _vm._v(
+                                  "Hide\n                                            "
+                                )
                               ]
                             )
                           ]
@@ -46698,7 +46746,7 @@ var render = function() {
                         _c("div", { staticClass: "row" }, [
                           _c(
                             "div",
-                            { staticClass: "rating modalRating" },
+                            { staticClass: "rating modalRating col-md-12" },
                             _vm._l(5, function(i) {
                               return _c(
                                 "a",
@@ -46839,93 +46887,92 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("h2", { staticClass: "space" }, [_vm._v("Popular Movies:")]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "slider slider-nav" },
-            _vm._l(_vm.popular_movies, function(movie, index) {
-              return index < 30
-                ? _c(
-                    "a",
-                    { staticClass: "smSlickItem", attrs: { href: "#" } },
-                    [
-                      _c("img", {
-                        staticClass: "slickImage",
-                        attrs: {
-                          src: _vm.image_prefix_url + movie.poster_path
-                        },
-                        on: {
-                          click: function($event) {
-                            _vm.showMovie(movie.id)
+        _c(
+          "div",
+          { staticClass: "row" },
+          [
+            _c("h2", { staticClass: "space" }, [_vm._v("Popular Movies:")]),
+            _vm._v(" "),
+            _c("router-link", { attrs: { to: "/profile" } }, [
+              _vm._v("Go to Profile")
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "slider slider-nav" },
+              _vm._l(_vm.popular_movies, function(movie, index) {
+                return index < 30
+                  ? _c(
+                      "a",
+                      { staticClass: "smSlickItem", attrs: { href: "#" } },
+                      [
+                        _c("img", {
+                          staticClass: "slickImage",
+                          attrs: {
+                            src: _vm.image_prefix_url + movie.poster_path
+                          },
+                          on: {
+                            click: function($event) {
+                              _vm.showMovie(movie.id)
+                            }
                           }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "slickActions" }, [
-                        _c("div", { staticClass: "row" }, [
-                          _c(
-                            "div",
-                            { staticClass: "rating" },
-                            _vm._l(5, function(i) {
-                              return _c(
-                                "a",
-                                {
-                                  on: {
-                                    click: function($event) {
-                                      _vm.addRating(movie.id, i)
-                                    }
-                                  }
-                                },
-                                [_vm._v("★")]
-                              )
-                            })
-                          )
-                        ]),
+                        }),
                         _vm._v(" "),
-                        _c("div", { staticClass: "row btnHolder" }, [
-                          _c(
-                            "button",
-                            {
-                              on: {
-                                click: function($event) {
-                                  _vm.laterMovie(movie.id)
-                                }
-                              }
-                            },
-                            [
-                              _c("span", {
-                                staticClass: "glyphicon glyphicon-floppy-disk",
-                                attrs: { "aria-hidden": "true" }
+                        _c("div", { staticClass: "slickActions" }, [
+                          _c("div", { staticClass: "row" }, [
+                            _c(
+                              "div",
+                              { staticClass: "rating" },
+                              _vm._l(5, function(i) {
+                                return _c(
+                                  "a",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        _vm.addRating(movie.id, i)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("★")]
+                                )
                               })
-                            ]
-                          ),
+                            )
+                          ]),
                           _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              on: {
-                                click: function($event) {
-                                  _vm.hideMovie(movie.id)
+                          _c("div", { staticClass: "row btnHolder" }, [
+                            _c(
+                              "button",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    _vm.laterMovie(movie.id)
+                                  }
                                 }
-                              }
-                            },
-                            [
-                              _c("span", {
-                                staticClass: "glyphicon glyphicon-eye-close",
-                                attrs: { "aria-hidden": "true" }
-                              })
-                            ]
-                          )
+                              },
+                              [_vm._v("Save")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                on: {
+                                  click: function($event) {
+                                    _vm.hideMovie(movie.id)
+                                  }
+                                }
+                              },
+                              [_vm._v("Hide")]
+                            )
+                          ])
                         ])
-                      ])
-                    ]
-                  )
-                : _vm._e()
-            })
-          )
-        ]),
+                      ]
+                    )
+                  : _vm._e()
+              })
+            )
+          ],
+          1
+        ),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _vm.final_recommendations.length == 0
@@ -47035,6 +47082,120 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(3)
+/* script */
+var __vue_script__ = __webpack_require__(61)
+/* template */
+var __vue_template__ = __webpack_require__(62)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\MyNav.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6d465370", Component.options)
+  } else {
+    hotAPI.reload("data-v-6d465370", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+
+    components: {},
+
+    data: function data() {
+        return {
+            // ???
+            new: {
+                // ???
+                newVar: ''
+            }
+        };
+    }
+});
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("router-link", { attrs: { to: "/profile" } }, [
+        _vm._v("Go to Profile")
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6d465370", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

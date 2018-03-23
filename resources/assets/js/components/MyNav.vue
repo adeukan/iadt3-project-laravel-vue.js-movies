@@ -1,18 +1,14 @@
 <template>
 	<div>
-		<my-nav></my-nav>
-		<router-view></router-view>
+        <router-link to="/profile">Go to Profile</router-link>
 	</div>
 </template>
 
 <script>
 
-import MyNav from './MyNav.vue'
-
 	export default {
 
 		components: {
-			MyNav
 		},
 
 	    data(){

@@ -2,10 +2,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-
-                
-
-
                 <!-- modal window with the selected movie info -->
                 <div class="modal modal-lg fade"
                      tabindex="-1"
@@ -37,7 +33,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="rating modalRating col-md-12">
+                                            <div class="rating modalRating">
                                                 <!-- rating stars -->
                                                 <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                                             </div>
@@ -104,15 +100,11 @@
 
                 <!-- ROW 1  -->
                 <div class="row">
-                    <h2 class="space">Popular Movies:</h2>
-
-                    <router-link to="/profile">Go to Profile</router-link>
-
-                    
+                    <h2 class="space">Watch Later:</h2>
                     <div class="slider slider-nav">
 
                         <a v-if="index < 30"
-                           v-for="(movie,index) in popular_movies" href="#" class="smSlickItem">
+                           v-for="(movie,index) in watchlater_movies" href="#" class="smSlickItem">
 
                             <img
                                     v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
@@ -141,12 +133,12 @@
                 <!-- ROW 2 -->
                 <div class="row">
                     <h2 v-if="final_recommendations.length == 0">High Rated Movies:</h2>
-                    <h2 v-else>Recommended Movies:</h2>
+                    <h2 v-else>Hidden Movies:</h2>
 
                     <div class="slider slider-nav">
 
                         <a v-if="index < 30"
-                           v-for="(movie,index) in second_line_movies" href="#" class="smSlickItem">
+                           v-for="(movie,index) in hidden_movies" href="#" class="smSlickItem">
 
                             <img
                                     v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
@@ -196,133 +188,28 @@
                 // array with user ratings
                 ratings: {},
                 // contains all popular movies received from TMDb
-                popular_movies: [],
+                hidden_movies: [],
                 // contains all highest rated movies received from TMDb
-                high_rated_movies: [],
-                // recommended movies (without )
-                recommended_array: [],
-                final_recommendations: [],
-                second_line_movies: [],
+                watchlater_movies: [],
                 // tmdb api key value
                 api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
                 // url prefix for getting posters
-                image_prefix_url: "http://image.tmdb.org/t/p/w500",
-                
+                image_prefix_url: "http://image.tmdb.org/t/p/w500"
             };
         },
 
         // functions triggered when Vue object is mounted
         mounted() {
-            // get most popular and highest rated movies to display them in the first line
-            this.getPopularMovies(),
-            this.getHighRatedMovies(),
-            // check DB for previously saved recommendations
-            // depending on the checking result, run a function to fill the second line of movies
-            this.checkRecommendations() 
         },
 
         methods: {
-          
-            checkRecommendations() {
 
-                // check DB for previously saved recommendations
-                axios.get("/check_recommendations")
-                        .then(response => {
-                                        // if there are no any previously saved recommendations
-                                        if(response.data.recommended == 'nothing') {
-
-                                            // if "I" have rated more than 50 movies - try to get new recommendations!
-                                            if(response.data.rated > 50) {
-                                                this.getRecommendations();
-                                            }
-                                            // or just get the list of highest rated movies
-                                            else {
-                                                this.getHighRatedMovies();
-                                                this.useHighRatedMovies();
-                                            }
-                                        }
-                                        // if "I" have previously saved recommendations (movies)
-                                        else {
-                                            // put them into a local array (create reference)
-                                            this.recommended_array = response.data.recommended;
-                                            // and get full info for each of them
-                                            this.getRecommendedInfo();
-                                        }
-                    });
+            getWatchlater() {
+                axios.get("/get_watchlater")
             },
 
-            // getting recommendations
-            getRecommendations() {
-
-                // first, get the recommendations (list of movies)
-                axios.get("/get_recommendations")
-                     .then(response => {
-                                        // if recommendations are present
-                                        if(response.data.recommended != 'nothing') {
-
-                                            // put them into a local array (create reference)
-                                            this.recommended_array = response.data.recommended;
-
-                                            // then store them in DB
-                                            axios.post("/save_recommendations", this.recommended_array);
-
-                                            this.getRecommendedInfo();
-                                        }
-                                        else {
-                                            this.useHighRatedMovies();
-                                        }
-                });
-            },
-
-            getRecommendedInfo() {
-
-                this.recommended_array.forEach(movie => {
-
-                    // url query to find movie by tmdb_id
-                    var url = "https://api.themoviedb.org/3/movie/" + movie.movie_id + "?" + this.api_key;
-                    // reference to Vue object
-                    var self = this;
-
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(json => {
-                                       // put the movie object to local object "movie"
-                                       self.final_recommendations.push(json);
-                             })
-                        .then(this.second_line_movies = this.final_recommendations);
-                }); 
-            },
-
-            useHighRatedMovies() {
-                this.second_line_movies = this.high_rated_movies;
-            },
-
-            getPopularMovies() {
-                // url query for all popular movies
-                var url =
-                    "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=a3abe9699d800e588cb2a57107b4179c";
-                // reference to Vue object
-                var self = this;
-                // get all popular movies from TMDb
-                $.getJSON(url).done(function (received_movies) {
-                    // put the received movies into array
-                    self.popular_movies = received_movies.results;
-                });
-            },
-
-            getHighRatedMovies() {
-
-                // url query for all highest rated movies
-                var url =
-                    "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=a3abe9699d800e588cb2a57107b4179c";
-
-                // reference to Vue object
-                var self = this;
-                // get all highest rated movies from TMDb
-                $.getJSON(url).done(function (response) {
-                    // put the received movies into array
-                    self.high_rated_movies = response.results;
-                });   
+            getHidden() {
+                axios.get("/get_hidden")
             },
 
             // show selected movie info in modal window
@@ -343,14 +230,14 @@
                 $("#movie_info").modal("show");
             },
 
-            hideMovie(tmdb_id) {
+            hideMovie(movieId) {
                 // HIDE BUTTON HANDLER
                 axios.post("/hide", {
                                       tmdb_id: tmdb_id
                                     })
 
             },
-            laterMovie(tmdb_id) {
+            laterMovie(movieId) {
                 // WATCHLATER BUTTON HANDLER
 
                 axios.post("/watchlater", {
