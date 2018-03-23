@@ -33,7 +33,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="rating modalRating">
+                                            <div class="rating modalRating col-md-12">
                                                 <!-- rating stars -->
                                                 <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                                             </div>

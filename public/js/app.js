@@ -45876,7 +45876,7 @@ var render = function() {
                                 expression: "new_ratings[i]"
                               }
                             },
-                            _vm._l(10, function(i) {
+                            _vm._l(5, function(i) {
                               return _c(
                                 "a",
                                 {
@@ -45902,12 +45902,7 @@ var render = function() {
                                 }
                               }
                             },
-                            [
-                              _c("span", {
-                                staticClass: "glyphicon glyphicon-floppy-disk",
-                                attrs: { "aria-hidden": "true" }
-                              })
-                            ]
+                            [_vm._v("Save")]
                           ),
                           _vm._v(" "),
                           _c(
@@ -45919,12 +45914,7 @@ var render = function() {
                                 }
                               }
                             },
-                            [
-                              _c("span", {
-                                staticClass: "glyphicon glyphicon-eye-close",
-                                attrs: { "aria-hidden": "true" }
-                              })
-                            ]
+                            [_vm._v("Hide")]
                           )
                         ])
                       ])
@@ -45981,13 +45971,7 @@ var render = function() {
                                   }
                                 }
                               },
-                              [
-                                _c("span", {
-                                  staticClass:
-                                    "glyphicon glyphicon-floppy-disk",
-                                  attrs: { "aria-hidden": "true" }
-                                })
-                              ]
+                              [_vm._v("Save")]
                             ),
                             _vm._v(" "),
                             _c(
@@ -45999,12 +45983,7 @@ var render = function() {
                                   }
                                 }
                               },
-                              [
-                                _c("span", {
-                                  staticClass: "glyphicon glyphicon-eye-close",
-                                  attrs: { "aria-hidden": "true" }
-                                })
-                              ]
+                              [_vm._v("Hide")]
                             )
                           ]
                         ),
@@ -46022,7 +46001,7 @@ var render = function() {
                                 expression: "new_ratings[index]"
                               }
                             },
-                            _vm._l(10, function(i) {
+                            _vm._l(5, function(i) {
                               return _c(
                                 "a",
                                 {
@@ -46701,7 +46680,7 @@ var render = function() {
                         _c("div", { staticClass: "row" }, [
                           _c(
                             "div",
-                            { staticClass: "rating modalRating" },
+                            { staticClass: "rating modalRating col-md-12" },
                             _vm._l(5, function(i) {
                               return _c(
                                 "a",

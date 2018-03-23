@@ -21,13 +21,13 @@
               <div class="row">
                 <div class="rating" v-model="new_ratings[i]">
                   <!-- scores from 0 to 10 -->
-                  <a v-for="i in 10" @click="addRating(movie.id, i)">★</a>
+                  <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                 </div>
               </div>
               <div class="row btnHolder">
                 
-                <button @click="laterMovie(movie.id)"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
-                <button @click="hideMovie(movie.id)"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+                <button @click="laterMovie(movie.id)">Save</button>
+                <button @click="hideMovie(movie.id)">Hide</button>
               </div>
 
             </div>
@@ -59,14 +59,14 @@
 
                 <div class="row btnHolder modalBtnHolder">
                   
-                  <button @click="laterMovie(movie.id)"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></button>
-                  <button @click="hideMovie(movie.id)"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span></button>
+                  <button @click="laterMovie(movie.id)">Save</button>
+                  <button @click="hideMovie(movie.id)">Hide</button>
                 </div>
 
                 <div class="row">
                   <div class="rating modalRating" v-model="new_ratings[index]">
                     <!-- scores from 0 to 10 -->
-                    <a v-for="i in 10" @click="addRating(movie.id, i)">★</a>
+                    <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                   </div>
                 </div>
 
