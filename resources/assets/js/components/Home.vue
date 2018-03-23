@@ -2,6 +2,10 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+
+                
+
+
                 <!-- modal window with the selected movie info -->
                 <div class="modal modal-lg fade"
                      tabindex="-1"
@@ -101,6 +105,10 @@
                 <!-- ROW 1  -->
                 <div class="row">
                     <h2 class="space">Popular Movies:</h2>
+
+                    <router-link to="/profile">Go to Profile</router-link>
+
+                    
                     <div class="slider slider-nav">
 
                         <a v-if="index < 30"

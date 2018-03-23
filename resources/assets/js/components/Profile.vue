@@ -4,38 +4,7 @@
     <div class="col-md-12">
 
 
-      <div class="row">
-        <h2 class="space">Movies You Have Rated:</h2>
-        <div class="slider slider-nav">
-
-            <a  v-if="TMDBmovies.length > 0"
-              v-for="(movie,i) in TMDBmovies" href="#" class="smSlickItem" >
-
-            <img
-                v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovieInfo(i)">
-
-              <!-- the drop-down list with for choosing rating -->
-              <!-- the rating of each film is linked to the corresponding array member -->
-            <div class="slickActions">
-
-              <div class="row">
-                <div class="rating" v-model="new_ratings[i]">
-                  <!-- scores from 0 to 10 -->
-                  <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
-                </div>
-              </div>
-              <div class="row btnHolder">
-                
-                <button @click="laterMovie(movie.id)">Save</button>
-                <button @click="hideMovie(movie.id)">Hide</button>
-              </div>
-
-            </div>
-
-          </a>
-
-        </div>
-      </div>
+      
 
       <!-- modal window with the selected movie info -->
       <div class="modal modal-lg fade"
@@ -132,11 +101,45 @@
       </div>
       <!-- /.modal -->
     </div>
+
+
+    <div class="row">
+        <h2 class="space">Movies You Have Rated:</h2>
+        <div class="slider slider-nav">
+
+            <a  v-if="TMDBmovies.length > 0"
+              v-for="(movie,i) in TMDBmovies" href="#" class="smSlickItem" >
+
+            <img
+                v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovieInfo(i)">
+
+              <!-- the drop-down list with for choosing rating -->
+              <!-- the rating of each film is linked to the corresponding array member -->
+            <div class="slickActions">
+
+              <div class="row">
+                <div class="rating" v-model="new_ratings[i]">
+                  <!-- scores from 0 to 10 -->
+                  <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
+                </div>
+              </div>
+              <div class="row btnHolder">
+                
+                <button @click="laterMovie(movie.id)">Save</button>
+                <button @click="hideMovie(movie.id)">Hide</button>
+              </div>
+
+            </div>
+
+          </a>
+
+        </div>
+      </div>
         <!-- /.modal -->
       </div> 
     </div>
   </div>
-</div>
+
 
 </template>
 
@@ -200,6 +203,49 @@ export default {
     new_ratings() {
 
     },
+
+    hideMovie(tmdb_id) {
+        // HIDE BUTTON HANDLER
+        axios.post("/hide", {
+                              tmdb_id: tmdb_id
+                            })
+
+    },
+    laterMovie(tmdb_id) {
+        // WATCHLATER BUTTON HANDLER
+
+        axios.post("/watchlater", {
+                                    tmdb_id: tmdb_id
+                                  })
+    },
+
+                // ADD OR CHANGE RATING ---------------------------------------------------------
+            addRating(tmdb_id, rating) {
+
+                // mirror the rating value (1 => 5, 2 => 4, ...)
+                rating = 6 - rating;
+
+                // if the movie has not been rated yet, store new raiting in DB
+                if (this.ratings[tmdb_id] === undefined) {
+
+                    axios.post("/store", {
+                                         tmdb_id: tmdb_id,
+                                         user_rating: rating
+                                         })
+                    // reflect changes in the local array
+                    .then(response => { this.ratings[tmdb_id] = rating });
+                }
+                // if the rating has changed compared to the previous value, update rating in DB
+                else if (this.ratings[tmdb_id] !== rating) {
+
+                    axios.post("/update", {
+                                           tmdb_id: tmdb_id,
+                                           user_rating: rating
+                                          })
+                    // reflect changes in the local array
+                    .then(response => {this.ratings[tmdb_id] = rating;});
+                }
+            }, // addRating()
     // show a modal window with information about the selected movie
     showMovieInfo(movieIndex) {
       // put the selected movie into object (temporary container)

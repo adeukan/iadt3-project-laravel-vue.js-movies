@@ -177,7 +177,11 @@ class UserMovieController extends Controller
     // #return \Illuminate\Http\Response
     public function getUserMovies()
     {
-        $all_rated_by_user = UserMovie::where(['user_id' => Auth::user()->id])->get();
+        $all_rated_by_user = UserMovie::where([
+            'user_id' => Auth::user()->id,
+            'hidden' => '0',
+            'watchlater' => '0'
+        ])->get();
 
         return response()->json([
             'all_rated_by_user'    => $all_rated_by_user,
@@ -188,7 +192,11 @@ class UserMovieController extends Controller
     // #return \Illuminate\Http\Response
     public function getHiddenMovies()
     {
-        $all_rated_by_user = UserMovie::where(['user_id' => Auth::user()->id] && ['hide' => '1'])->get();
+        $all_rated_by_user = UserMovie::where([
+            'user_id' => Auth::user()->id,
+            'hidden' => '1',
+            'watchlater' => '0'
+        ])->get();
 
         return response()->json([
             'all_rated_by_user'    => $all_rated_by_user,
@@ -199,7 +207,11 @@ class UserMovieController extends Controller
     // #return \Illuminate\Http\Response
     public function getWatchLaterMovies()
     {
-        $all_rated_by_user = UserMovie::where(['user_id' => Auth::user()->id] && ['watchlater' => '1'])->get();
+        $all_rated_by_user = UserMovie::where([
+            'user_id' => Auth::user()->id,
+            'hidden' => '0',
+            'watchlater' => '1'
+        ])->get();
 
         return response()->json([
             'all_rated_by_user'    => $all_rated_by_user,
@@ -234,6 +246,8 @@ class UserMovieController extends Controller
             $userMovie->save();
         } else {
             $userMovie->ratio = $request->input("user_rating");
+            $userMovie->hidden = '0';
+            $userMovie->watchlater = '0';
             $userMovie->save();
         }
     }
@@ -267,6 +281,7 @@ class UserMovieController extends Controller
         } else {
             $userMovie->hidden = '0';
             $userMovie->watchlater = '1';
+            $userMovie->ratio = '0';
             $userMovie->save();
         }
         
@@ -300,6 +315,7 @@ class UserMovieController extends Controller
             $userMovie->save();
         } else {
             $userMovie->hidden = '1';
+            $userMovie->ratio = '0';
             $userMovie->watchlater = '0';
             $userMovie->save();
         }
