@@ -47166,6 +47166,10 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "navbar" }, [
     _c("div", { staticClass: "container" }, [
+      _c("h2", { staticClass: "navbar-brand" }, [
+        _vm._v(" Movie Recommendation Site ")
+      ]),
+      _vm._v(" "),
       _c("ul", { staticClass: "nav navbar-nav navbar-right navStyle" }, [
         _c(
           "li",

@@ -30,19 +30,21 @@ body{
 }
 .navbar-brand {
     color:#636e72;
+    margin:0px;
 }
 .navbar-brand:hover {
     color:#b2bec3;
 }
 .navStyle a{
     color:#636e72;
+    margin-left:2px;
 }
 .nav > li > a:hover, .nav > li > a:focus{
     color:#dfe6e9;
     background-color:#636e72;
 }
 .router-link-active{
-    color:#dfe6e9;
+    color:#dfe6e9 !important;
     background-color:#636e72;
 }
 
