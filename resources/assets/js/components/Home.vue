@@ -163,10 +163,9 @@
                                     </div>
                                 </div>
                                 <div class="row btnHolder">
-                                    <button @click="hideMovie(movie.id)"><span class="glyphicon glyphicon-eye-close"
-                                                                               aria-hidden="true"></span></button>
-                                    <button @click="laterMovie(movie.id)"><span class="glyphicon glyphicon-floppy-disk"
-                                                                                aria-hidden="true"></span></button>
+
+                                    <button @click="laterMovie(movie.id)">Save</button>
+                                    <button @click="hideMovie(movie.id)">Hide</button>
                                 </div>
                             </div>
                         </a>

@@ -46448,7 +46448,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -47027,16 +47026,11 @@ var render = function() {
                             {
                               on: {
                                 click: function($event) {
-                                  _vm.hideMovie(movie.id)
+                                  _vm.laterMovie(movie.id)
                                 }
                               }
                             },
-                            [
-                              _c("span", {
-                                staticClass: "glyphicon glyphicon-eye-close",
-                                attrs: { "aria-hidden": "true" }
-                              })
-                            ]
+                            [_vm._v("Save")]
                           ),
                           _vm._v(" "),
                           _c(
@@ -47044,16 +47038,11 @@ var render = function() {
                             {
                               on: {
                                 click: function($event) {
-                                  _vm.laterMovie(movie.id)
+                                  _vm.hideMovie(movie.id)
                                 }
                               }
                             },
-                            [
-                              _c("span", {
-                                staticClass: "glyphicon glyphicon-floppy-disk",
-                                attrs: { "aria-hidden": "true" }
-                              })
-                            ]
+                            [_vm._v("Hide")]
                           )
                         ])
                       ])
