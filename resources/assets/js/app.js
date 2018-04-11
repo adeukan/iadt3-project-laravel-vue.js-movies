@@ -21,12 +21,24 @@ window.Vue = require('vue');
 
 // import component and router to use them inside Vue object
 import App from './components/App.vue';
-import router from './router.js'
+import router from './router.js';
+import slick from './slick.js';
+
+var Slick = Vue.component('Slick',{
+  template : '#slick',
+  data : function(){
+      return this.slick; //Notice: in components data should return an object. For example "return { someProp: 1 }"
+  },
+  props : ['slick']
+});
+
 
 // create Vue object
 const app = new Vue({
 	
     el: '#app',				// <app> is the html element associated with Vue object
-    components: { App },	// here we can register many components for <app> element
+    components: { 	App 
+    				Slick: Slick},	// here we can register many components for <app> element
+    slick,					// slick
     router					// Vue router
 });

@@ -3,7 +3,7 @@
         <div class="container">
             <h2 class="navbar-brand"> Movie Recommendation Site </h2>
             <ul class="nav navbar-nav navbar-right navStyle">
-                <li><router-link to="/">Home</router-link></li>
+                <li><router-link to="/" exact>Home</router-link></li>
                 <li><router-link to="/profile">Profile</router-link></li>
                 <li><router-link to="/lists">Lists</router-link></li>
                 <li><router-link to="/logout">Logout</router-link></li>

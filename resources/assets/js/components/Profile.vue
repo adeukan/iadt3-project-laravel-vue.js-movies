@@ -101,8 +101,8 @@
 
 
     <div class="row">
-        <h2 class="space">Movies You Have Rated:</h2>
-        <div class="slider slider-nav">
+        <h2>Movies You Have Rated:</h2>
+        <slick ref="slick" :options="slickOptions">
 
             <a  v-if="TMDBmovies.length > 0"
               v-for="(movie,i) in TMDBmovies" href="#" class="smSlickItem" >
@@ -129,7 +129,7 @@
 
           </a>
 
-        </div>
+        </slick>
       </div>
       </div> 
     </div>

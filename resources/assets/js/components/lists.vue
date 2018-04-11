@@ -104,8 +104,8 @@
 
                 <!-- ROW 1  -->
                 <div class="row">
-                    <h2 class="space">Saved Movies:</h2>
-                    <div class="slider slider-nav">
+                    <h2>Saved Movies:</h2>
+                    <slick ref="slick" :options="slickOptions">
 
                         <a  v-if="watch_movies_display.length > 0"
                           v-for="(movie,i) in watch_movies_display" href="#" class="smSlickItem" >
@@ -132,13 +132,13 @@
 
                       </a>
 
-                    </div>
+                    </slick>
                   </div>
 
                 <!-- ROW 2 -->
                 <div class="row">
                     <h2 class="space">Hidden Movies:</h2>
-                    <div class="slider slider-nav">
+                    <slick ref="slick" :options="slickOptions">
 
                         <a  v-if="hide_movies_display.length > 0"
                           v-for="(movie,i) in hide_movies_display" href="#" class="smSlickItem" >
@@ -165,7 +165,7 @@
 
                       </a>
 
-                    </div>
+                    </slick>
                   </div>
             </div>
         </div>

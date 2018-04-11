@@ -32,57 +32,6 @@
     <script src="{{ asset('js/tether.min.js') }}"></script>
     <script src="{{ asset('slickfolder/slick/slick.min.js') }}"></script>
 
-    <script type="text/javascript">
-
-        $(document).ready(function(){
-          $('.slider-nav').slick({
-                dots:false,
-                slidesToShow: 5,
-                slidesToScroll: 4,
-                infinite:true,
-                variableWidth: true,
-                responsive: [
-                    {
-                      breakpoint: 1300,
-                      settings: {
-                        slidesToShow: 3,
-                        slidesToScroll: 2,
-                      }
-                    },
-                    {
-                      breakpoint: 480,
-                      settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                      }
-                    }
-                ]
-          });
-          $('.slider-nav2').slick({
-                dots:false,
-                slidesToShow: 5,
-                slidesToScroll: 4,
-                infinite:true,
-                variableWidth: true,
-                responsive: [
-                    {
-                      breakpoint: 1300,
-                      settings: {
-                        slidesToShow: 3,
-                        slidesToScroll: 2,
-                      }
-                    },
-                    {
-                      breakpoint: 480,
-                      settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                      }
-                    }
-                ]
-          });
-        });
-
-    </script>
+    
 </body>
 </html>

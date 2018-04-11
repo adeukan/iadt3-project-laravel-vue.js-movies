@@ -102,48 +102,43 @@
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
 
-                <!-- ROW 1  -->
-                <div class="row">
-                    <h2>Popular Movies:</h2>
+                <div clas="row">
+                    <h2>Popular Movies</h2>
                     <div class="slider-parent">
-                    <div class="slider slider-nav">
+                        <slick ref="slick" :options="slickOptions">
 
-                        <a v-if="index < 30"
-                           v-for="(movie,index) in popular_movies" href="#" class="smSlickItem">
+                            <a v-if="index < 30" v-for="(movie,index) in popular_movies" href="#" class="smSlickItem">
 
-                            <img
-                                    v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
-                                    @click="showMovie(movie.id)">
+                                <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
 
-                            <!-- the drop-down list with for choosing rating -->
-                            <!-- the rating of each film is linked to the corresponding array member -->
-                            <div class="slickActions">
+                                <!-- the rating of each film is linked to the corresponding array member -->
+                                <div class="slickActions">
 
-                                <div class="row">
-                                    <div class="rating">
-                                        <!-- rating stars -->
-                                        <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
+                                    <div class="row">
+                                        <div class="rating">
+                                            <!-- rating stars -->
+                                            <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
+                                        </div>
+                                    </div>
+                                    <div class="row btnHolder">
+
+                                        <button @click="laterMovie(movie.id)">Save</button>
+                                        <button @click="hideMovie(movie.id)">Hide</button>
                                     </div>
                                 </div>
-                                <div class="row btnHolder">
+                            </a>
 
-                                    <button @click="laterMovie(movie.id)">Save</button>
-                                    <button @click="hideMovie(movie.id)">Hide</button>
-                                </div>
-                            </div>
-                        </a>
+                        </slick>
                     </div>
                 </div>
-                </div><!-- ROW 1 -->
 
-                <!-- ROW 2 -->
-                <div class="row">
+                <div clas="row">
                     <h2 v-if="final_recommendations.length == 0">High Rated Movies:</h2>
                     <h2 v-else>Recommended Movies:</h2>
                     <div class="slider-parent">
-                    <div class="slider slider-nav2">
+                        <slick ref="slick" :options="slickOptions">
 
-                        <a v-if="index < 30"
+                            <a v-if="index < 30"
                            v-for="(movie,index) in second_line_movies" href="#" class="smSlickItem">
 
                             <img
@@ -167,7 +162,8 @@
                                 </div>
                             </div>
                         </a>
-                    </div>
+
+                        </slick>
                     </div>
                 </div>
             </div>
@@ -177,6 +173,7 @@
 </template>
 
 <script>
+
     export default {
         data() {
             return {
@@ -384,7 +381,7 @@
                     // reflect changes in the local array
                     .then(response => {this.ratings[tmdb_id] = rating;});
                 }
-            } // addRating()
+            }
         },
     };
 </script>
