@@ -105,7 +105,7 @@
                 <!-- ROW 1  -->
                 <div class="row">
                     <h2>Popular Movies:</h2>
-                    
+                    <div class="slider-parent">
                     <div class="slider slider-nav">
 
                         <a v-if="index < 30"
@@ -133,14 +133,15 @@
                             </div>
                         </a>
                     </div>
+                </div>
                 </div><!-- ROW 1 -->
 
                 <!-- ROW 2 -->
                 <div class="row">
                     <h2 v-if="final_recommendations.length == 0">High Rated Movies:</h2>
                     <h2 v-else>Recommended Movies:</h2>
-
-                    <div class="slider slider-nav">
+                    <div class="slider-parent">
+                    <div class="slider slider-nav2">
 
                         <a v-if="index < 30"
                            v-for="(movie,index) in second_line_movies" href="#" class="smSlickItem">
@@ -166,6 +167,7 @@
                                 </div>
                             </div>
                         </a>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -318,6 +320,8 @@
                 $.getJSON(url).done(function (response) {
                     // put the received movies into array
                     self.high_rated_movies = response.results;
+
+
                 });   
             },
 

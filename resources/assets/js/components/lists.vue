@@ -2,6 +2,10 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+
+                
+
+
                 <!-- modal window with the selected movie info -->
                 <div class="modal modal-lg fade"
                      tabindex="-1"
@@ -33,7 +37,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="rating modalRating">
+                                            <div class="rating modalRating col-md-12">
                                                 <!-- rating stars -->
                                                 <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                                             </div>
@@ -59,9 +63,9 @@
                                                 <p class="li_item">
                                                     <!-- loop to display all involved countries -->
                                                     <span v-for="(country, index) in movie.production_countries">
-													{{country.name}}
-													<span v-if="movie.production_countries[index + 1] != null">,</span>
-											</span>
+                                                    {{country.name}}
+                                                    <span v-if="movie.production_countries[index + 1] != null">,</span>
+                                            </span>
                                                 </p>
                                             </div>
                                         </div>
@@ -71,10 +75,10 @@
                                                 <span class="li_header">Genres: </span>
                                                 <!-- loop to display all genres -->
                                                 <p class="li_item">
-											<span v-for="(genre, index) in movie.genres">
-												{{genre.name}}
-												<span v-if="movie.genres[index + 1] != null">,</span>
-											</span>
+                                            <span v-for="(genre, index) in movie.genres">
+                                                {{genre.name}}
+                                                <span v-if="movie.genres[index + 1] != null">,</span>
+                                            </span>
                                                 </p>
                                             </div>
 
@@ -100,70 +104,69 @@
 
                 <!-- ROW 1  -->
                 <div class="row">
-                    <h2 class="space">Watch Later:</h2>
+                    <h2 class="space">Saved Movies:</h2>
                     <div class="slider slider-nav">
 
-                        <a v-if="index < 30"
-                           v-for="(movie,index) in watchlater_movies" href="#" class="smSlickItem">
+                        <a  v-if="watch_movies_display.length > 0"
+                          v-for="(movie,i) in watch_movies_display" href="#" class="smSlickItem" >
 
-                            <img
-                                    v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
-                                    @click="showMovie(movie.id)">
+                        <img
+                            v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(i)">
 
-                            <!-- the drop-down list with for choosing rating -->
-                            <!-- the rating of each film is linked to the corresponding array member -->
-                            <div class="slickActions">
+                        <!-- the drop-down list with for choosing rating -->
+                        <!-- the rating of each film is linked to the corresponding array member -->
+                        <div class="slickActions">
 
-                                <div class="row">
-                                    <div class="rating">
-                                        <!-- rating stars -->
-                                        <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
-                                    </div>
-                                </div>
-                                <div class="row btnHolder">
-
-                                    <button @click="laterMovie(movie.id)">Save</button>
-                                    <button @click="hideMovie(movie.id)">Hide</button>
+                            <div class="row">
+                                <div class="rating">
+                                    <!-- rating stars -->
+                                    <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                                 </div>
                             </div>
-                        </a>
+                            <div class="row btnHolder">
+
+                                <button @click="laterMovie(movie.id)">Save</button>
+                                <button @click="hideMovie(movie.id)">Hide</button>
+                            </div>
+                        </div>
+
+                      </a>
+
                     </div>
-                </div><!-- ROW 1 -->
+                  </div>
 
                 <!-- ROW 2 -->
                 <div class="row">
-                    <h2 v-if="final_recommendations.length == 0">High Rated Movies:</h2>
-                    <h2 v-else>Hidden Movies:</h2>
-
+                    <h2 class="space">Hidden Movies:</h2>
                     <div class="slider slider-nav">
 
-                        <a v-if="index < 30"
-                           v-for="(movie,index) in hidden_movies" href="#" class="smSlickItem">
+                        <a  v-if="hide_movies_display.length > 0"
+                          v-for="(movie,i) in hide_movies_display" href="#" class="smSlickItem" >
 
-                            <img
-                                    v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
-                                    @click="showMovie(movie.id)">
+                        <img
+                            v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(i)">
 
-                            <!-- the drop-down list with for choosing rating -->
-                            <!-- the rating of each film is linked to the corresponding array member -->
-                            <div class="slickActions">
+                        <!-- the drop-down list with for choosing rating -->
+                        <!-- the rating of each film is linked to the corresponding array member -->
+                        <div class="slickActions">
 
-                                <div class="row">
-                                    <div class="rating">
-                                        <!-- rating stars -->
-                                        <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
-                                    </div>
-                                </div>
-                                <div class="row btnHolder">
-                                    <button @click="hideMovie(movie.id)"><span class="glyphicon glyphicon-eye-close"
-                                                                               aria-hidden="true"></span></button>
-                                    <button @click="laterMovie(movie.id)"><span class="glyphicon glyphicon-floppy-disk"
-                                                                                aria-hidden="true"></span></button>
+                            <div class="row">
+                                <div class="rating">
+                                    <!-- rating stars -->
+                                    <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                                 </div>
                             </div>
-                        </a>
+                            <div class="row btnHolder">
+
+                                <button @click="laterMovie(movie.id)">Save</button>
+                                <button @click="hideMovie(movie.id)">Hide</button>
+                            </div>
+                        </div>
+
+                      </a>
+
                     </div>
-                </div>
+                  </div>
             </div>
         </div>
     </div>
@@ -188,28 +191,80 @@
                 // array with user ratings
                 ratings: {},
                 // contains all popular movies received from TMDb
-                hidden_movies: [],
+                watch_movies: [],
                 // contains all highest rated movies received from TMDb
-                watchlater_movies: [],
+                hide_movies: [],
+                // the array to store full movie details for each movie received from TMDb
+                watch_movies_display: [],
+                // the array to store full movie details for each movie received from TMDb
+                hide_movies_display: [],
                 // tmdb api key value
-                api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
+                api_key: "?api_key=a3abe9699d800e588cb2a57107b4179c",
+                // TMDb api key url prefix
+                api_key_prefix: 'https://api.themoviedb.org/3/movie/',
                 // url prefix for getting posters
                 image_prefix_url: "http://image.tmdb.org/t/p/w500"
+                
             };
         },
 
         // functions triggered when Vue object is mounted
         mounted() {
+            // get most popular and highest rated movies to display them in the first line
+            this.getWatchLaterMovies(),
+            this.getHiddenMovies()
         },
 
         methods: {
 
-            getWatchlater() {
-                axios.get("/get_watchlater")
+            getWatchLaterMovies() {
+
+                // get all movies from DB junction table for current user
+                axios.get('/watchlater')
+                    .then(response => {
+                      // put all received movie objects into array
+                      this.watch_movies = response.data.user_watch
+                      // reference to Vue object
+                      var self = this
+                      // you can't loop through response object, so put it to the array first
+                      this.watch_movies = response.data.user_watch
+                      // loop to obtain full movie details from TMDb for each movie from user list
+                      for (var i = 0; i < this.watch_movies.length; i++) {
+                        // url query string with movie id
+                        var url = this.api_key_prefix + this.watch_movies[i].movie_id + this.api_key
+                        // get movie object from TMDb by tmdb_id
+                        $.getJSON(url)
+                          .done(function(received_movie) {
+                            // put the received movie object into array
+                            self.watch_movies_display.push(received_movie)
+                          })
+                      }
+                })
             },
 
-            getHidden() {
-                axios.get("/get_hidden")
+            getHiddenMovies() {
+
+                // get all movies from DB junction table for current user
+                axios.get('/hidden')
+                    .then(response => {
+                      // put all received movie objects into array
+                      this.watch_movies = response.data.user_hidden
+                      // reference to Vue object
+                      var self = this
+                      // you can't loop through response object, so put it to the array first
+                      this.watch_movies = response.data.user_hidden
+                      // loop to obtain full movie details from TMDb for each movie from user list
+                      for (var i = 0; i < this.watch_movies.length; i++) {
+                        // url query string with movie id
+                        var url = this.api_key_prefix + this.watch_movies[i].movie_id + this.api_key
+                        // get movie object from TMDb by tmdb_id
+                        $.getJSON(url)
+                          .done(function(received_movie) {
+                            // put the received movie object into array
+                            self.hide_movies_display.push(received_movie)
+                          })
+                      }
+                })  
             },
 
             // show selected movie info in modal window
@@ -230,14 +285,14 @@
                 $("#movie_info").modal("show");
             },
 
-            hideMovie(movieId) {
+            hideMovie(tmdb_id) {
                 // HIDE BUTTON HANDLER
                 axios.post("/hide", {
                                       tmdb_id: tmdb_id
                                     })
 
             },
-            laterMovie(movieId) {
+            laterMovie(tmdb_id) {
                 // WATCHLATER BUTTON HANDLER
 
                 axios.post("/watchlater", {

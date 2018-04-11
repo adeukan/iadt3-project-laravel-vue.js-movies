@@ -202,14 +202,14 @@ class UserMovieController extends Controller
     // #return \Illuminate\Http\Response
     public function getHiddenMovies()
     {
-        $all_rated_by_user = UserMovie::where([
+        $user_hidden = UserMovie::where([
             'user_id' => Auth::user()->id,
             'hidden' => '1',
             'watchlater' => '0'
         ])->get();
 
         return response()->json([
-            'all_rated_by_user'    => $all_rated_by_user,
+            'user_hidden'    => $user_hidden,
         ], 200);
     }
 
@@ -217,14 +217,14 @@ class UserMovieController extends Controller
     // #return \Illuminate\Http\Response
     public function getWatchLaterMovies()
     {
-        $all_rated_by_user = UserMovie::where([
+        $user_watch = UserMovie::where([
             'user_id' => Auth::user()->id,
             'hidden' => '0',
             'watchlater' => '1'
         ])->get();
 
         return response()->json([
-            'all_rated_by_user'    => $all_rated_by_user,
+            'user_watch'    => $user_watch,
         ], 200);
     }
 
@@ -291,7 +291,6 @@ class UserMovieController extends Controller
         } else {
             $userMovie->hidden = '0';
             $userMovie->watchlater = '1';
-            $userMovie->ratio = '0';
             $userMovie->save();
         }
         
@@ -325,8 +324,6 @@ class UserMovieController extends Controller
             $userMovie->save();
         } else {
             $userMovie->hidden = '1';
-            $userMovie->ratio = '0';
-            $userMovie->watchlater = '0';
             $userMovie->save();
         }
     }
