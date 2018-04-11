@@ -111,7 +111,7 @@
                           v-for="(movie,i) in watch_movies_display" href="#" class="smSlickItem" >
 
                         <img
-                            v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(i)">
+                            v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
 
                         <!-- the drop-down list with for choosing rating -->
                         <!-- the rating of each film is linked to the corresponding array member -->
@@ -144,7 +144,7 @@
                           v-for="(movie,i) in hide_movies_display" href="#" class="smSlickItem" >
 
                         <img
-                            v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(i)">
+                            v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
 
                         <!-- the drop-down list with for choosing rating -->
                         <!-- the rating of each film is linked to the corresponding array member -->
@@ -271,7 +271,7 @@
             showMovie(movieId) {
                 // url query to find movie by tmdb_id
                 var url =
-                    "https://api.themoviedb.org/3/movie/" + movieId + "?" + this.api_key;
+                    "https://api.themoviedb.org/3/movie/" + movieId + this.api_key;
                 // reference to Vue object
                 var self = this;
                 // search movie by tmdb_id

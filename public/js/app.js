@@ -45972,7 +45972,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // show selected movie info in modal window
     showMovie: function showMovie(movieId) {
       // url query to find movie by tmdb_id
-      var url = "https://api.themoviedb.org/3/movie/" + movieId + "?" + this.api_key;
+      var url = "https://api.themoviedb.org/3/movie/" + movieId + this.api_key;
       // reference to Vue object
       var self = this;
       // search movie by tmdb_id
@@ -46286,7 +46286,7 @@ var render = function() {
                         },
                         on: {
                           click: function($event) {
-                            _vm.showMovie(i)
+                            _vm.showMovie(movie.id)
                           }
                         }
                       }),
@@ -46682,7 +46682,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         // show selected movie info in modal window
         showMovie: function showMovie(movieId) {
             // url query to find movie by tmdb_id
-            var url = "https://api.themoviedb.org/3/movie/" + movieId + "?" + this.api_key;
+            var url = "https://api.themoviedb.org/3/movie/" + movieId + this.api_key;
             // reference to Vue object
             var self = this;
             // search movie by tmdb_id
@@ -46994,7 +46994,7 @@ var render = function() {
                         },
                         on: {
                           click: function($event) {
-                            _vm.showMovie(i)
+                            _vm.showMovie(movie.id)
                           }
                         }
                       }),
@@ -47072,7 +47072,7 @@ var render = function() {
                         },
                         on: {
                           click: function($event) {
-                            _vm.showMovie(i)
+                            _vm.showMovie(movie.id)
                           }
                         }
                       }),
