@@ -174,9 +174,38 @@
 </template>
 
 <script>
+
+    import Slick from 'vue-slick';
+
     export default {
+        components: {
+            Slick
+        },
         data() {
             return {
+                slickOptions: {
+                    dots:false,
+                    slidesToShow: 5,
+                    slidesToScroll: 4,
+                    infinite:true,
+                    variableWidth: true,
+                    responsive: [
+                        {
+                          breakpoint: 1300,
+                          settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 2,
+                          }
+                        },
+                        {
+                          breakpoint: 480,
+                          settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1,
+                          }
+                        }
+                    ]
+                },
                 // temporary stores the properties of selected movie, used to display it in a modal window
                 movie: {
                     // you must not specify property names explicitly

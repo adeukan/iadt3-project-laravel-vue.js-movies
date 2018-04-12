@@ -2,10 +2,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-
-                
-
-
                 <!-- modal window with the selected movie info -->
                 <div class="modal modal-lg fade"
                      tabindex="-1"
@@ -111,6 +107,7 @@
 
                                 <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
 
+                                <!-- the drop-down list with for choosing rating -->
                                 <!-- the rating of each film is linked to the corresponding array member -->
                                 <div class="slickActions">
 
@@ -138,30 +135,27 @@
                     <div class="slider-parent">
                         <slick ref="slick" :options="slickOptions">
 
-                            <a v-if="index < 30"
-                           v-for="(movie,index) in second_line_movies" href="#" class="smSlickItem">
+                            <a v-if="index < 30" v-for="(movie,index) in second_line_movies" href="#" class="smSlickItem">
 
-                            <img
-                                    v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
-                                    @click="showMovie(movie.id)">
+                                <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
 
-                            <!-- the drop-down list with for choosing rating -->
-                            <!-- the rating of each film is linked to the corresponding array member -->
-                            <div class="slickActions">
+                                <!-- the drop-down list with for choosing rating -->
+                                <!-- the rating of each film is linked to the corresponding array member -->
+                                <div class="slickActions">
 
-                                <div class="row">
-                                    <div class="rating">
-                                        <!-- rating stars -->
-                                        <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
+                                    <div class="row">
+                                        <div class="rating">
+                                            <!-- rating stars -->
+                                            <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
+                                        </div>
+                                    </div>
+                                    <div class="row btnHolder">
+
+                                        <button @click="laterMovie(movie.id)">Save</button>
+                                        <button @click="hideMovie(movie.id)">Hide</button>
                                     </div>
                                 </div>
-                                <div class="row btnHolder">
-
-                                    <button @click="laterMovie(movie.id)">Save</button>
-                                    <button @click="hideMovie(movie.id)">Hide</button>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
 
                         </slick>
                     </div>
@@ -173,10 +167,38 @@
 </template>
 
 <script>
+    
+    import Slick from 'vue-slick';
 
     export default {
+        components: {
+            Slick
+        },
         data() {
             return {
+                slickOptions: {
+                    dots:false,
+                    slidesToShow: 5,
+                    slidesToScroll: 4,
+                    infinite:true,
+                    variableWidth: true,
+                    responsive: [
+                        {
+                          breakpoint: 1300,
+                          settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 2,
+                          }
+                        },
+                        {
+                          breakpoint: 480,
+                          settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1,
+                          }
+                        }
+                    ]
+                },
                 // temporary stores the properties of selected movie, used to display it in a modal window
                 movie: {
                     // you must not specify property names explicitly
@@ -317,8 +339,6 @@
                 $.getJSON(url).done(function (response) {
                     // put the received movies into array
                     self.high_rated_movies = response.results;
-
-
                 });   
             },
 

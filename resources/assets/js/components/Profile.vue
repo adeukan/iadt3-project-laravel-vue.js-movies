@@ -139,122 +139,151 @@
 </template>
 
 <script>
-export default {
 
-  data() {
-    return {
-      // temporary stores the properties of selected movie, used to display it in a modal window
-      movie: {
-        // you must not specify property names explicitly
-        // poster_path: '',
-        // title: '',
-        // tagline: '',
-        // production_countries: '',
-        // genres: '',
-        // runtime: '',
-        // overview: ''
-      },
-      // the array to store user settings for each movie received from TMDb
-      MyDBmovies: [],
-      // the array to store full movie details for each movie received from TMDb
-      TMDBmovies: [],
-      // TMDb api key
-      api_key: '?api_key=a3abe9699d800e588cb2a57107b4179c',
-      // TMDb api key url prefix
-      api_key_prefix: 'https://api.themoviedb.org/3/movie/',
-      // TMDb url prefix for posters
-      image_prefix_url: 'http://image.tmdb.org/t/p/w500'
-    }
-  },
-  // functions triggered when Vue object is mounted
-  mounted() {
-    this.getUserMovies()
-  },
-  methods: {
-    getUserMovies() {
+  import Slick from 'vue-slick';
 
-      // get all movies from DB junction table for current user
-      axios.get('/usermovies')
-        .then(response => {
-          // put all received movie objects into array
-          this.MyDBmovies = response.data.all_rated_by_user
-          // reference to Vue object
-          var self = this
-          // you can't loop through response object, so put it to the array first
-          this.MyDBmovies = response.data.all_rated_by_user
-          // loop to obtain full movie details from TMDb for each movie from user list
-          for (var i = 0; i < this.MyDBmovies.length; i++) {
-            // url query string with movie id
-            var url = this.api_key_prefix + this.MyDBmovies[i].movie_id + this.api_key
-            // get movie object from TMDb by tmdb_id
-            $.getJSON(url)
-              .done(function(received_movie) {
-                // put the received movie object into array
-                self.TMDBmovies.push(received_movie)
-              })
-          }
-        })
+  export default {
+
+    components: {
+      Slick
     },
-    // show selected movie info in modal window
-            showMovie(movieId) {
-                // url query to find movie by tmdb_id
-                var url =
-                    "https://api.themoviedb.org/3/movie/" + movieId + this.api_key;
-                // reference to Vue object
-                var self = this;
-                // search movie by tmdb_id
-                fetch(url)
-                    .then(r => r.json())
-                    .then(json => {
-                        // put the movie object to local object "movie"
-                        self.movie = json;
-                    });
-
-                $("#movie_info").modal("show");
-            },
-
-            hideMovie(tmdb_id) {
-                // HIDE BUTTON HANDLER
-                axios.post("/hide", {
-                                      tmdb_id: tmdb_id
-                                    })
-
-            },
-            laterMovie(tmdb_id) {
-                // WATCHLATER BUTTON HANDLER
-
-                axios.post("/watchlater", {
-                                            tmdb_id: tmdb_id
-                                          })
-            },
-
-            // ADD OR CHANGE RATING ---------------------------------------------------------
-            addRating(tmdb_id, rating) {
-
-                // mirror the rating value (1 => 5, 2 => 4, ...)
-                rating = 6 - rating;
-
-                // if the movie has not been rated yet, store new raiting in DB
-                if (this.ratings[tmdb_id] === undefined) {
-
-                    axios.post("/store", {
-                                         tmdb_id: tmdb_id,
-                                         user_rating: rating
-                                         })
-                    // reflect changes in the local array
-                    .then(response => { this.ratings[tmdb_id] = rating });
+    data() {
+      return {
+        slickOptions: {
+          dots:false,
+          slidesToShow: 5,
+          slidesToScroll: 4,
+          infinite:true,
+          variableWidth: true,
+          responsive: [
+              {
+                breakpoint: 1300,
+                settings: {
+                  slidesToShow: 3,
+                  slidesToScroll: 2,
                 }
-                // if the rating has changed compared to the previous value, update rating in DB
-                else if (this.ratings[tmdb_id] !== rating) {
+              },
+              {
+                breakpoint: 480,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                }
+              }
+          ]
+        },
+        // temporary stores the properties of selected movie, used to display it in a modal window
+        movie: {
+          // you must not specify property names explicitly
+          // poster_path: '',
+          // title: '',
+          // tagline: '',
+          // production_countries: '',
+          // genres: '',
+          // runtime: '',
+          // overview: ''
+        },
+        // the array to store user settings for each movie received from TMDb
+        MyDBmovies: [],
+        // the array to store full movie details for each movie received from TMDb
+        TMDBmovies: [],
+        // TMDb api key
+        api_key: '?api_key=a3abe9699d800e588cb2a57107b4179c',
+        // TMDb api key url prefix
+        api_key_prefix: 'https://api.themoviedb.org/3/movie/',
+        // TMDb url prefix for posters
+        image_prefix_url: 'http://image.tmdb.org/t/p/w500'
+      }
+    },
+    // functions triggered when Vue object is mounted
+    mounted() {
+      this.getUserMovies()
+    },
+    methods: {
+      getUserMovies() {
 
-                    axios.post("/update", {
+        // get all movies from DB junction table for current user
+        axios.get('/usermovies')
+          .then(response => {
+            // put all received movie objects into array
+            this.MyDBmovies = response.data.all_rated_by_user
+            // reference to Vue object
+            var self = this
+            // you can't loop through response object, so put it to the array first
+            this.MyDBmovies = response.data.all_rated_by_user
+            // loop to obtain full movie details from TMDb for each movie from user list
+            for (var i = 0; i < this.MyDBmovies.length; i++) {
+              // url query string with movie id
+              var url = this.api_key_prefix + this.MyDBmovies[i].movie_id + this.api_key
+              // get movie object from TMDb by tmdb_id
+              $.getJSON(url)
+                .done(function(received_movie) {
+                  // put the received movie object into array
+                  self.TMDBmovies.push(received_movie)
+                })
+            }
+          })
+      },
+      // show selected movie info in modal window
+              showMovie(movieId) {
+                  // url query to find movie by tmdb_id
+                  var url =
+                      "https://api.themoviedb.org/3/movie/" + movieId + this.api_key;
+                  // reference to Vue object
+                  var self = this;
+                  // search movie by tmdb_id
+                  fetch(url)
+                      .then(r => r.json())
+                      .then(json => {
+                          // put the movie object to local object "movie"
+                          self.movie = json;
+                      });
+
+                  $("#movie_info").modal("show");
+              },
+
+              hideMovie(tmdb_id) {
+                  // HIDE BUTTON HANDLER
+                  axios.post("/hide", {
+                                        tmdb_id: tmdb_id
+                                      })
+
+              },
+              laterMovie(tmdb_id) {
+                  // WATCHLATER BUTTON HANDLER
+
+                  axios.post("/watchlater", {
+                                              tmdb_id: tmdb_id
+                                            })
+              },
+
+              // ADD OR CHANGE RATING ---------------------------------------------------------
+              addRating(tmdb_id, rating) {
+
+                  // mirror the rating value (1 => 5, 2 => 4, ...)
+                  rating = 6 - rating;
+
+                  // if the movie has not been rated yet, store new raiting in DB
+                  if (this.ratings[tmdb_id] === undefined) {
+
+                      axios.post("/store", {
                                            tmdb_id: tmdb_id,
                                            user_rating: rating
-                                          })
-                    // reflect changes in the local array
-                    .then(response => {this.ratings[tmdb_id] = rating;});
-                }
-            } // addRating()
+                                           })
+                      // reflect changes in the local array
+                      .then(response => { this.ratings[tmdb_id] = rating });
+                  }
+                  // if the rating has changed compared to the previous value, update rating in DB
+                  else if (this.ratings[tmdb_id] !== rating) {
+
+                      axios.post("/update", {
+                                             tmdb_id: tmdb_id,
+                                             user_rating: rating
+                                            })
+                      // reflect changes in the local array
+                      .then(response => {this.ratings[tmdb_id] = rating;});
+                  }
+              } // addRating()
+    }
   }
-}
 </script>
