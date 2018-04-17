@@ -97,7 +97,7 @@
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
 
-                <div clas="row">
+                <div class="row">
                     <h2>Popular Movies</h2>
                     <div class="slider-parent">
                         <slick ref="popSlick" :options="slickOptions">
@@ -130,7 +130,7 @@
                     </div>
                 </div>
 
-                <div clas="row">
+                <div class="row">
                     <h2 v-if="final_recommendations.length == 0">High Rated Movies:</h2>
                     <h2 v-else>Recommended Movies:</h2>
                     <div class="slider-parent">

@@ -2,10 +2,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-
-                
-
-
                 <!-- modal window with the selected movie info -->
                 <div class="modal modal-lg fade"
                      tabindex="-1"
@@ -105,35 +101,37 @@
                 <!-- ROW 1  -->
                 <div class="row">
                     <h2>Saved Movies:</h2>
-                    <slick ref="saveSlick" :options="slickOptions">
+                    <div class="slider-parent">
+                        <slick ref="saveSlick" :options="slickOptions">
 
-                        <a  v-if="watch_movies_display.length > 0"
-                          v-for="(movie,i) in watch_movies_display" href="#" class="smSlickItem" >
+                            <a  v-if="watch_movies_display.length > 0"
+                              v-for="(movie,i) in watch_movies_display" href="#" class="smSlickItem" >
 
-                        <img
-                            v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
+                            <img
+                                v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
 
-                        <!-- the drop-down list with for choosing rating -->
-                        <!-- the rating of each film is linked to the corresponding array member -->
-                        <div class="slickActions">
+                            <!-- the drop-down list with for choosing rating -->
+                            <!-- the rating of each film is linked to the corresponding array member -->
+                            <div class="slickActions">
 
-                            <div class="row">
-                                <div class="rating">
-                                    <!-- rating stars -->
-                                    <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
+                                <div class="row">
+                                    <div class="rating">
+                                        <!-- rating stars -->
+                                        <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
+                                    </div>
+                                </div>
+                                <div class="row btnHolder">
+
+                                    <button @click="laterMovie(movie.id)">Save</button>
+                                    <button @click="hideMovie(movie.id)">Hide</button>
                                 </div>
                             </div>
-                            <div class="row btnHolder">
 
-                                <button @click="laterMovie(movie.id)">Save</button>
-                                <button @click="hideMovie(movie.id)">Hide</button>
-                            </div>
-                        </div>
+                          </a>
 
-                      </a>
-
-                    </slick>
-                  </div>
+                        </slick>
+                    </div>
+                </div>
 
                 <!-- ROW 2 -->
                 <div class="row">
@@ -166,7 +164,8 @@
                       </a>
 
                     </slick>
-                  </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -187,6 +186,7 @@
                     dots:false,
                     slidesToShow: 5,
                     slidesToScroll: 4,
+                    infinite: true,
                     variableWidth: true,
                     responsive: [
                         {

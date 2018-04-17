@@ -49888,7 +49888,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -49903,6 +49902,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 dots: false,
                 slidesToShow: 5,
                 slidesToScroll: 4,
+                infinite: true,
                 variableWidth: true,
                 responsive: [{
                     breakpoint: 1300,
@@ -50326,88 +50326,90 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "row" },
-          [
-            _c("h2", [_vm._v("Saved Movies:")]),
-            _vm._v(" "),
-            _c(
-              "slick",
-              { ref: "saveSlick", attrs: { options: _vm.slickOptions } },
-              _vm._l(_vm.watch_movies_display, function(movie, i) {
-                return _vm.watch_movies_display.length > 0
-                  ? _c(
-                      "a",
-                      { staticClass: "smSlickItem", attrs: { href: "#" } },
-                      [
-                        _c("img", {
-                          staticClass: "slickImage",
-                          attrs: {
-                            src: _vm.image_prefix_url + movie.poster_path
-                          },
-                          on: {
-                            click: function($event) {
-                              _vm.showMovie(movie.id)
+        _c("div", { staticClass: "row" }, [
+          _c("h2", [_vm._v("Saved Movies:")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "slider-parent" },
+            [
+              _c(
+                "slick",
+                { ref: "saveSlick", attrs: { options: _vm.slickOptions } },
+                _vm._l(_vm.watch_movies_display, function(movie, i) {
+                  return _vm.watch_movies_display.length > 0
+                    ? _c(
+                        "a",
+                        { staticClass: "smSlickItem", attrs: { href: "#" } },
+                        [
+                          _c("img", {
+                            staticClass: "slickImage",
+                            attrs: {
+                              src: _vm.image_prefix_url + movie.poster_path
+                            },
+                            on: {
+                              click: function($event) {
+                                _vm.showMovie(movie.id)
+                              }
                             }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "slickActions" }, [
-                          _c("div", { staticClass: "row" }, [
-                            _c(
-                              "div",
-                              { staticClass: "rating" },
-                              _vm._l(5, function(i) {
-                                return _c(
-                                  "a",
-                                  {
-                                    on: {
-                                      click: function($event) {
-                                        _vm.addRating(movie.id, i)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("★")]
-                                )
-                              })
-                            )
-                          ]),
+                          }),
                           _vm._v(" "),
-                          _c("div", { staticClass: "row btnHolder" }, [
-                            _c(
-                              "button",
-                              {
-                                on: {
-                                  click: function($event) {
-                                    _vm.laterMovie(movie.id)
-                                  }
-                                }
-                              },
-                              [_vm._v("Save")]
-                            ),
+                          _c("div", { staticClass: "slickActions" }, [
+                            _c("div", { staticClass: "row" }, [
+                              _c(
+                                "div",
+                                { staticClass: "rating" },
+                                _vm._l(5, function(i) {
+                                  return _c(
+                                    "a",
+                                    {
+                                      on: {
+                                        click: function($event) {
+                                          _vm.addRating(movie.id, i)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("★")]
+                                  )
+                                })
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c(
-                              "button",
-                              {
-                                on: {
-                                  click: function($event) {
-                                    _vm.hideMovie(movie.id)
+                            _c("div", { staticClass: "row btnHolder" }, [
+                              _c(
+                                "button",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      _vm.laterMovie(movie.id)
+                                    }
                                   }
-                                }
-                              },
-                              [_vm._v("Hide")]
-                            )
+                                },
+                                [_vm._v("Save")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      _vm.hideMovie(movie.id)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Hide")]
+                              )
+                            ])
                           ])
-                        ])
-                      ]
-                    )
-                  : _vm._e()
-              })
-            )
-          ],
-          1
-        ),
+                        ]
+                      )
+                    : _vm._e()
+                })
+              )
+            ],
+            1
+          )
+        ]),
         _vm._v(" "),
         _c(
           "div",
@@ -51218,7 +51220,7 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("div", { attrs: { clas: "row" } }, [
+        _c("div", { staticClass: "row" }, [
           _c("h2", [_vm._v("Popular Movies")]),
           _vm._v(" "),
           _c(
@@ -51303,7 +51305,7 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("div", { attrs: { clas: "row" } }, [
+        _c("div", { staticClass: "row" }, [
           _vm.final_recommendations.length == 0
             ? _c("h2", [_vm._v("High Rated Movies:")])
             : _c("h2", [_vm._v("Recommended Movies:")]),

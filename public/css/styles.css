@@ -7,14 +7,14 @@ body{
 
 /* SLICK */
 .smSlickItem {
-    height:370px;
-    width:235px;
-    padding-left: 10px;
-    padding-right: 10px;
+    height:379px;
+    width:234px;
+    padding-left:5px;
+    padding-right:5px;
 }
 .slickImage {
-    height:290px;
-    width:210px;
+    height:280px;
+    width:224px;
     margin: auto;
 }
 .slickActions{
