@@ -119,6 +119,10 @@
                         <!-- rating stars -->
                         <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                     </div>
+                    <div class="ratingRated">
+                        <!-- get what the movie has been rated -->
+                        <span v-for="i in getRating(movie.id)">★</span>
+                    </div>
                 </div>
                 <div class="row btnHolder">
 
@@ -221,8 +225,6 @@
             this.MyDBmovies = response.data.all_rated_by_user
             // reference to Vue object
             var self = this
-            // you can't loop through response object, so put it to the array first
-            this.MyDBmovies = response.data.all_rated_by_user
             // loop to obtain full movie details from TMDb for each movie from user list
             for (var i = 0; i < this.MyDBmovies.length; i++) {
               // url query string with movie id
@@ -237,65 +239,76 @@
           })
       },
       // show selected movie info in modal window
-              showMovie(movieId) {
-                  // url query to find movie by tmdb_id
-                  var url =
-                      "https://api.themoviedb.org/3/movie/" + movieId + this.api_key;
-                  // reference to Vue object
-                  var self = this;
-                  // search movie by tmdb_id
-                  fetch(url)
-                      .then(r => r.json())
-                      .then(json => {
-                          // put the movie object to local object "movie"
-                          self.movie = json;
-                      });
+      showMovie(movieId) {
+          // url query to find movie by tmdb_id
+          var url =
+              "https://api.themoviedb.org/3/movie/" + movieId + this.api_key;
+          // reference to Vue object
+          var self = this;
+          // search movie by tmdb_id
+          fetch(url)
+              .then(r => r.json())
+              .then(json => {
+                  // put the movie object to local object "movie"
+                  self.movie = json;
+              });
 
-                  $("#movie_info").modal("show");
-              },
+          $("#movie_info").modal("show");
+      },
+      getRating(movieId) {
+        var self = this
+        for(var i = 0; i < this.MyDBmovies.length; i++) {
+          console.log("test");
+          if(movieId == this.MyDBmovies[i].movie_id) {
+            var rating = this.MyDBmovies[i].ratio;
+            console.log(rating);
+            return rating;
+          }
+        }
+      },
 
-              hideMovie(tmdb_id) {
-                  // HIDE BUTTON HANDLER
-                  axios.post("/hide", {
-                                        tmdb_id: tmdb_id
-                                      })
+      hideMovie(tmdb_id) {
+          // HIDE BUTTON HANDLER
+          axios.post("/hide", {
+                                tmdb_id: tmdb_id
+                              })
 
-              },
-              laterMovie(tmdb_id) {
-                  // WATCHLATER BUTTON HANDLER
+      },
+      laterMovie(tmdb_id) {
+          // WATCHLATER BUTTON HANDLER
 
-                  axios.post("/watchlater", {
-                                              tmdb_id: tmdb_id
-                                            })
-              },
+          axios.post("/watchlater", {
+                                      tmdb_id: tmdb_id
+                                    })
+      },
 
-              // ADD OR CHANGE RATING ---------------------------------------------------------
-              addRating(tmdb_id, rating) {
+      // ADD OR CHANGE RATING ---------------------------------------------------------
+      addRating(tmdb_id, rating) {
 
-                  // mirror the rating value (1 => 5, 2 => 4, ...)
-                  rating = 6 - rating;
+          // mirror the rating value (1 => 5, 2 => 4, ...)
+          rating = 6 - rating;
 
-                  // if the movie has not been rated yet, store new raiting in DB
-                  if (this.ratings[tmdb_id] === undefined) {
+          // if the movie has not been rated yet, store new raiting in DB
+          if (this.ratings[tmdb_id] === undefined) {
 
-                      axios.post("/store", {
-                                           tmdb_id: tmdb_id,
-                                           user_rating: rating
-                                           })
-                      // reflect changes in the local array
-                      .then(response => { this.ratings[tmdb_id] = rating });
-                  }
-                  // if the rating has changed compared to the previous value, update rating in DB
-                  else if (this.ratings[tmdb_id] !== rating) {
+              axios.post("/store", {
+                                   tmdb_id: tmdb_id,
+                                   user_rating: rating
+                                   })
+              // reflect changes in the local array
+              .then(response => { this.ratings[tmdb_id] = rating });
+          }
+          // if the rating has changed compared to the previous value, update rating in DB
+          else if (this.ratings[tmdb_id] !== rating) {
 
-                      axios.post("/update", {
-                                             tmdb_id: tmdb_id,
-                                             user_rating: rating
-                                            })
-                      // reflect changes in the local array
-                      .then(response => {this.ratings[tmdb_id] = rating;});
-                  }
-              } // addRating()
+              axios.post("/update", {
+                                     tmdb_id: tmdb_id,
+                                     user_rating: rating
+                                    })
+              // reflect changes in the local array
+              .then(response => {this.ratings[tmdb_id] = rating;});
+          }
+      } // addRating()
     }
   }
 </script>

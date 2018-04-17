@@ -45967,6 +45967,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -46051,8 +46055,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this2.MyDBmovies = response.data.all_rated_by_user;
         // reference to Vue object
         var self = _this2;
-        // you can't loop through response object, so put it to the array first
-        _this2.MyDBmovies = response.data.all_rated_by_user;
         // loop to obtain full movie details from TMDb for each movie from user list
         for (var i = 0; i < _this2.MyDBmovies.length; i++) {
           // url query string with movie id
@@ -46081,6 +46083,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       });
 
       $("#movie_info").modal("show");
+    },
+    getRating: function getRating(movieId) {
+      var self = this;
+      for (var i = 0; i < this.MyDBmovies.length; i++) {
+        console.log("test");
+        if (movieId == this.MyDBmovies[i].movie_id) {
+          var rating = this.MyDBmovies[i].ratio;
+          console.log(rating);
+          return rating;
+        }
+      }
     },
     hideMovie: function hideMovie(tmdb_id) {
       // HIDE BUTTON HANDLER
@@ -49606,6 +49619,14 @@ var render = function() {
                                   },
                                   [_vm._v("★")]
                                 )
+                              })
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "ratingRated" },
+                              _vm._l(_vm.getRating(movie.id), function(i) {
+                                return _c("span", [_vm._v("★")])
                               })
                             )
                           ]),

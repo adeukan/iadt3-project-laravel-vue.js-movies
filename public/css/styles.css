@@ -12,8 +12,11 @@ body{
     padding-left:5px;
     padding-right:5px;
 }
+a.smSlickItem {
+    text-decoration:none;
+}
 .slickImage {
-    height:280px;
+    height:300px;
     width:224px;
     margin: auto;
 }
@@ -180,10 +183,10 @@ h2 {
     text-decoration: none;
 }
 .rating input {
-  float: right;
-  opacity: 0;
-  position: absolute;
-  text-decoration: none;
+      float: right;
+      opacity: 0;
+      position: absolute;
+      text-decoration: none;
 }
 .rating a,
 .rating label {
@@ -210,7 +213,7 @@ h2 {
     text-decoration: none;
 }
 .rating {
-	direction: rtl;
+	direction: ltr;
     text-decoration: none;
 }
 .rating a {
@@ -220,9 +223,20 @@ h2 {
 .modalRating{
     font-size:1.8vw;
 }
-
-
-
+/*  
+ * Rating styles
+ */
+.ratingRated {
+    position:relative;
+    margin:0px;
+    padding:0px;
+    color: #dfe6e9;
+    width: 75%;
+    padding-left:23%;
+    font-size: 2.2em;
+    overflow:hidden;
+    text-decoration: none;
+}
 
 
 
