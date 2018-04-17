@@ -9,6 +9,8 @@ body{
 .smSlickItem {
     height:370px;
     width:235px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .slickImage {
     height:290px;
@@ -139,7 +141,7 @@ h2.modal-title{
     text-align:center;
 }
 .btnHolder button {
-    width:3vw;
+    min-width:3vw;
     background-color:#dfe6e9;
     border:1px solid #636e72;
     border-radius:5px;

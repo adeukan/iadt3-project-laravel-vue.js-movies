@@ -20,7 +20,6 @@
                             <div class="modal-body">
                                 <div class="col-md-3">
 
-                                    <!-- the drop-down list with for choosing rating -->
                                     <!-- the rating of each film is linked to the corresponding array member -->
                                     <div class="modalActions">
 
@@ -55,7 +54,7 @@
 
                                             <!-- countries -->
                                             <div class="list-group-item col-md-6">
-                                                <span class="li_header">Countries: </span>
+                                                <span class="li_header">Created In: </span>
                                                 <p class="li_item">
                                                     <!-- loop to display all involved countries -->
                                                     <span v-for="(country, index) in movie.production_countries">
@@ -101,13 +100,14 @@
                 <div clas="row">
                     <h2>Popular Movies</h2>
                     <div class="slider-parent">
-                        <slick ref="slick" :options="slickOptions">
+                        <slick ref="popSlick" :options="slickOptions">
+
+
 
                             <a v-if="index < 30" v-for="(movie,index) in popular_movies" href="#" class="smSlickItem">
 
                                 <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
-
-                                <!-- the drop-down list with for choosing rating -->
+                                
                                 <!-- the rating of each film is linked to the corresponding array member -->
                                 <div class="slickActions">
 
@@ -124,6 +124,7 @@
                                     </div>
                                 </div>
                             </a>
+                     
 
                         </slick>
                     </div>
@@ -133,7 +134,7 @@
                     <h2 v-if="final_recommendations.length == 0">High Rated Movies:</h2>
                     <h2 v-else>Recommended Movies:</h2>
                     <div class="slider-parent">
-                        <slick ref="slick" :options="slickOptions">
+                        <slick ref="secondSlick" :options="slickOptions">
 
                             <a v-if="index < 30" v-for="(movie,index) in second_line_movies" href="#" class="smSlickItem">
 
@@ -229,13 +230,34 @@
         },
 
         // functions triggered when Vue object is mounted
-        mounted() {
+        created() {
             // get most popular and highest rated movies to display them in the first line
             this.getPopularMovies(),
             this.getHighRatedMovies(),
             // check DB for previously saved recommendations
             // depending on the checking result, run a function to fill the second line of movies
             this.checkRecommendations() 
+        },
+
+        watch: {    //https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
+            popular_movies: function (newMovies) {
+              let currIndex = this.$refs.popSlick.currentSlide()
+
+              this.$refs.popSlick.destroy()
+              this.$nextTick(() => {
+                this.$refs.popSlick.create()
+                this.$refs.popSlick.goTo(currIndex, true)
+              })
+            },
+            second_line_movies: function (newMovies) {
+              let currIndex = this.$refs.secondSlick.currentSlide()
+
+              this.$refs.secondSlick.destroy()
+              this.$nextTick(() => {
+                this.$refs.secondSlick.create()
+                this.$refs.secondSlick.goTo(currIndex, true)
+              })
+            }
         },
 
         methods: {
@@ -324,6 +346,7 @@
                 $.getJSON(url).done(function (received_movies) {
                     // put the received movies into array
                     self.popular_movies = received_movies.results;
+                    
                 });
             },
 

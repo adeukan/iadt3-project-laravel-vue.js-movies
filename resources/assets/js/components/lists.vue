@@ -105,7 +105,7 @@
                 <!-- ROW 1  -->
                 <div class="row">
                     <h2>Saved Movies:</h2>
-                    <slick ref="slick" :options="slickOptions">
+                    <slick ref="saveSlick" :options="slickOptions">
 
                         <a  v-if="watch_movies_display.length > 0"
                           v-for="(movie,i) in watch_movies_display" href="#" class="smSlickItem" >
@@ -137,8 +137,8 @@
 
                 <!-- ROW 2 -->
                 <div class="row">
-                    <h2 class="space">Hidden Movies:</h2>
-                    <slick ref="slick" :options="slickOptions">
+                    <h2>Hidden Movies:</h2>
+                    <slick ref="hideSlick" :options="slickOptions">
 
                         <a  v-if="hide_movies_display.length > 0"
                           v-for="(movie,i) in hide_movies_display" href="#" class="smSlickItem" >
@@ -187,7 +187,6 @@
                     dots:false,
                     slidesToShow: 5,
                     slidesToScroll: 4,
-                    infinite:true,
                     variableWidth: true,
                     responsive: [
                         {
@@ -235,6 +234,26 @@
                 image_prefix_url: "http://image.tmdb.org/t/p/w500"
                 
             };
+        },
+        watch: {    //https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
+            watch_movies_display: function (newMovies) {
+              let currIndex = this.$refs.saveSlick.currentSlide()
+
+              this.$refs.saveSlick.destroy()
+              this.$nextTick(() => {
+                this.$refs.saveSlick.create()
+                this.$refs.saveSlick.goTo(currIndex, true)
+              })
+            },
+            hide_movies_display: function (newMovies) {
+              let currIndex = this.$refs.hideSlick.currentSlide()
+
+              this.$refs.hideSlick.destroy()
+              this.$nextTick(() => {
+                this.$refs.hideSlick.create()
+                this.$refs.hideSlick.goTo(currIndex, true)
+              })
+            }
         },
 
         // functions triggered when Vue object is mounted

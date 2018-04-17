@@ -199,6 +199,18 @@
     mounted() {
       this.getUserMovies()
     },
+    watch: {    //https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
+      TMDBmovies: function (newMovies) {
+        let currIndex = this.$refs.slick.currentSlide()
+
+        this.$refs.slick.destroy()
+        this.$nextTick(() => {
+          this.$refs.slick.create()
+          this.$refs.slick.goTo(currIndex, true)
+        })
+      }
+    },
+            
     methods: {
       getUserMovies() {
 
