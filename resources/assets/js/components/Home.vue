@@ -119,6 +119,10 @@
                                             <!-- rating stars -->
                                             <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                                         </div>
+                                        <div v-if="getRating(movie.id) > 0" class="ratingRated">
+                                            <!-- get what the movie has been rated -->
+                                            <span v-for="i in getRating(movie.id)">★</span>
+                                        </div>
                                     </div>
                                     <div class="row btnHolder">
 
@@ -153,6 +157,10 @@
                                     <div class="rating">
                                         <!-- rating stars -->
                                         <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
+                                    </div>
+                                    <div class="ratingRated">
+                                        <!-- get what the movie has been rated -->
+                                        <span v-for="i in getRating(movie.id)">★</span>
                                     </div>
                                 </div>
                                 <div class="row btnHolder">
@@ -216,6 +224,7 @@ export default {
       ratings: {},
       // contains all popular movies received from TMDb
       popular_movies: [],
+      MyDBmovies: [],
       // contains all highest rated movies received from TMDb
       high_rated_movies: [],
       // recommended movies (without )
@@ -237,10 +246,14 @@ export default {
     // check DB for previously saved recommendations
     // depending on the checking result, run a function to fill the second line of movies
     this.checkRecommendations();
+    this.getUserMovies()
   },
   watch: {    //https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
     popular_movies: function (newMovies) {
+
       let currIndex = this.$refs.popSlick.currentSlide()
+
+      console.log(currIndex);
 
       this.$refs.popSlick.destroy()
       this.$nextTick(() => {
@@ -349,9 +362,38 @@ export default {
       var self = this;
       // get all highest rated movies from TMDb
       $.getJSON(url).done(function(response) {
+
+        // console.log(response.results.length);
+
+        for(var i = 0;i < response.results.length; i++) {
+          if(response.results[i].poster_path === null) {
+            console.log(response.results[i]);
+            response.results.splice(i, 1);
+          }
+        }
         // put the received movies into array
         self.high_rated_movies = response.results;
       });
+    },
+    getUserMovies() {
+
+        // get all movies from DB junction table for current user
+        axios.get('/usermovies')
+          .then(response => {
+            // put all received movie objects into array
+            this.MyDBmovies = response.data.all_rated_by_user
+            // reference to Vue object
+            var self = this
+          })
+      },
+    getRating(movieId) {
+        var self = this
+        for(var i = 0; i < this.MyDBmovies.length; i++) {
+          if(movieId == this.MyDBmovies[i].movie_id) {
+            var rating = this.MyDBmovies[i].ratio;
+            return rating;
+          }
+        }
     },
 
     // show selected movie info in modal window

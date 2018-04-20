@@ -17,6 +17,7 @@ const router = new VueRouter({
 	{ path: '/', component: Home },
 	{ path: '/profile', component: Profile },
 	{ path: '/lists', component: Lists },
+	{ path: '/logout', component: Home },
 
     // { path: '/popular', component: PopularMovies },
     // { path: '/wishlist', component: MyWishlist },

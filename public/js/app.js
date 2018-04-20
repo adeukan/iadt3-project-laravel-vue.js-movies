@@ -43136,7 +43136,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 // define the VueRouter object
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
 	mode: 'history',
-	routes: [{ path: '/', component: __WEBPACK_IMPORTED_MODULE_4__components_Home_vue___default.a }, { path: '/profile', component: __WEBPACK_IMPORTED_MODULE_2__components_Profile_vue___default.a }, { path: '/lists', component: __WEBPACK_IMPORTED_MODULE_3__components_lists_vue___default.a }]
+	routes: [{ path: '/', component: __WEBPACK_IMPORTED_MODULE_4__components_Home_vue___default.a }, { path: '/profile', component: __WEBPACK_IMPORTED_MODULE_2__components_Profile_vue___default.a }, { path: '/lists', component: __WEBPACK_IMPORTED_MODULE_3__components_lists_vue___default.a }, { path: '/logout', component: __WEBPACK_IMPORTED_MODULE_4__components_Home_vue___default.a }]
 });
 
 /* harmony default export */ __webpack_exports__["a"] = (router);
@@ -50752,6 +50752,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -50793,6 +50801,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       ratings: {},
       // contains all popular movies received from TMDb
       popular_movies: [],
+      MyDBmovies: [],
       // contains all highest rated movies received from TMDb
       high_rated_movies: [],
       // recommended movies (without )
@@ -50814,6 +50823,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // check DB for previously saved recommendations
     // depending on the checking result, run a function to fill the second line of movies
     this.checkRecommendations();
+    this.getUserMovies();
   },
 
   watch: { //https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
@@ -50821,6 +50831,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this = this;
 
       var currIndex = this.$refs.popSlick.currentSlide();
+
+      console.log(currIndex);
 
       this.$refs.popSlick.destroy();
       this.$nextTick(function () {
@@ -50927,9 +50939,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var self = this;
       // get all highest rated movies from TMDb
       $.getJSON(url).done(function (response) {
+
+        // console.log(response.results.length);
+
+        for (var i = 0; i < response.results.length; i++) {
+          if (response.results[i].poster_path === null) {
+            console.log(response.results[i]);
+            response.results.splice(i, 1);
+          }
+        }
         // put the received movies into array
         self.high_rated_movies = response.results;
       });
+    },
+    getUserMovies: function getUserMovies() {
+      var _this6 = this;
+
+      // get all movies from DB junction table for current user
+      axios.get('/usermovies').then(function (response) {
+        // put all received movie objects into array
+        _this6.MyDBmovies = response.data.all_rated_by_user;
+        // reference to Vue object
+        var self = _this6;
+      });
+    },
+    getRating: function getRating(movieId) {
+      var self = this;
+      for (var i = 0; i < this.MyDBmovies.length; i++) {
+        if (movieId == this.MyDBmovies[i].movie_id) {
+          var rating = this.MyDBmovies[i].ratio;
+          return rating;
+        }
+      }
     },
 
 
@@ -50966,7 +51007,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // ADD OR CHANGE RATING ---------------------------------------------------------
     addRating: function addRating(tmdb_id, rating) {
-      var _this6 = this;
+      var _this7 = this;
 
       // mirror the rating value (1 => 5, 2 => 4, ...)
       rating = 6 - rating;
@@ -50979,7 +51020,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         })
         // reflect changes in the local array
         .then(function (response) {
-          _this6.ratings[tmdb_id] = rating;
+          _this7.ratings[tmdb_id] = rating;
         });
       } else if (this.ratings[tmdb_id] !== rating) {
         // if the rating has changed compared to the previous value, update rating in DB
@@ -50989,7 +51030,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         })
         // reflect changes in the local array
         .then(function (response) {
-          _this6.ratings[tmdb_id] = rating;
+          _this7.ratings[tmdb_id] = rating;
         });
       }
     }
@@ -51272,7 +51313,19 @@ var render = function() {
                                     [_vm._v("★")]
                                   )
                                 })
-                              )
+                              ),
+                              _vm._v(" "),
+                              _vm.getRating(movie.id) > 0
+                                ? _c(
+                                    "div",
+                                    { staticClass: "ratingRated" },
+                                    _vm._l(_vm.getRating(movie.id), function(
+                                      i
+                                    ) {
+                                      return _c("span", [_vm._v("★")])
+                                    })
+                                  )
+                                : _vm._e()
                             ]),
                             _vm._v(" "),
                             _c("div", { staticClass: "row btnHolder" }, [
@@ -51358,6 +51411,14 @@ var render = function() {
                                     },
                                     [_vm._v("★")]
                                   )
+                                })
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "ratingRated" },
+                                _vm._l(_vm.getRating(movie.id), function(i) {
+                                  return _c("span", [_vm._v("★")])
                                 })
                               )
                             ]),
