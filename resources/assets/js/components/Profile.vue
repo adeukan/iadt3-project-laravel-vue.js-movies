@@ -157,8 +157,6 @@
           dots:false,
           slidesToShow: 5,
           slidesToScroll: 4,
-          infinite:true,
-          variableWidth: true,
           responsive: [
               {
                 breakpoint: 1300,
@@ -258,10 +256,8 @@
       getRating(movieId) {
         var self = this
         for(var i = 0; i < this.MyDBmovies.length; i++) {
-          console.log("test");
           if(movieId == this.MyDBmovies[i].movie_id) {
             var rating = this.MyDBmovies[i].ratio;
-            console.log(rating);
             return rating;
           }
         }

@@ -186,8 +186,6 @@
                     dots:false,
                     slidesToShow: 5,
                     slidesToScroll: 4,
-                    infinite: true,
-                    variableWidth: true,
                     responsive: [
                         {
                           breakpoint: 1300,

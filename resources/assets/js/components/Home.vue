@@ -2,6 +2,10 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+
+                
+
+
                 <!-- modal window with the selected movie info -->
                 <div class="modal modal-lg fade"
                      tabindex="-1"
@@ -20,6 +24,7 @@
                             <div class="modal-body">
                                 <div class="col-md-3">
 
+                                    <!-- the drop-down list with for choosing rating -->
                                     <!-- the rating of each film is linked to the corresponding array member -->
                                     <div class="modalActions">
 
@@ -54,7 +59,7 @@
 
                                             <!-- countries -->
                                             <div class="list-group-item col-md-6">
-                                                <span class="li_header">Created In: </span>
+                                                <span class="li_header">Countries: </span>
                                                 <p class="li_item">
                                                     <!-- loop to display all involved countries -->
                                                     <span v-for="(country, index) in movie.production_countries">
@@ -97,17 +102,15 @@
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
 
-                <div class="row">
+                <div clas="row">
                     <h2>Popular Movies</h2>
                     <div class="slider-parent">
                         <slick ref="popSlick" :options="slickOptions">
 
-
-
                             <a v-if="index < 30" v-for="(movie,index) in popular_movies" href="#" class="smSlickItem">
 
                                 <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
-                                
+
                                 <!-- the rating of each film is linked to the corresponding array member -->
                                 <div class="slickActions">
 
@@ -124,39 +127,41 @@
                                     </div>
                                 </div>
                             </a>
-                     
 
                         </slick>
                     </div>
                 </div>
 
-                <div class="row">
+                <div clas="row">
                     <h2 v-if="final_recommendations.length == 0">High Rated Movies:</h2>
                     <h2 v-else>Recommended Movies:</h2>
                     <div class="slider-parent">
                         <slick ref="secondSlick" :options="slickOptions">
 
-                            <a v-if="index < 30" v-for="(movie,index) in second_line_movies" href="#" class="smSlickItem">
+                            <a v-if="index < 30"
+                           v-for="(movie,index) in second_line_movies" href="#" class="smSlickItem">
 
-                                <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
+                            <img
+                                    v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
+                                    @click="showMovie(movie.id)">
 
-                                <!-- the drop-down list with for choosing rating -->
-                                <!-- the rating of each film is linked to the corresponding array member -->
-                                <div class="slickActions">
+                            <!-- the drop-down list with for choosing rating -->
+                            <!-- the rating of each film is linked to the corresponding array member -->
+                            <div class="slickActions">
 
-                                    <div class="row">
-                                        <div class="rating">
-                                            <!-- rating stars -->
-                                            <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
-                                        </div>
-                                    </div>
-                                    <div class="row btnHolder">
-
-                                        <button @click="laterMovie(movie.id)">Save</button>
-                                        <button @click="hideMovie(movie.id)">Hide</button>
+                                <div class="row">
+                                    <div class="rating">
+                                        <!-- rating stars -->
+                                        <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                                     </div>
                                 </div>
-                            </a>
+                                <div class="row btnHolder">
+
+                                    <button @click="laterMovie(movie.id)">Save</button>
+                                    <button @click="hideMovie(movie.id)">Hide</button>
+                                </div>
+                            </div>
+                        </a>
 
                         </slick>
                     </div>
@@ -168,263 +173,250 @@
 </template>
 
 <script>
-    
-    import Slick from 'vue-slick';
+import Slick from "vue-slick";
 
-    export default {
-        components: {
-            Slick
-        },
-        data() {
-            return {
-                slickOptions: {
-                    dots:false,
-                    slidesToShow: 5,
-                    slidesToScroll: 4,
-                    infinite:true,
-                    variableWidth: true,
-                    responsive: [
-                        {
-                          breakpoint: 1300,
-                          settings: {
-                            slidesToShow: 3,
-                            slidesToScroll: 2,
-                          }
-                        },
-                        {
-                          breakpoint: 480,
-                          settings: {
-                            slidesToShow: 1,
-                            slidesToScroll: 1,
-                          }
-                        }
-                    ]
-                },
-                // temporary stores the properties of selected movie, used to display it in a modal window
-                movie: {
-                    // you must not specify property names explicitly
-                    // title: '',
-                    // tagline: '',
-                    // production_countries: '',
-                    // genres: '',
-                    // runtime: '',
-                    // overview: '',
-                    // poster_path: ''
-                },
-                // array with user ratings
-                ratings: {},
-                // contains all popular movies received from TMDb
-                popular_movies: [],
-                // contains all highest rated movies received from TMDb
-                high_rated_movies: [],
-                // recommended movies (without )
-                recommended_array: [],
-                final_recommendations: [],
-                second_line_movies: [],
-                // tmdb api key value
-                api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
-                // url prefix for getting posters
-                image_prefix_url: "http://image.tmdb.org/t/p/w500",
-                
-            };
-        },
-
-        // functions triggered when Vue object is mounted
-        created() {
-            // get most popular and highest rated movies to display them in the first line
-            this.getPopularMovies(),
-            this.getHighRatedMovies(),
-            // check DB for previously saved recommendations
-            // depending on the checking result, run a function to fill the second line of movies
-            this.checkRecommendations() 
-        },
-
-        watch: {    //https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
-            popular_movies: function (newMovies) {
-              let currIndex = this.$refs.popSlick.currentSlide()
-
-              this.$refs.popSlick.destroy()
-              this.$nextTick(() => {
-                this.$refs.popSlick.create()
-                this.$refs.popSlick.goTo(currIndex, true)
-              })
-            },
-            second_line_movies: function (newMovies) {
-              let currIndex = this.$refs.secondSlick.currentSlide()
-
-              this.$refs.secondSlick.destroy()
-              this.$nextTick(() => {
-                this.$refs.secondSlick.create()
-                this.$refs.secondSlick.goTo(currIndex, true)
-              })
+export default {
+  components: {
+    Slick
+  },
+  data() {
+    return {
+      slickOptions: {
+        slidesToShow: 5,
+        slidesToScroll: 4,
+        responsive: [
+          {
+            breakpoint: 1300,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 2
             }
-        },
-
-        methods: {
-          
-            checkRecommendations() {
-
-                // check DB for previously saved recommendations
-                axios.get("/check_recommendations")
-                        .then(response => {
-                                        // if there are no any previously saved recommendations
-                                        if(response.data.recommended == 'nothing') {
-
-                                            // if "I" have rated more than 50 movies - try to get new recommendations!
-                                            if(response.data.rated > 50) {
-                                                this.getRecommendations();
-                                            }
-                                            // or just get the list of highest rated movies
-                                            else {
-                                                this.getHighRatedMovies();
-                                                this.useHighRatedMovies();
-                                            }
-                                        }
-                                        // if "I" have previously saved recommendations (movies)
-                                        else {
-                                            // put them into a local array (create reference)
-                                            this.recommended_array = response.data.recommended;
-                                            // and get full info for each of them
-                                            this.getRecommendedInfo();
-                                        }
-                    });
-            },
-
-            // getting recommendations
-            getRecommendations() {
-
-                // first, get the recommendations (list of movies)
-                axios.get("/get_recommendations")
-                     .then(response => {
-                                        // if recommendations are present
-                                        if(response.data.recommended != 'nothing') {
-
-                                            // put them into a local array (create reference)
-                                            this.recommended_array = response.data.recommended;
-
-                                            // then store them in DB
-                                            axios.post("/save_recommendations", this.recommended_array);
-
-                                            this.getRecommendedInfo();
-                                        }
-                                        else {
-                                            this.useHighRatedMovies();
-                                        }
-                });
-            },
-
-            getRecommendedInfo() {
-
-                this.recommended_array.forEach(movie => {
-
-                    // url query to find movie by tmdb_id
-                    var url = "https://api.themoviedb.org/3/movie/" + movie.movie_id + "?" + this.api_key;
-                    // reference to Vue object
-                    var self = this;
-
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(json => {
-                                       // put the movie object to local object "movie"
-                                       self.final_recommendations.push(json);
-                             })
-                        .then(this.second_line_movies = this.final_recommendations);
-                }); 
-            },
-
-            useHighRatedMovies() {
-                this.second_line_movies = this.high_rated_movies;
-            },
-
-            getPopularMovies() {
-                // url query for all popular movies
-                var url =
-                    "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=a3abe9699d800e588cb2a57107b4179c";
-                // reference to Vue object
-                var self = this;
-                // get all popular movies from TMDb
-                $.getJSON(url).done(function (received_movies) {
-                    // put the received movies into array
-                    self.popular_movies = received_movies.results;
-                    
-                });
-            },
-
-            getHighRatedMovies() {
-
-                // url query for all highest rated movies
-                var url =
-                    "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=a3abe9699d800e588cb2a57107b4179c";
-
-                // reference to Vue object
-                var self = this;
-                // get all highest rated movies from TMDb
-                $.getJSON(url).done(function (response) {
-                    // put the received movies into array
-                    self.high_rated_movies = response.results;
-                });   
-            },
-
-            // show selected movie info in modal window
-            showMovie(movieId) {
-                // url query to find movie by tmdb_id
-                var url =
-                    "https://api.themoviedb.org/3/movie/" + movieId + "?" + this.api_key;
-                // reference to Vue object
-                var self = this;
-                // search movie by tmdb_id
-                fetch(url)
-                    .then(r => r.json())
-                    .then(json => {
-                        // put the movie object to local object "movie"
-                        self.movie = json;
-                    });
-
-                $("#movie_info").modal("show");
-            },
-
-            hideMovie(tmdb_id) {
-                // HIDE BUTTON HANDLER
-                axios.post("/hide", {
-                                      tmdb_id: tmdb_id
-                                    })
-
-            },
-            laterMovie(tmdb_id) {
-                // WATCHLATER BUTTON HANDLER
-
-                axios.post("/watchlater", {
-                                            tmdb_id: tmdb_id
-                                          })
-            },
-
-            // ADD OR CHANGE RATING ---------------------------------------------------------
-            addRating(tmdb_id, rating) {
-
-                // mirror the rating value (1 => 5, 2 => 4, ...)
-                rating = 6 - rating;
-
-                // if the movie has not been rated yet, store new raiting in DB
-                if (this.ratings[tmdb_id] === undefined) {
-
-                    axios.post("/store", {
-                                         tmdb_id: tmdb_id,
-                                         user_rating: rating
-                                         })
-                    // reflect changes in the local array
-                    .then(response => { this.ratings[tmdb_id] = rating });
-                }
-                // if the rating has changed compared to the previous value, update rating in DB
-                else if (this.ratings[tmdb_id] !== rating) {
-
-                    axios.post("/update", {
-                                           tmdb_id: tmdb_id,
-                                           user_rating: rating
-                                          })
-                    // reflect changes in the local array
-                    .then(response => {this.ratings[tmdb_id] = rating;});
-                }
+          },
+          {
+            breakpoint: 480,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1
             }
-        },
+          }
+        ]
+      },
+      // temporary stores the properties of selected movie, used to display it in a modal window
+      movie: {
+        // you must not specify property names explicitly
+        // title: '',
+        // tagline: '',
+        // production_countries: '',
+        // genres: '',
+        // runtime: '',
+        // overview: '',
+        // poster_path: ''
+      },
+      // array with user ratings
+      ratings: {},
+      // contains all popular movies received from TMDb
+      popular_movies: [],
+      // contains all highest rated movies received from TMDb
+      high_rated_movies: [],
+      // recommended movies (without )
+      recommended_array: [],
+      final_recommendations: [],
+      second_line_movies: [],
+      // tmdb api key value
+      api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
+      // url prefix for getting posters
+      image_prefix_url: "http://image.tmdb.org/t/p/w500"
     };
+  },
+
+  // functions triggered when Vue object is mounted
+  mounted() {
+    // get most popular and highest rated movies to display them in the first line
+    this.getPopularMovies(),
+    this.getHighRatedMovies(),
+    // check DB for previously saved recommendations
+    // depending on the checking result, run a function to fill the second line of movies
+    this.checkRecommendations();
+  },
+  watch: {    //https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
+    popular_movies: function (newMovies) {
+      let currIndex = this.$refs.popSlick.currentSlide()
+
+      this.$refs.popSlick.destroy()
+      this.$nextTick(() => {
+        this.$refs.popSlick.create()
+        this.$refs.popSlick.goTo(currIndex, true)
+      })
+    },
+    second_line_movies: function (newMovies) {
+      let currIndex = this.$refs.secondSlick.currentSlide()
+
+      this.$refs.secondSlick.destroy()
+      this.$nextTick(() => {
+        this.$refs.secondSlick.create()
+        this.$refs.secondSlick.goTo(currIndex, true)
+      })
+    }
+  },
+
+  methods: {
+    checkRecommendations() {
+      // check DB for previously saved recommendations
+      axios.get("/check_recommendations").then(response => {
+        // if there are no any previously saved recommendations
+        if (response.data.recommended == "nothing") {
+          // if "I" have rated more than 50 movies - try to get new recommendations!
+          if (response.data.rated > 50) {
+            this.getRecommendations();
+          } else {
+            // or just get the list of highest rated movies
+            this.getHighRatedMovies();
+            this.useHighRatedMovies();
+          }
+        } else {
+          // if "I" have previously saved recommendations (movies)
+          // put them into a local array (create reference)
+          this.recommended_array = response.data.recommended;
+          // and get full info for each of them
+          this.getRecommendedInfo();
+        }
+      });
+    },
+
+    // getting recommendations
+    getRecommendations() {
+      // first, get the recommendations (list of movies)
+      axios.get("/get_recommendations").then(response => {
+        // if recommendations are present
+        if (response.data.recommended != "nothing") {
+          // put them into a local array (create reference)
+          this.recommended_array = response.data.recommended;
+
+          // then store them in DB
+          axios.post("/save_recommendations", this.recommended_array);
+
+          this.getRecommendedInfo();
+        } else {
+          this.useHighRatedMovies();
+        }
+      });
+    },
+
+    getRecommendedInfo() {
+      this.recommended_array.forEach(movie => {
+        // url query to find movie by tmdb_id
+        var url =
+          "https://api.themoviedb.org/3/movie/" +
+          movie.movie_id +
+          "?" +
+          this.api_key;
+        // reference to Vue object
+        var self = this;
+
+        fetch(url)
+          .then(response => response.json())
+          .then(json => {
+            // put the movie object to local object "movie"
+            self.final_recommendations.push(json);
+          })
+          .then((this.second_line_movies = this.final_recommendations));
+      });
+    },
+
+    useHighRatedMovies() {
+      this.second_line_movies = this.high_rated_movies;
+    },
+
+    getPopularMovies() {
+      // url query for all popular movies
+      var url =
+        "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=a3abe9699d800e588cb2a57107b4179c";
+      // reference to Vue object
+      var self = this;
+      // get all popular movies from TMDb
+      $.getJSON(url).done(function(received_movies) {
+        // put the received movies into array
+        self.popular_movies = received_movies.results;
+      });
+    },
+
+    getHighRatedMovies() {
+      // url query for all highest rated movies
+      var url =
+        "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=a3abe9699d800e588cb2a57107b4179c";
+
+      // reference to Vue object
+      var self = this;
+      // get all highest rated movies from TMDb
+      $.getJSON(url).done(function(response) {
+        // put the received movies into array
+        self.high_rated_movies = response.results;
+      });
+    },
+
+    // show selected movie info in modal window
+    showMovie(movieId) {
+      // url query to find movie by tmdb_id
+      var url =
+        "https://api.themoviedb.org/3/movie/" + movieId + "?" + this.api_key;
+      // reference to Vue object
+      var self = this;
+      // search movie by tmdb_id
+      fetch(url)
+        .then(r => r.json())
+        .then(json => {
+          // put the movie object to local object "movie"
+          self.movie = json;
+        });
+
+      $("#movie_info").modal("show");
+    },
+
+    hideMovie(tmdb_id) {
+      // HIDE BUTTON HANDLER
+      axios.post("/hide", {
+        tmdb_id: tmdb_id
+      });
+    },
+    laterMovie(tmdb_id) {
+      // WATCHLATER BUTTON HANDLER
+
+      axios.post("/watchlater", {
+        tmdb_id: tmdb_id
+      });
+    },
+
+    // ADD OR CHANGE RATING ---------------------------------------------------------
+    addRating(tmdb_id, rating) {
+      // mirror the rating value (1 => 5, 2 => 4, ...)
+      rating = 6 - rating;
+
+      // if the movie has not been rated yet, store new raiting in DB
+      if (this.ratings[tmdb_id] === undefined) {
+        axios
+          .post("/store", {
+            tmdb_id: tmdb_id,
+            user_rating: rating
+          })
+          // reflect changes in the local array
+          .then(response => {
+            this.ratings[tmdb_id] = rating;
+          });
+      } else if (this.ratings[tmdb_id] !== rating) {
+        // if the rating has changed compared to the previous value, update rating in DB
+        axios
+          .post("/update", {
+            tmdb_id: tmdb_id,
+            user_rating: rating
+          })
+          // reflect changes in the local array
+          .then(response => {
+            this.ratings[tmdb_id] = rating;
+          });
+      }
+    }
+  }
+
+
+};
 </script>
