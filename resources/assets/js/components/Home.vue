@@ -7,97 +7,78 @@
 
 
                 <!-- modal window with the selected movie info -->
-                <div class="modal modal-lg fade"
+                <div class="modal fade"
                      tabindex="-1"
                      role="dialog"
                      id="movie_info">
                     <div class="modal-dialog"
                          role="document">
                         <div class="modal-content">
-                            <div class="modal-header">
+                                <!--
+                                <div class="modal-header">
                                 <h2 class="modal-title">{{movie.title}}
                                     <button type="button" class="modal-close" data-dismiss="modal">
                                         Close
                                     </button>
                                 </h2>
-                            </div>
-                            <div class="modal-body">
-                                <div class="col-md-3">
-
-                                    <!-- the drop-down list with for choosing rating -->
-                                    <!-- the rating of each film is linked to the corresponding array member -->
-                                    <div class="modalActions">
-
-                                        <div class="row btnHolder modalBtnHolder">
-
-                                            <button @click="laterMovie(movie.id)">Save
-                                            </button>
-                                            <button @click="hideMovie(movie.id)">Hide
-                                            </button>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="rating modalRating col-md-12">
-                                                <!-- rating stars -->
-                                                <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <img class="modal-image" v-bind:src="image_prefix_url + movie.poster_path">
-
                                 </div>
-                                <div class="col-md-9">
+                              -->
+                                <div class="col-md-10">
                                     <div class="list-group">
                                         <div class="row">
-                                            <!-- tagline -->
-                                            <div class="list-group-item col-md-6">
-                                                <span class="li_header">Tagline: </span>
-                                                <p class="li_item"> {{movie.tagline}}</p>
+                                            <div class="list-group-item col-md-12">
+                                                <h2 class="modal-title">{{movie.title}} <span v-if="movie.runtime > 0" class="modal_runtime"> | {{movie.runtime}} minutes</span></h2>
                                             </div>
-
+                                            <div class="list-group-item col-md-12 modal_tagline">
+                                                <p v-if="movie.tagline != 0" class="li_item modal_tagline">
+                                                    {{movie.tagline}}
+                                                </p>
+                                                <!-- loop to display all production_companies -->
+                                                <p v-if="movie.production_companies != 0" class="li_item modal_tagline">
+                                                  <span v-for="(company, index) in movie.production_companies">
+                                                    {{company.name}}
+                                                    <span v-if="movie.production_companies[index + 1] != null">|</span>
+                                                  </span>
+                                                </p>
+                                                <a v-if="movie.homepage != null" class="li_item modal_tagline" v-bind:href="movie.homepage">
+                                                    Website Link
+                                                </a>
+                                            </div>
                                             <!-- countries -->
-                                            <div class="list-group-item col-md-6">
-                                                <span class="li_header">Countries: </span>
-                                                <p class="li_item">
+                                            <div class="list-group-item col-md-12">
+                                                <p v-if="movie.release_date != null" class="li_item modal_info">
+                                                    {{movie.release_date}}
+                                                </p>
+                                                <p v-if="movie.production_countries != 0" class="li_item modal_info">
                                                     <!-- loop to display all involved countries -->
                                                     <span v-for="(country, index) in movie.production_countries">
-													{{country.name}}
-													<span v-if="movie.production_countries[index + 1] != null">,</span>
-											</span>
+													                            {{country.name}}
+													                          <span v-if="movie.production_countries[index + 1] != null">,</span>
+											                              </span>
                                                 </p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <!-- genres -->
-                                            <div class="list-group-item col-md-6">
-                                                <span class="li_header">Genres: </span>
                                                 <!-- loop to display all genres -->
-                                                <p class="li_item">
-											<span v-for="(genre, index) in movie.genres">
-												{{genre.name}}
-												<span v-if="movie.genres[index + 1] != null">,</span>
-											</span>
+                                                <p v-if="movie.genres != null" class="li_item modal_info">
+                            											<span v-for="(genre, index) in movie.genres">
+                            												{{genre.name}}
+                            												<span v-if="movie.genres[index + 1] != null">|</span>
+                            											</span>
                                                 </p>
                                             </div>
 
-                                            <!-- movie runtime -->
-                                            <div class="list-group-item col-md-6">
-                                                <span class="li_header">Runtime: </span>
-                                                <p class="li_item">{{movie.runtime}} minutes.</p>
-                                            </div>
                                         </div>
                                         <div class="row">
                                             <!-- movie overview -->
                                             <div class="list-group-item">
-                                                <span class="li_header">Overview: </span>
-                                                <p class="li_item"> {{movie.overview}} </p>
+                                                <p class="li_item li_item_main"> {{movie.overview}} </p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="col-md-2">
+                                  <button type="button" class="modal-close" data-dismiss="modal">
+                                      X
+                                  </button>
+                                </div>
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->
                 </div><!-- /.modal -->
@@ -109,7 +90,7 @@
 
                             <a v-if="index < 30" v-for="(movie,index) in popular_movies" href="#" class="smSlickItem">
 
-                                <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
+                                <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id,movie.backdrop_path)">
 
                                 <!-- the rating of each film is linked to the corresponding array member -->
                                 <div class="slickActions">
@@ -147,7 +128,7 @@
 
                             <img
                                     v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
-                                    @click="showMovie(movie.id)">
+                                    @click="showMovie(movie.id,movie.backdrop_path)">
 
                             <!-- the drop-down list with for choosing rating -->
                             <!-- the rating of each film is linked to the corresponding array member -->
@@ -158,7 +139,7 @@
                                         <!-- rating stars -->
                                         <a v-for="i in 5" @click="addRating(movie.id, i)">★</a>
                                     </div>
-                                    <div class="ratingRated">
+                                    <div v-if="getRating(movie.id) > 0" class="ratingRated">
                                         <!-- get what the movie has been rated -->
                                         <span v-for="i in getRating(movie.id)">★</span>
                                     </div>
@@ -234,7 +215,7 @@ export default {
       // tmdb api key value
       api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
       // url prefix for getting posters
-      image_prefix_url: "http://image.tmdb.org/t/p/w500"
+      image_prefix_url: "http://image.tmdb.org/t/p/original"
     };
   },
 
@@ -250,10 +231,7 @@ export default {
   },
   watch: {    //https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
     popular_movies: function (newMovies) {
-
       let currIndex = this.$refs.popSlick.currentSlide()
-
-      console.log(currIndex);
 
       this.$refs.popSlick.destroy()
       this.$nextTick(() => {
@@ -363,11 +341,8 @@ export default {
       // get all highest rated movies from TMDb
       $.getJSON(url).done(function(response) {
 
-        // console.log(response.results.length);
-
         for(var i = 0;i < response.results.length; i++) {
           if(response.results[i].poster_path === null) {
-            console.log(response.results[i]);
             response.results.splice(i, 1);
           }
         }
@@ -395,9 +370,8 @@ export default {
           }
         }
     },
-
     // show selected movie info in modal window
-    showMovie(movieId) {
+    showMovie(movieId,backgroundPath) {
       // url query to find movie by tmdb_id
       var url =
         "https://api.themoviedb.org/3/movie/" + movieId + "?" + this.api_key;
@@ -409,7 +383,21 @@ export default {
         .then(json => {
           // put the movie object to local object "movie"
           self.movie = json;
+
+          if(self.movie.release_date != null) {
+            var date = self.movie.release_date;
+            var newdate = date.split("-").reverse().join("/");
+            self.movie.release_date = newdate;
+          }
         });
+
+      var urlImage = "http://image.tmdb.org/t/p/";
+      if(backgroundPath != null) {
+        var backgroundImage = urlImage + "original" + backgroundPath;
+        $('.modal').css('background-image', 'url(' + backgroundImage + ')');
+      } else {
+        $('.modal').css('background', '#636e72');
+      }
 
       $("#movie_info").modal("show");
     },
