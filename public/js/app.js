@@ -51157,7 +51157,7 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("div", { attrs: { clas: "row" } }, [
+        _c("div", { staticClass: "row" }, [
           _c("h2", [_vm._v("Popular Movies")]),
           _vm._v(" "),
           _c(
@@ -51254,7 +51254,7 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("div", { attrs: { clas: "row" } }, [
+        _c("div", { staticClass: "row" }, [
           _vm.recommended_display.length == 0
             ? _c("h2", [_vm._v("High Rated Movies:")])
             : _c("h2", [_vm._v("Recommended Movies:")]),
