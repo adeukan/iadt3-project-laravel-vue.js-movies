@@ -3,93 +3,77 @@
 		<div class="row">
 			<div class="col-md-12">
 
-				<!-- MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL -->
-				<div class="modal modal-lg fade" tabindex="-1" role="dialog" id="movie_info">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h2 class="modal-title">{{movie.title}}
-									<button type="button" class="modal-close" data-dismiss="modal">
-										Close
-									</button>
-								</h2>
-							</div>
-							<div class="modal-body">
-								<div class="col-md-3">
-
-									<!-- the drop-down list with for choosing rating -->
-									<!-- the rating of each film is linked to the corresponding array member -->
-									<div class="modalActions">
-										<div class="row btnHolder modalBtnHolder">
-											<button @click="laterMovie(movie.id)">Save</button>
-											<button @click="hideMovie(movie.id)">Hide</button>
-										</div>
-
-										<div class="row">
-											<div class="rating modalRating col-md-12">
-												<!-- rating stars -->
-												<a v-for="i in 5" @click="rateMovie(movie.id, i)">★</a>
-											</div>
-										</div>
-									</div>
-
-									<img class="modal-image" v-bind:src="image_prefix_url + movie.poster_path">
-								</div>
-
-								<div class="col-md-9">
-									<div class="list-group">
-										<div class="row">
-											<!-- tagline -->
-											<div class="list-group-item col-md-6">
-												<span class="li_header">Tagline: </span>
-												<p class="li_item"> {{movie.tagline}}</p>
-											</div>
-
-											<!-- countries -->
-											<div class="list-group-item col-md-6">
-												<span class="li_header">Countries: </span>
-												<p class="li_item">
-													<!-- loop to display all involved countries -->
-													<span v-for="(country, index) in movie.production_countries">
-													{{country.name}}
-													<span v-if="movie.production_countries[index + 1] != null">,</span>
-											</span>
-												</p>
-											</div>
-										</div>
-										<div class="row">
-											<!-- genres -->
-											<div class="list-group-item col-md-6">
-												<span class="li_header">Genres: </span>
-												<!-- loop to display all genres -->
-												<p class="li_item">
-											<span v-for="(genre, index) in movie.genres">
-												{{genre.name}}
-												<span v-if="movie.genres[index + 1] != null">,</span>
-											</span>
-												</p>
-											</div>
-
-											<!-- movie runtime -->
-											<div class="list-group-item col-md-6">
-												<span class="li_header">Runtime: </span>
-												<p class="li_item">{{movie.runtime}} minutes.</p>
-											</div>
-										</div>
-										<div class="row">
-
-											<!-- movie overview -->
-											<div class="list-group-item">
-												<span class="li_header">Overview: </span>
-												<p class="li_item"> {{movie.overview}} </p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div><!-- modal-content -->
-					</div><!-- modal-dialog -->
-				</div><!-- modal -->
+                <!-- MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL -->
+                <div class="modal fade" tabindex="-1" role="dialog" id="movie_info">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <!--
+                            <div class="modal-header">
+                            <h2 class="modal-title">{{movie.title}}
+                                <button type="button" class="modal-close" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </h2>
+                            </div>
+                          -->
+                            <div class="col-md-10">
+                                <div class="list-group">
+                                    <div class="row">
+                                        <div class="list-group-item col-md-12">
+                                            <h2 class="modal-title">{{movie.title}} <span v-if="movie.runtime > 0" class="modal_runtime"> | {{movie.runtime}} minutes</span></h2>
+                                        </div>
+                                        <div class="list-group-item col-md-12 modal_tagline">
+                                            <p v-if="movie.tagline != 0" class="li_item modal_tagline">
+                                                {{movie.tagline}}
+                                            </p>
+                                            <!-- loop to display all production_companies -->
+                                            <p v-if="movie.production_companies != 0" class="li_item modal_tagline">
+                                              <span v-for="(company, index) in movie.production_companies">
+                                                {{company.name}}
+                                                <span v-if="movie.production_companies[index + 1] != null">|</span>
+                                              </span>
+                                            </p>
+                                            <a v-if="movie.homepage != null" class="li_item modal_tagline" v-bind:href="movie.homepage">
+                                                Website Link
+                                            </a>
+                                        </div>
+                                        <!-- countries -->
+                                        <div class="list-group-item col-md-12">
+                                            <p v-if="movie.release_date != null" class="li_item modal_info">
+                                                {{movie.release_date}}
+                                            </p>
+                                            <p v-if="movie.production_countries != 0" class="li_item modal_info">
+                                                <!-- loop to display all involved countries -->
+                                                <span v-for="(country, index) in movie.production_countries">
+											                            {{country.name}}
+											                          <span v-if="movie.production_countries[index + 1] != null">,</span>
+									                              </span>
+                                            </p>
+                                            <!-- loop to display all genres -->
+                                            <p v-if="movie.genres != null" class="li_item modal_info">
+                        											<span v-for="(genre, index) in movie.genres">
+                        												{{genre.name}}
+                        												<span v-if="movie.genres[index + 1] != null">|</span>
+                        											</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <!-- movie overview -->
+                                        <div class="list-group-item">
+                                            <p class="li_item li_item_main"> {{movie.overview}} </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                              <button type="button" class="modal-close" data-dismiss="modal">
+                                  X
+                              </button>
+                            </div>
+                        </div><!-- modal-content -->
+                    </div><!-- modal-dialog -->
+                </div><!-- modal -->
 
 				<!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1 -->
 				<div class="row">
@@ -101,7 +85,7 @@
 							  v-for="(movie,i) in later_movies_display" href="#" class="smSlickItem" >
 
 							<img
-								v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
+								v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id,movie.backdrop_path)">
 
 							<!-- the drop-down list with for choosing rating -->
 							<!-- the rating of each film is linked to the corresponding array member -->
@@ -135,7 +119,7 @@
 						  v-for="(movie,i) in hidden_movies_display" href="#" class="smSlickItem" >
 
 						<img
-							v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id)">
+							v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id,movie.backdrop_path)">
 
 						<!-- the drop-down list with for choosing rating -->
 						<!-- the rating of each film is linked to the corresponding array member -->
@@ -208,7 +192,8 @@ export default {
 	  // 'hidden' movies without full info
 	  hidden_movies_display: [],
 	  // tmdb api key value
-	  api_key: "?api_key=a3abe9699d800e588cb2a57107b4179c",
+	  api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
+
 	  // TMDb api key url prefix
 	  api_key_prefix: "https://api.themoviedb.org/3/movie/",
 	  // url prefix for getting posters
@@ -261,7 +246,7 @@ export default {
 		for (var i = 0; i < this.later_movies.length; i++) {
 		  // url query string with movie id
 		  var url =
-			this.api_key_prefix + this.later_movies[i].tmdb_id + this.api_key;
+			this.api_key_prefix + this.later_movies[i].tmdb_id + "?" + this.api_key;
 		  // get movie object from TMDb by tmdb_id
 		  $.getJSON(url).done(function(response) {
 				// put the received movie object into array
@@ -284,7 +269,7 @@ export default {
 		for (var i = 0; i < this.hidden_movies.length; i++) {
 		  // url query string with movie id
 		  var url =
-			this.api_key_prefix + this.hidden_movies[i].tmdb_id + this.api_key;
+			this.api_key_prefix + this.hidden_movies[i].tmdb_id + "?" + this.api_key;
 		  // get movie object from TMDb by tmdb_id
 		  $.getJSON(url).done(function(response) {
 			// put the received movie object into array
@@ -294,23 +279,40 @@ export default {
 	  });
 	},
 
+    // show selected movie info in modal window ------------------------------------------------
+    showMovie(tmdb_id, backgroundPath) {
+      // url query to find movie by tmdb_id
+      var url =
+        "https://api.themoviedb.org/3/movie/" + tmdb_id + "?" + this.api_key;
+      // reference to Vue object
+      var self = this;
+      // search movie by tmdb_id
+      fetch(url)
+        .then(r => r.json())
+        .then(json => {
+          // local reference to movie object
+          self.movie = json;
 
-	// show selected movie info in modal window --------------------------------------------------
-	showMovie(tmdb_id) {
-	  // url query to find movie by tmdb_id
-	  var url = "https://api.themoviedb.org/3/movie/" + tmdb_id + this.api_key;
-	  // reference to Vue object
-	  var self = this;
-	  // search movie by tmdb_id
-	  fetch(url)
-		.then(r => r.json())
-		.then(json => {
-		  // put the movie object to local object "movie"
-		  self.movie = json;
-		});
+          if (self.movie.release_date != null) {
+            var date = self.movie.release_date;
+            var newdate = date
+              .split("-")
+              .reverse()
+              .join("/");
+            self.movie.release_date = newdate;
+          }
+        });
 
-	  $("#movie_info").modal("show");
-	},
+      var urlImage = "http://image.tmdb.org/t/p/";
+      if (backgroundPath != null) {
+        var backgroundImage = urlImage + "original" + backgroundPath;
+        $(".modal").css("background-image", "url(" + backgroundImage + ")");
+      } else {
+        $(".modal").css("background", "#636e72");
+      }
+
+      $("#movie_info").modal("show");
+    },
 
 
     // ------------------------------------------------------------------------------------------
