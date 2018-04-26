@@ -19,7 +19,7 @@ Auth::routes();
 // Authentication Routes...
 // Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 // Route::post('login', 'Auth\LoginController@login');
-Route::post('/logout', 'Auth\LoginController@logout');
+// Route::post('/logout', 'Auth\LoginController@logout');
 
 // // Registration Routes...
 // Route::get('register', 'Auth\RegisterController@showRegistrationForm');
@@ -32,17 +32,18 @@ Route::post('/logout', 'Auth\LoginController@logout');
 // Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
 
-Route::get('/usermovies', 'UserMovieController@getUserMovies');
-Route::post('/store', 'UserMovieController@store');
-Route::post('/update', 'UserMovieController@update');
+Route::get('/my_movies', 'UserMovieController@getMyMovies');
+Route::get('/get_watchlater', 'UserMovieController@getWatchLaterMovies');
+Route::get('/get_hidden', 'UserMovieController@getHiddenMovies');
+Route::get('/get_rated', 'UserMovieController@getRatedMovies');
+
+Route::get('/check_recommendations', 'UserMovieController@checkRecommendations');
+Route::get('/get_recommendations', 'UserMovieController@getRecommendations');
+Route::post('/save_recommendations', 'UserMovieController@saveRecommendations');
+
+Route::post('/rate', 'UserMovieController@rate');
 Route::post('/hide', 'UserMovieController@hide');
 Route::post('/watchlater', 'UserMovieController@watchlater');
-Route::get('/get_recommendations', 'UserMovieController@getRecommendations');
-Route::get('/check_recommendations', 'UserMovieController@checkRecommendations');
-Route::post('/save_recommendations', 'UserMovieController@saveRecommendations');
-Route::get('/watchlater', 'UserMovieController@getWatchLaterMovies');
-Route::get('/hidden', 'UserMovieController@getHiddenMovies');
-// Route::post('/compare_user', 'UserMovieController@compareUser');
 
 
 

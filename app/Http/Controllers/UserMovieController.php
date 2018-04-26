@@ -17,11 +17,39 @@ class UserMovieController extends Controller
         $this->middleware('auth');
     }
 
+    
+    public function getMyMovies() {
+
+        $my_movies = UserMovie::where([
+                    'user_id' => Auth::user()->id,
+            ])->get();
+
+        return response()->json([
+                'my_movies' => $my_movies,
+            ]);
+    }
+
+
+    // get and return the movies rated by the current user
+    public function getRatedMovies()
+    {
+        $rated_movies = UserMovie::where([
+            'user_id' => Auth::user()->id,
+            'hidden' => '0',
+            'watchlater' => '0'
+        ])->get();
+
+        return response()->json([
+            'rated_movies'    => $rated_movies,
+        ], 200);
+    }
+
+
     // check the DB for existing recommendations
     public function checkRecommendations() {
         
         // SQL - get (and count) previously saved recommendations for "me" 
-        $sql =  'SELECT movie_id, avg_ratio, COUNT(*) as qty
+        $sql =  'SELECT tmdb_id, avg_ratio, COUNT(*) as qty
                 FROM recommendations
                 WHERE user_id = ' . Auth::user()->id ;
 
@@ -53,14 +81,14 @@ class UserMovieController extends Controller
     public function getRecommendations() {
 
         // SQL - get users with similar set of movies
-        $sql = 'SELECT t2.user_id, COUNT(t2.movie_id) AS same_movies_num
+        $sql = 'SELECT t2.user_id, COUNT(t2.tmdb_id) AS same_movies_num
              FROM user_movies t1 INNER JOIN user_movies t2
                 ON t1.user_id = ' . Auth::user()->id . 
                 ' AND t2.user_id != ' . Auth::user()->id .
-                ' AND t1.movie_id = t2.movie_id
+                ' AND t1.tmdb_id = t2.tmdb_id
              GROUP BY t2.user_id
              HAVING same_movies_num >= 30
-             ORDER BY COUNT(t2.movie_id) DESC
+             ORDER BY COUNT(t2.tmdb_id) DESC
              LIMIT 100';  
         
         // get the users with the set of movies most similar to mine (sorted by the number of same movies)
@@ -76,11 +104,11 @@ class UserMovieController extends Controller
         foreach ($same_movie_users as $user) {
             
             // SQL - for each user, count the number of similar ratings (for our common movies)
-            $sql = 'SELECT COUNT(t1.movie_id) AS equal_ratios_num
+            $sql = 'SELECT COUNT(t1.tmdb_id) AS equal_ratios_num
                     FROM user_movies t1 INNER JOIN user_movies t2
                         ON t1.user_id = ' . Auth::user()->id .  
                         ' AND t2.user_id = ' . $user->user_id .
-                        ' AND t1.movie_id = t2.movie_id
+                        ' AND t1.tmdb_id = t2.tmdb_id
                         AND (t1.ratio - t2.ratio) BETWEEN -1 AND 1';
 
             $response = DB::select($sql);
@@ -131,14 +159,14 @@ class UserMovieController extends Controller
 
         // SQL - get the movies (which I have not seen before) with the highest ratings among my friends
         // the movies should have a rating from 3 to 5 (from 4 to 5 is better), and at least 3 "friends" should have it in their list
-        $sql =  'SELECT t2.movie_id, AVG(t2.ratio) AS avg_ratio
+        $sql =  'SELECT t2.tmdb_id, AVG(t2.ratio) AS avg_ratio
                 FROM user_movies t1 INNER JOIN user_movies t2
                     ON t1.user_id = ' . Auth::user()->id . 
                     ' AND t2.user_id IN(' . $arguments . ')
-                    AND t2.movie_id NOT IN (SELECT movie_id
+                    AND t2.tmdb_id NOT IN (SELECT tmdb_id
                                             FROM user_movies
                                             WHERE user_id = '. Auth::user()->id .')
-                GROUP BY(t2.movie_id)
+                GROUP BY(t2.tmdb_id)
                 HAVING AVG(t2.ratio) >= 3 AND COUNT(DISTINCT t2.user_id) > 3
                 ORDER BY AVG(t2.ratio) DESC';
 
@@ -176,40 +204,27 @@ class UserMovieController extends Controller
             // and record to DB
             DB::table('recommendations')->insert([
                                                 'user_id' => Auth::user()->id,
-                                                'movie_id' => $recommended_movie['movie_id'],
+                                                'tmdb_id' => $recommended_movie['tmdb_id'],
                                                 'avg_ratio' => $recommended_movie['avg_ratio']
                                                 ]);
         }                                     
     } // saveRecommendations()
 
 
-    // get and return the movies rated by the current user
-    // #return \Illuminate\Http\Response
-    public function getUserMovies()
-    {
-        $all_rated_by_user = UserMovie::where([
-            'user_id' => Auth::user()->id,
-            'hidden' => '0',
-            'watchlater' => '0'
-        ])->get();
 
-        return response()->json([
-            'all_rated_by_user'    => $all_rated_by_user,
-        ], 200);
-    }
 
     // get and return the hidden movies
     // #return \Illuminate\Http\Response
     public function getHiddenMovies()
     {
-        $user_hidden = UserMovie::where([
+        $hidden_movies = UserMovie::where([
             'user_id' => Auth::user()->id,
             'hidden' => '1',
             'watchlater' => '0'
         ])->get();
 
         return response()->json([
-            'user_hidden'    => $user_hidden,
+            'hidden_movies'    => $hidden_movies,
         ], 200);
     }
 
@@ -217,45 +232,37 @@ class UserMovieController extends Controller
     // #return \Illuminate\Http\Response
     public function getWatchLaterMovies()
     {
-        $user_watch = UserMovie::where([
+        $later_movies = UserMovie::where([
             'user_id' => Auth::user()->id,
             'hidden' => '0',
             'watchlater' => '1'
         ])->get();
 
         return response()->json([
-            'user_watch'    => $user_watch,
+            'later_movies'    => $later_movies,
         ], 200);
     }
 
     // add new movie with rating to DB
-    public function store(Request $request)
+    public function rate(Request $request)
     {
-        // check if this movie is in the "movies" table
-        $movie = Movie::where(["tmdb_id" => $request->input("tmdb_id")])->first();
-
-        if($movie == null) {
-            // create new record in movie table
-            $movie = new Movie();
-            $movie->tmdb_id = $request->input("tmdb_id");
-            $movie->save();
-        }
-
         // check if the user has previously rated/hidden/saved the movie
         $userMovie = UserMovie::where([
             'user_id' => Auth::user()->id,
-            'movie_id' => $request->input("tmdb_id")
+            'tmdb_id' => $request->input("tmdb_id")
         ])->first();
 
         if($userMovie == null){
             // create new record in user_movies table
             $userMovie = new UserMovie();
             $userMovie->user_id = Auth::user()->id;
-            $userMovie->movie_id = $request->input("tmdb_id");
+            $userMovie->tmdb_id = $request->input("tmdb_id");
             $userMovie->ratio = $request->input("user_rating");
             $userMovie->save();
         } else {
+            // change rating for an existing movie record
             $userMovie->ratio = $request->input("user_rating");
+            // reset hidden & watchlater flags
             $userMovie->hidden = '0';
             $userMovie->watchlater = '0';
             $userMovie->save();
@@ -265,32 +272,25 @@ class UserMovieController extends Controller
     // add new movie to watch later to DB
     public function watchlater(Request $request)
     {
-        // check if this movie is in the "movies" table
-        $movie = Movie::where(["tmdb_id" => $request->input("tmdb_id")])->first();
 
-        if($movie == null) {
-            // create new record in movie table
-            $movie = new Movie();
-            $movie->tmdb_id = $request->input("tmdb_id");
-            $movie->save();
-        }
 
         // check if the user has previously rated/hidden/saved the movie
         $userMovie = UserMovie::where([
             'user_id' => Auth::user()->id,
-            'movie_id' => $request->input("tmdb_id")
+            'tmdb_id' => $request->input("tmdb_id")
         ])->first();
 
         //if they they do not exist in user_movie table create it
         if($userMovie == null) {
             $userMovie = new UserMovie();
             $userMovie->user_id = Auth::user()->id;
-            $userMovie->movie_id = $request->input("tmdb_id");
+            $userMovie->tmdb_id = $request->input("tmdb_id");
             $userMovie->watchlater = '1';
             $userMovie->save();
         } else {
             $userMovie->hidden = '0';
             $userMovie->watchlater = '1';
+            $userMovie->ratio = '0';
             $userMovie->save();
         }
         
@@ -299,31 +299,25 @@ class UserMovieController extends Controller
         // add new movie to watch later to DB
     public function hide(Request $request)
     {
-        // check if this movie is in the "movies" table
-        $movie = Movie::where(["tmdb_id" => $request->input("tmdb_id")])->first();
 
-        if($movie == null) {
-            // create new record in movie table
-            $movie = new Movie();
-            $movie->tmdb_id = $request->input("tmdb_id");
-            $movie->save();
-        }
 
         // check if the user has previously rated/hidden/saved the movie
         $userMovie = UserMovie::where([
             'user_id' => Auth::user()->id,
-            'movie_id' => $request->input("tmdb_id")
+            'tmdb_id' => $request->input("tmdb_id")
         ])->first();
 
         //if they they do not exist in user_movie table create it
         if($userMovie == null) {
             $userMovie = new UserMovie();
             $userMovie->user_id = Auth::user()->id;
-            $userMovie->movie_id = $request->input("tmdb_id");
+            $userMovie->tmdb_id = $request->input("tmdb_id");
             $userMovie->hidden = '1';
             $userMovie->save();
         } else {
             $userMovie->hidden = '1';
+            $userMovie->ratio = '0';
+            $userMovie->watchlater = '0';
             $userMovie->save();
         }
     }

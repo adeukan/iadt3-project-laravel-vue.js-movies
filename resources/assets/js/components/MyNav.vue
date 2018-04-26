@@ -10,8 +10,6 @@
             </ul>
         </div>
     </div>
-
-  
 </template>
 
 <script>
@@ -23,9 +21,7 @@
 
 	    data(){
 	        return {
-	        	// ???
 	            new: {
-	            	// ???
 	                newVar: ''
 	            }
 	        }

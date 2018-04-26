@@ -1,0 +1,6 @@
+LOAD DATA INFILE 'UserMovies (data).txt' 
+        INTO TABLE user_movies
+        FIELDS TERMINATED BY ','
+        ENCLOSED BY ''
+        LINES TERMINATED BY '\n'
+        (user_id,ratio,tmdb_id);
