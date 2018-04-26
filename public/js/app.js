@@ -49823,15 +49823,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -50627,15 +50618,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -50670,8 +50652,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       my_movies: [],
       // popular movies with full info
       popular_movies: [],
-
-      rated_movies: [],
       // recommended movies without full info
       recommended: [],
       // recommended movies with full info
@@ -50746,64 +50726,70 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // ------------------------------------------------------------------------------------------ 
     getPopularMovies: function getPopularMovies() {
-      // url query for all popular movies
-      var url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=a3abe9699d800e588cb2a57107b4179c";
       // reference to Vue object
       var self = this;
 
-      // get all popular movies from TMDb
-      $.getJSON(url).done(function (response) {
-        // get rid of movies that have already been marked by "my"
-        for (var i = 0; i < response.results.length; i++) {
-          // get rid of the movies which are already in "my_movies" list
-          if (self.my_movies.indexOf(response.results[i].id) !== -1) {
-            // delete only the value, reindexing the array now may destroy the loop
-            delete response.results[i];
-          }
-          // get rid of movies without a poster
-          else if (response.results[i].poster_path === null) {
+      // url query for all popular movies
+      for (var i = 0; i < 5; i++) {
+        // url query for all popular movies
+        var url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&include_adult=false&page=" + i + "&api_key=a3abe9699d800e588cb2a57107b4179c";
+
+        // get all popular movies from TMDb
+        $.getJSON(url).done(function (response) {
+          // get rid of movies that have already been marked by "my"
+          for (var i = 0; i < response.results.length; i++) {
+            // get rid of the movies which are already in "my_movies" list
+            if (self.my_movies.indexOf(response.results[i].id) !== -1) {
               // delete only the value, reindexing the array now may destroy the loop
               delete response.results[i];
             }
-        }
-        // delete undefined members and reindex the array
-        // use these movies to display them in the first line
-        self.popular_movies = response.results.filter(function (member) {
-          return member !== undefined;
+            // get rid of movies without a poster
+            else if (response.results[i].poster_path === null) {
+                // delete only the value, reindexing the array now may destroy the loop
+                delete response.results[i];
+              }
+          }
+          // delete undefined members and reindex the array
+          // use these movies to display them in the first line
+          self.popular_movies.push.apply(self.popular_movies, response.results.filter(function (member) {
+            return member !== undefined;
+          }));
         });
-      });
+      }
     },
 
 
     // ------------------------------------------------------------------------------------------
     getHighRatedMovies: function getHighRatedMovies() {
-      // url query for all highest rated movies
-      var url = "https://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=a3abe9699d800e588cb2a57107b4179c";
       // reference to Vue object
       var self = this;
+      for (var i = 0; i < 5; i++) {
+        // url query for all highest rated movies
+        var url = "https://api.themoviedb.org/3/discover/movie?api_key=a3abe9699d800e588cb2a57107b4179c&language=en-US&sort_by=vote_count.desc&include_adult=false&include_video=false&page=" + i;
 
-      // get all highest rated movies from TMDb
-      $.getJSON(url).done(function (response) {
+        // get all highest rated movies from TMDb
+        $.getJSON(url).done(function (response) {
 
-        // get rid of movies that have already been marked by "my"
-        for (var i = 0; i < response.results.length; i++) {
-          // get rid of the movies which are already in "my_movies" list
-          if (self.my_movies.indexOf(response.results[i].id) !== -1) {
-            // delete only the value, reindexing the array now may destroy the loop
-            delete response.results[i];
-          }
-          // get rid of movies without a poster
-          else if (response.results[i].poster_path === null) {
+          // get rid of movies that have already been marked by "my"
+          for (var i = 0; i < response.results.length; i++) {
+            // get rid of the movies which are already in "my_movies" list
+            if (self.my_movies.indexOf(response.results[i].id) !== -1 || self.popular_movies.indexOf(response.results[i].id) !== -1) {
               // delete only the value, reindexing the array now may destroy the loop
               delete response.results[i];
             }
-        }
-        // delete undefined members and reindex the array
-        // use these movies to display them in the second line
-        self.second_line_movies = response.results.filter(function (member) {
-          return member !== undefined;
+            // get rid of movies without a poster
+            else if (response.results[i].poster_path === null) {
+                // delete only the value, reindexing the array now may destroy the loop
+                delete response.results[i];
+              }
+          }
+          // delete undefined members and reindex the array
+          // use these movies to display them in the second line
+          self.second_line_movies.push.apply(self.second_line_movies, response.results.filter(function (member) {
+            return member !== undefined;
+          }));
         });
-      });
+      }
     },
 
 
@@ -50897,30 +50883,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
 
-    // ------------------------------------------------------------------------------------------
-    // getRatedMovies() {
-    //   // get all movies from DB junction table for current user
-    //   axios.get("/get_rated").then(response => {
-    //     // put all received movie objects into array
-    //     this.rated_movies = response.data.rated_movies;
-    //     // reference to Vue object
-    //     var self = this;
-    //   });
-    // },
-
-
-    // ------------------------------------------------------------------------------------------
-    getRating: function getRating(tmdb_id) {
-      // var self = this;
-      // for (var i = 0; i < this.rated_movies.length; i++) {
-      //   if (tmdb_id == this.rated_movies[i].movie_id) {
-      //     var rating = this.rated_movies[i].ratio;
-      //     return rating;
-      //   }
-      // }
-    },
-
-
     // show selected movie info in modal window ------------------------------------------------
     showMovie: function showMovie(tmdb_id, backgroundPath) {
       // url query to find movie by tmdb_id
@@ -50943,7 +50905,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       var urlImage = "http://image.tmdb.org/t/p/";
       if (backgroundPath != null) {
-        var backgroundImage = urlImage + "original" + backgroundPath;
+        var backgroundImage = urlImage + "w1280" + backgroundPath;
         $(".modal").css("background-image", "url(" + backgroundImage + ")");
       } else {
         $(".modal").css("background", "#636e72");

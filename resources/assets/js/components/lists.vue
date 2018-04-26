@@ -7,15 +7,6 @@
                 <div class="modal fade" tabindex="-1" role="dialog" id="movie_info">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
-                          <!--
-                            <div class="modal-header">
-                            <h2 class="modal-title">{{movie.title}}
-                                <button type="button" class="modal-close" data-dismiss="modal">
-                                    Close
-                                </button>
-                            </h2>
-                            </div>
-                          -->
                             <div class="col-md-10">
                                 <div class="list-group">
                                     <div class="row">
