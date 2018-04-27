@@ -45954,246 +45954,298 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-		components: {
-				Slick: __WEBPACK_IMPORTED_MODULE_0_vue_slick___default.a
-		},
-		data: function data() {
-				return {
-						slickOptions: {
-								dots: false,
-								slidesToShow: 5,
-								slidesToScroll: 4,
-								responsive: [{
-										breakpoint: 1300,
-										settings: {
-												slidesToShow: 3,
-												slidesToScroll: 2
-										}
-								}, {
-										breakpoint: 480,
-										settings: {
-												slidesToShow: 1,
-												slidesToScroll: 1
-										}
-								}]
-						},
-						num_rated: 0,
-						num_saved: 0,
-						num_hidden: 0,
-						avg_rating: 0,
-						dob_date: 0,
-						my_user: [],
-						later_movies: [],
-						hidden_movies: [],
-						// temporary stores the properties of selected movie, used to display it in a modal window
-						movie: {},
-						// 'rated' movies without full info
-						rated_movies: [],
-						// 'rated' movies with full info
-						rated_movies_display: [],
-						// TMDb api key
-						api_key: "?api_key=a3abe9699d800e588cb2a57107b4179c",
-						backdrop_api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
-						// TMDb api key url prefix
-						api_key_prefix: "https://api.themoviedb.org/3/movie/",
-						// TMDb url prefix for posters
-						image_prefix_url: "http://image.tmdb.org/t/p/w500"
-				};
-		},
+	components: {
+		Slick: __WEBPACK_IMPORTED_MODULE_0_vue_slick___default.a
+	},
+	data: function data() {
+		return {
+			slickOptions: {
+				dots: false,
+				slidesToShow: 5,
+				slidesToScroll: 4,
+				responsive: [{
+					breakpoint: 1300,
+					settings: {
+						slidesToShow: 3,
+						slidesToScroll: 2
+					}
+				}, {
+					breakpoint: 480,
+					settings: {
+						slidesToShow: 1,
+						slidesToScroll: 1
+					}
+				}]
+			},
+			num_rated: 0,
+			num_saved: 0,
+			num_hidden: 0,
+			avg_rating: 0,
+			dob_date: 0,
+			my_user: [],
+			later_movies: [],
+			hidden_movies: [],
+			// temporary stores the properties of selected movie, used to display it in a modal window
+			movie: {},
+			// 'rated' movies without full info
+			rated_movies: [],
+			// 'rated' movies with full info
+			rated_movies_display: [],
+			// TMDb api key
+			api_key: "?api_key=a3abe9699d800e588cb2a57107b4179c",
+			backdrop_api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
+			// TMDb api key url prefix
+			api_key_prefix: "https://api.themoviedb.org/3/movie/",
+			// TMDb url prefix for posters
+			image_prefix_url: "http://image.tmdb.org/t/p/w500"
+		};
+	},
 
 
-		// ------------------------------------------------------------------------------------------
-		mounted: function mounted() {
-				this.getRatedMovies();
-				this.getNumSaved();
-				this.getNumHidden();
-				this.getMyUser();
-		},
+	// ------------------------------------------------------------------------------------------
+	mounted: function mounted() {
+		this.getRatedMovies();
+		this.getNumSaved();
+		this.getNumHidden();
+		this.getMyUser();
+	},
 
 
-		// ------------------------------------------------------------------------------------------
-		watch: {
-				//https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
-				rated_movies_display: function rated_movies_display(newMovies) {
-						var _this = this;
+	// ------------------------------------------------------------------------------------------
+	watch: {
+		//https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
+		rated_movies_display: function rated_movies_display(newMovies) {
+			var _this = this;
 
-						var currIndex = this.$refs.slick.currentSlide();
+			var currIndex = this.$refs.slick.currentSlide();
 
-						this.$refs.slick.destroy();
-						this.$nextTick(function () {
-								_this.$refs.slick.create();
-								_this.$refs.slick.goTo(currIndex, true);
-						});
-				}
-		},
-
-		methods: {
-
-				// ------------------------------------------------------------------------------------------
-				getRatedMovies: function getRatedMovies() {
-						var _this2 = this;
-
-						// get all "my" rated movies
-						axios.get("/get_rated").then(function (response) {
-
-								_this2.rated_movies = response.data.rated_movies;
-								// reference to Vue object
-								var self = _this2;
-								// loop to obtain full movie details from TMDb for each movie from user list
-								for (var i = 0; i < _this2.rated_movies.length; i++) {
-										// url query string with movie id
-										var url = _this2.api_key_prefix + _this2.rated_movies[i].tmdb_id + _this2.api_key;
-										// get movie object from TMDb by tmdb_id
-										$.getJSON(url).done(function (response) {
-												// put the received movie object into array
-												self.rated_movies_display.push(response);
-										});
-								}
-								self.getNumRated();
-						});
-				},
-
-
-				// ------------------------------------------------------------------------------------------
-				getMyUser: function getMyUser() {
-						var _this3 = this;
-
-						axios.get("/my_user").then(function (response) {
-								_this3.my_user = response.data.my_user;
-
-								var name = _this3.my_user[0].name;
-								name = name.charAt(0).toUpperCase() + name.slice(1);
-								_this3.my_user[0].name = name;
-
-								var dob_date = _this3.my_user[0].dob;
-								var new_dob_date = dob_date.split("-").reverse().join("/");
-								_this3.my_user[0].dob = new_dob_date;
-
-								var reg_date = _this3.my_user[0].created_at.substring(0, 10);
-								var new_reg_date = reg_date.split("-").reverse().join("/");
-								_this3.my_user[0].created_at = new_reg_date;
-						});
-				},
-
-
-				// ------------------------------------------------------------------------------------------
-				getNumRated: function getNumRated() {
-						this.num_rated = this.rated_movies.length;
-
-						for (var i = 0; i < this.rated_movies.length; i++) {
-								this.avg_rating += this.rated_movies[i].ratio;
-						}
-						this.avg_rating = this.avg_rating / this.rated_movies.length;
-				},
-
-
-				// ------------------------------------------------------------------------------------------
-				getNumSaved: function getNumSaved() {
-						var _this4 = this;
-
-						// get all movies from DB junction table for current user
-						axios.get("/get_watchlater").then(function (response) {
-								// put all received movie objects into array
-								_this4.later_movies = response.data.later_movies;
-								_this4.num_saved = _this4.later_movies.length;
-						});
-				},
-
-
-				// ------------------------------------------------------------------------------------------
-				getNumHidden: function getNumHidden() {
-						var _this5 = this;
-
-						// get all movies from DB junction table for current user
-						axios.get("/get_hidden").then(function (response) {
-								// put all received movie objects into array
-								_this5.hidden_movies = response.data.hidden_movies;
-								_this5.num_hidden = _this5.hidden_movies.length;
-						});
-				},
-
-
-				// show selected movie info in modal window ------------------------------------------------
-				showMovie: function showMovie(tmdb_id, backgroundPath) {
-
-						// url query to find movie by tmdb_id
-						var url = "https://api.themoviedb.org/3/movie/" + tmdb_id + "?" + this.backdrop_api_key;
-						// reference to Vue object
-						var self = this;
-						// search movie by tmdb_id
-						fetch(url).then(function (r) {
-								return r.json();
-						}).then(function (json) {
-								// local reference to movie object
-								self.movie = json;
-
-								if (self.movie.release_date != null) {
-										var date = self.movie.release_date;
-										var newdate = date.split("-").reverse().join("/");
-										self.movie.release_date = newdate;
-								}
-						});
-
-						var urlImage = "http://image.tmdb.org/t/p/";
-						if (backgroundPath != null) {
-								var backgroundImage = urlImage + "original" + backgroundPath;
-								$(".modal").css("background-image", "url(" + backgroundImage + ")");
-						} else {
-								$(".modal").css("background", "#636e72");
-						}
-
-						$("#movie_info").modal("show");
-				},
-				getRating: function getRating(tmdb_id) {
-						var self = this;
-						for (var i = 0; i < this.rated_movies.length; i++) {
-								if (tmdb_id == this.rated_movies[i].tmdb_id) {
-										var rating = this.rated_movies[i].ratio;
-										return rating;
-								}
-						}
-				},
-
-
-				// ------------------------------------------------------------------------------------------
-				hideMovie: function hideMovie(tmdb_id) {
-						axios.post("/hide", {
-								tmdb_id: tmdb_id
-						});
-				},
-
-
-				// ------------------------------------------------------------------------------------------
-				laterMovie: function laterMovie(tmdb_id) {
-						axios.post("/watchlater", {
-								tmdb_id: tmdb_id
-						});
-				},
-
-
-				// ------------------------------------------------------------------------------------------
-				rateMovie: function rateMovie(tmdb_id, rating) {
-						var _this6 = this;
-
-						// mirror the rating value (1 => 5, 2 => 4, ...)
-						rating = 6 - rating;
-
-						if (this.ratings[tmdb_id] !== rating) {
-								axios.post("/rate", {
-										tmdb_id: tmdb_id,
-										user_rating: rating
-								})
-								// reflect changes in the local array
-								.then(function (response) {
-										_this6.ratings[tmdb_id] = rating;
-								});
-						}
-				}
+			this.$refs.slick.destroy();
+			this.$nextTick(function () {
+				_this.$refs.slick.create();
+				_this.$refs.slick.goTo(currIndex, true);
+			});
 		}
+	},
+
+	methods: {
+
+		// ------------------------------------------------------------------------------------------
+		getRatedMovies: function getRatedMovies() {
+			var _this2 = this;
+
+			// get all "my" rated movies
+			axios.get("/get_rated").then(function (response) {
+
+				_this2.rated_movies = response.data.rated_movies;
+				// reference to Vue object
+				var self = _this2;
+				// loop to obtain full movie details from TMDb for each movie from user list
+				for (var i = 0; i < _this2.rated_movies.length; i++) {
+					// url query string with movie id
+					var url = _this2.api_key_prefix + _this2.rated_movies[i].tmdb_id + _this2.api_key;
+					// get movie object from TMDb by tmdb_id
+					$.getJSON(url).done(function (response) {
+						// put the received movie object into array
+						self.rated_movies_display.push(response);
+					});
+				}
+				self.getNumRated();
+			});
+		},
+
+
+		// ------------------------------------------------------------------------------------------
+		getMyUser: function getMyUser() {
+			var _this3 = this;
+
+			axios.get("/my_user").then(function (response) {
+				_this3.my_user = response.data.my_user;
+
+				var name = _this3.my_user[0].name;
+				name = name.charAt(0).toUpperCase() + name.slice(1);
+				_this3.my_user[0].name = name;
+
+				var dob_date = _this3.my_user[0].dob;
+				var new_dob_date = dob_date.split("-").reverse().join("/");
+				_this3.my_user[0].dob = new_dob_date;
+
+				var reg_date = _this3.my_user[0].created_at.substring(0, 10);
+				var new_reg_date = reg_date.split("-").reverse().join("/");
+				_this3.my_user[0].created_at = new_reg_date;
+			});
+		},
+
+
+		// ------------------------------------------------------------------------------------------
+		getNumRated: function getNumRated() {
+			this.num_rated = this.rated_movies.length;
+
+			for (var i = 0; i < this.rated_movies.length; i++) {
+				this.avg_rating += this.rated_movies[i].ratio;
+			}
+			if (this.avg_rating != 0) {
+				this.avg_rating = this.avg_rating / this.rated_movies.length;
+				this.avg_rating = Math.round(this.avg_rating * 100) / 100;
+			}
+		},
+
+
+		// ------------------------------------------------------------------------------------------
+		getNumSaved: function getNumSaved() {
+			var _this4 = this;
+
+			// get all movies from DB junction table for current user
+			axios.get("/get_watchlater").then(function (response) {
+				// put all received movie objects into array
+				_this4.later_movies = response.data.later_movies;
+				_this4.num_saved = _this4.later_movies.length;
+			});
+		},
+
+
+		// ------------------------------------------------------------------------------------------
+		getNumHidden: function getNumHidden() {
+			var _this5 = this;
+
+			// get all movies from DB junction table for current user
+			axios.get("/get_hidden").then(function (response) {
+				// put all received movie objects into array
+				_this5.hidden_movies = response.data.hidden_movies;
+				_this5.num_hidden = _this5.hidden_movies.length;
+			});
+		},
+
+
+		// show selected movie info in modal window ------------------------------------------------
+		showMovie: function showMovie(tmdb_id, backgroundPath) {
+
+			// url query to find movie by tmdb_id
+			var url = "https://api.themoviedb.org/3/movie/" + tmdb_id + "?" + this.backdrop_api_key;
+			// reference to Vue object
+			var self = this;
+			// search movie by tmdb_id
+			fetch(url).then(function (r) {
+				return r.json();
+			}).then(function (json) {
+				// local reference to movie object
+				self.movie = json;
+
+				if (self.movie.release_date != null) {
+					var date = self.movie.release_date;
+					var newdate = date.split("-").reverse().join("/");
+					self.movie.release_date = newdate;
+				}
+			});
+
+			var urlImage = "http://image.tmdb.org/t/p/";
+			if (backgroundPath != null) {
+				var backgroundImage = urlImage + "original" + backgroundPath;
+				$(".modal").css("background-image", "url(" + backgroundImage + ")");
+			} else {
+				$(".modal").css("background", "#636e72");
+			}
+
+			$("#movie_info").modal("show");
+		},
+		getRating: function getRating(tmdb_id) {
+			var self = this;
+			for (var i = 0; i < this.rated_movies.length; i++) {
+				if (tmdb_id == this.rated_movies[i].tmdb_id) {
+					var rating = this.rated_movies[i].ratio;
+					return rating;
+				}
+			}
+		},
+
+
+		// ------------------------------------------------------------------------------------------
+		hideMovie: function hideMovie(tmdb_id) {
+			axios.post("/hide", {
+				tmdb_id: tmdb_id
+			});
+		},
+
+
+		// ------------------------------------------------------------------------------------------
+		laterMovie: function laterMovie(tmdb_id) {
+			axios.post("/watchlater", {
+				tmdb_id: tmdb_id
+			});
+		},
+
+
+		// ------------------------------------------------------------------------------------------
+		rateMovie: function rateMovie(tmdb_id, rating) {
+			var _this6 = this;
+
+			// mirror the rating value (1 => 5, 2 => 4, ...)
+			rating = 6 - rating;
+
+			if (this.ratings[tmdb_id] !== rating) {
+				axios.post("/rate", {
+					tmdb_id: tmdb_id,
+					user_rating: rating
+				})
+				// reflect changes in the local array
+				.then(function (response) {
+					_this6.ratings[tmdb_id] = rating;
+				});
+			}
+		}
+	}
 });
 
 /***/ }),
@@ -49583,51 +49635,93 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
-            _vm._v(_vm._s(_vm.my_user[0].name) + " ")
+        _c("div", { staticClass: "list-group" }, [
+          _c("div", { staticClass: "row list-group-item" }, [
+            _c("div", { staticClass: "col-md-12" }, [
+              _c(
+                "h1",
+                { staticClass: "li-item-profile li-item-profile-header" },
+                [_vm._v(_vm._s(_vm.my_user[0].name) + " ")]
+              )
+            ])
           ]),
           _vm._v(" "),
-          _c("p", { staticClass: "col-md-2" }),
-          _vm._v(" "),
-          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
-            _vm._v("Movies Rated: " + _vm._s(_vm.num_rated))
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
-            _vm._v("Email: " + _vm._s(_vm.my_user[0].email))
+          _c("div", { staticClass: "row list-group-item" }, [
+            _c("div", { staticClass: "col-md-6" }, [
+              _vm._m(1, false, false),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-7" }, [
+                _c(
+                  "h2",
+                  { staticClass: "li-item-profile li-item-profile-data" },
+                  [_vm._v(_vm._s(_vm.my_user[0].email))]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6" }, [
+              _vm._m(2, false, false),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-7" }, [
+                _c(
+                  "h2",
+                  { staticClass: "li-item-profile li-item-profile-data" },
+                  [_vm._v(_vm._s(_vm.num_rated))]
+                )
+              ])
+            ])
           ]),
           _vm._v(" "),
-          _c("p", { staticClass: "col-md-2" }),
-          _vm._v(" "),
-          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
-            _vm._v("Saved: " + _vm._s(_vm.num_saved))
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
-            _vm._v("DOB: " + _vm._s(_vm.my_user[0].dob))
+          _c("div", { staticClass: "row list-group-item" }, [
+            _c("div", { staticClass: "col-md-6" }, [
+              _vm._m(3, false, false),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-7" }, [
+                _c(
+                  "h2",
+                  { staticClass: "li-item-profile li-item-profile-data" },
+                  [_vm._v(_vm._s(_vm.my_user[0].dob))]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6" }, [
+              _vm._m(4, false, false),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-7" }, [
+                _c(
+                  "h2",
+                  { staticClass: "li-item-profile li-item-profile-data" },
+                  [_vm._v(_vm._s(_vm.num_saved))]
+                )
+              ])
+            ])
           ]),
           _vm._v(" "),
-          _c("p", { staticClass: "col-md-2" }),
-          _vm._v(" "),
-          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
-            _vm._v("Hidden: " + _vm._s(_vm.num_hidden))
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
-            _vm._v("Registered: " + _vm._s(_vm.my_user[0].created_at))
-          ]),
-          _vm._v(" "),
-          _c("p", { staticClass: "col-md-2" }),
-          _vm._v(" "),
-          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
-            _vm._v("Average Rating: " + _vm._s(_vm.avg_rating))
+          _c("div", { staticClass: "row list-group-item" }, [
+            _c("div", { staticClass: "col-md-6" }, [
+              _vm._m(5, false, false),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-7" }, [
+                _c(
+                  "h2",
+                  { staticClass: "li-item-profile li-item-profile-data" },
+                  [_vm._v(_vm._s(_vm.avg_rating))]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6" }, [
+              _vm._m(6, false, false),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-7" }, [
+                _c(
+                  "h2",
+                  { staticClass: "li-item-profile li-item-profile-data" },
+                  [_vm._v(_vm._s(_vm.num_hidden))]
+                )
+              ])
+            ])
           ])
         ]),
         _vm._v(" "),
@@ -49635,7 +49729,9 @@ var render = function() {
           "div",
           { staticClass: "row" },
           [
-            _c("h2", [_vm._v("Movies You Have Rated:")]),
+            _c("h2", { staticClass: "carousel-header" }, [
+              _vm._v("Movies You Have Rated")
+            ]),
             _vm._v(" "),
             _c(
               "slick",
@@ -49743,6 +49839,66 @@ var staticRenderFns = [
           )
         ]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-5" }, [
+      _c("h2", { staticClass: "li-item-profile li-item-profile-type" }, [
+        _vm._v("Email Address")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-5" }, [
+      _c("h2", { staticClass: "li-item-profile li-item-profile-type" }, [
+        _vm._v("Movies Rated")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-5" }, [
+      _c("h2", { staticClass: "li-item-profile li-item-profile-type" }, [
+        _vm._v("Date of Birth")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-5" }, [
+      _c("h2", { staticClass: "li-item-profile li-item-profile-type" }, [
+        _vm._v("Movies Saved")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-5" }, [
+      _c("h2", { staticClass: "li-item-profile li-item-profile-type" }, [
+        _vm._v("Average Rating")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-5" }, [
+      _c("h2", { staticClass: "li-item-profile li-item-profile-type" }, [
+        _vm._v("Movies hidden")
+      ])
     ])
   }
 ]
@@ -50346,7 +50502,9 @@ var render = function() {
         ),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
-          _c("h2", [_vm._v("Saved Movies:")]),
+          _c("h2", { staticClass: "carousel-header" }, [
+            _vm._v("Saved Movies")
+          ]),
           _vm._v(" "),
           _c(
             "div",
@@ -50434,7 +50592,9 @@ var render = function() {
           "div",
           { staticClass: "row" },
           [
-            _c("h2", [_vm._v("Hidden Movies:")]),
+            _c("h2", { staticClass: "carousel-header" }, [
+              _vm._v("Hidden Movies")
+            ]),
             _vm._v(" "),
             _c(
               "slick",
@@ -50739,7 +50899,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -50852,7 +51011,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var self = this;
 
       // url query for all popular movies
-      for (var i = 0; i < 5; i++) {
+      for (var i = 1; i < 5; i++) {
         // url query for all popular movies
         var url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&include_adult=false&page=" + i + "&api_key=a3abe9699d800e588cb2a57107b4179c";
 
@@ -50885,7 +51044,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     getHighRatedMovies: function getHighRatedMovies() {
       // reference to Vue object
       var self = this;
-      for (var i = 0; i < 5; i++) {
+      for (var i = 1; i < 5; i++) {
         // url query for all highest rated movies
         var url = "https://api.themoviedb.org/3/discover/movie?api_key=a3abe9699d800e588cb2a57107b4179c&language=en-US&sort_by=vote_count.desc&include_adult=false&include_video=false&page=" + i;
 
@@ -51041,6 +51200,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     hideMovie: function hideMovie(tmdb_id) {
       axios.post("/hide", {
         tmdb_id: tmdb_id
+      });
+      for (var i = 0; i < this.popular_movies.length; i++) {
+        if (tmdb_id = this.popular_movies[i].id) {
+          this.popular_movies[i].fadeOut();
+        }
+      }
+
+      this.$http.delete('/some/url/', { some: 'param' }).success(function () {
+        // Do whatever
       });
     },
 
@@ -51241,8 +51409,10 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("h2", [_vm._v("Popular Movies")]),
+        _c("div", { ref: "popSlider", staticClass: "row" }, [
+          _c("h2", { staticClass: "carousel-header" }, [
+            _vm._v("Popular Movies")
+          ]),
           _vm._v(" "),
           _c(
             "div",
@@ -51255,7 +51425,10 @@ var render = function() {
                   return index < 30
                     ? _c(
                         "a",
-                        { staticClass: "smSlickItem", attrs: { href: "#" } },
+                        {
+                          staticClass: "smSlickItem",
+                          attrs: { href: "#", id: "movie.id" }
+                        },
                         [
                           _c("img", {
                             staticClass: "slickImage",
@@ -51326,10 +51499,14 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
+        _c("div", { ref: "secondSlider", staticClass: "row" }, [
           _vm.recommended_display.length == 0
-            ? _c("h2", [_vm._v("High Rated Movies:")])
-            : _c("h2", [_vm._v("Recommended Movies:")]),
+            ? _c("h2", { staticClass: "carousel-header" }, [
+                _vm._v("High Rated Movies")
+              ])
+            : _c("h2", { staticClass: "carousel-header" }, [
+                _vm._v("Recommended Movies")
+              ]),
           _vm._v(" "),
           _c(
             "div",

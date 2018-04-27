@@ -68,7 +68,7 @@
 
 				<!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1 -->
 				<div class="row">
-					<h2>Saved Movies:</h2>
+					<h2 class="carousel-header">Saved Movies</h2>
 					<div class="slider-parent">
 						<slick ref="saveSlick" :options="slickOptions">
 
@@ -103,7 +103,7 @@
 
 				<!-- LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2 -->
 				<div class="row">
-					<h2>Hidden Movies:</h2>
+					<h2 class="carousel-header">Hidden Movies</h2>
 					<slick ref="hideSlick" :options="slickOptions">
 
 						<a  v-if="hidden_movies_display.length > 0"

@@ -67,38 +67,37 @@
                 </div><!-- modal -->
 
                 <!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1  -->
-                <div class="row">
-                    <h2>Popular Movies</h2>
+                <div class="row" ref="popSlider">
+                    <h2 class="carousel-header">Popular Movies</h2>
                     <div class="slider-parent">
                         <slick ref="popSlick" :options="slickOptions">
+                          <a v-if="index < 30" v-for="(movie,index) in popular_movies" href="#" id="movie.id"class="smSlickItem">
 
-                            <a v-if="index < 30" v-for="(movie,index) in popular_movies" href="#" class="smSlickItem">
+                              <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
+                                   @click="showMovie(movie.id,movie.backdrop_path)">
 
-                                <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
-                                     @click="showMovie(movie.id,movie.backdrop_path)">
+                              <div class="slickActions">
+                                  <div class="row">
+                                      <div class="rating">
+                                          <!-- rating stars -->
+                                          <a v-for="i in 5" @click="rateMovie(movie.id, i)">★</a>
+                                      </div>
+                                  </div>
+                                  <div class="row btnHolder">
 
-                                <div class="slickActions">
-                                    <div class="row">
-                                        <div class="rating">
-                                            <!-- rating stars -->
-                                            <a v-for="i in 5" @click="rateMovie(movie.id, i)">★</a>
-                                        </div>
-                                    </div>
-                                    <div class="row btnHolder">
-
-                                        <button @click="laterMovie(movie.id)">Save</button>
-                                        <button @click="hideMovie(movie.id)">Hide</button>
-                                    </div>
-                                </div>
-                            </a>
+                                      <button @click="laterMovie(movie.id)">Save</button>
+                                      <button @click="hideMovie(movie.id)">Hide</button>
+                                  </div>
+                              </div>
+                          </a>
                         </slick>
                     </div>
                 </div>
 
                 <!-- LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2  -->
-                <div class="row">
-                    <h2 v-if="recommended_display.length == 0">High Rated Movies:</h2>
-                    <h2 v-else>Recommended Movies:</h2>
+                <div class="row" ref="secondSlider">
+                    <h2 v-if="recommended_display.length == 0" class="carousel-header">High Rated Movies</h2>
+                    <h2 v-else class="carousel-header">Recommended Movies</h2>
                     <div class="slider-parent">
                         <slick ref="secondSlick" :options="slickOptions">
 
@@ -243,7 +242,7 @@ export default {
       var self = this;
 
       // url query for all popular movies
-      for(var i = 0; i < 5; i++) {
+      for(var i = 1; i < 5; i++) {
         // url query for all popular movies
         var url = "https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&include_adult=false&page=" + i + "&api_key=a3abe9699d800e588cb2a57107b4179c";
 
@@ -274,7 +273,7 @@ export default {
     getHighRatedMovies() {
       // reference to Vue object
       var self = this;
-      for(var i =0; i < 5; i++) {
+      for(var i = 1; i < 5; i++) {
         // url query for all highest rated movies
         var url = "https://api.themoviedb.org/3/discover/movie?api_key=a3abe9699d800e588cb2a57107b4179c&language=en-US&sort_by=vote_count.desc&include_adult=false&include_video=false&page=" + i;
 
@@ -424,6 +423,15 @@ export default {
     hideMovie(tmdb_id) {
       axios.post("/hide", {
         tmdb_id: tmdb_id
+      });
+      for(var i = 0; i < this.popular_movies.length; i++) {
+        if(tmdb_id = this.popular_movies[i].id) {
+          this.popular_movies[i].fadeOut();
+        }
+      }
+
+      this.$http.delete('/some/url/', {some: 'param'}).success(function() {
+            // Do whatever
       });
     },
 

@@ -74,22 +74,71 @@
                         </div><!-- modal-content -->
                     </div><!-- modal-dialog -->
                 </div><!-- modal -->
-    <div class="row">
-    	<h3 class="col-md-5 li_item_profile">{{my_user[0].name}} </h3> <p class="col-md-2"></p> <h3 class="col-md-5 li_item_profile">Movies Rated: {{num_rated}}</h3>
-   	</div>
-   	<div class="row">
-   		<h3 class="col-md-5 li_item_profile">Email: {{my_user[0].email}}</h3> <p class="col-md-2"></p> <h3 class="col-md-5 li_item_profile">Saved: {{num_saved}}</h3>
-   	</div>
-   	<div class="row">
-   		<h3 class="col-md-5 li_item_profile">DOB: {{my_user[0].dob}}</h3> <p class="col-md-2"></p> <h3 class="col-md-5 li_item_profile">Hidden: {{num_hidden}}</h3>
-   	</div>
-   	<div class="row">
-   		<h3 class="col-md-5 li_item_profile">Registered: {{my_user[0].created_at}}</h3> <p class="col-md-2"></p> <h3 class="col-md-5 li_item_profile">Average Rating: {{avg_rating}}</h3>
-   	</div>
+    <div class="list-group">
+	    <div class="row list-group-item">
+	    	<div class="col-md-12">
+	    		<h1 class="li-item-profile li-item-profile-header">{{my_user[0].name}} </h1>
+	    	</div>
+	   	</div>
+	   	<div class="row list-group-item">
+	   		<div class="col-md-6">
+   				<div class="col-md-5">
+	   				<h2 class="li-item-profile li-item-profile-type">Email Address</h2>
+	   			</div>
+	   			<div class="col-md-7">
+	   				<h2 class="li-item-profile li-item-profile-data">{{my_user[0].email}}</h2>
+	   			</div>
+	   		</div>
+	   		<div class="col-md-6">
+	   			<div class="col-md-5">
+	   				<h2 class="li-item-profile li-item-profile-type">Movies Rated</h2>
+	   			</div>
+	   			<div class="col-md-7">
+	   				<h2 class="li-item-profile li-item-profile-data">{{num_rated}}</h2>
+	   			</div>
+	   		</div>
+	   	</div>
+	   	<div class="row list-group-item">
+	   		<div class="col-md-6">
+	   			<div class="col-md-5">
+	   				<h2 class="li-item-profile li-item-profile-type">Date of Birth</h2>
+	   			</div>
+	   			<div class="col-md-7">
+	   				<h2 class="li-item-profile li-item-profile-data">{{my_user[0].dob}}</h2>
+	   			</div>
+	   		</div>
+	   		<div class="col-md-6">
+	   			<div class="col-md-5">
+	   				<h2 class="li-item-profile li-item-profile-type">Movies Saved</h2>
+	   			</div>
+	   			<div class="col-md-7">
+	   				<h2 class="li-item-profile li-item-profile-data">{{num_saved}}</h2>
+	   			</div>
+	   		</div>
+	   	</div>
+	   	<div class="row list-group-item">
+	   		<div class="col-md-6">
+	   			<div class="col-md-5">
+	   				<h2 class="li-item-profile li-item-profile-type">Average Rating</h2>
+	   			</div>
+	   			<div class="col-md-7">
+	   				<h2 class="li-item-profile li-item-profile-data">{{avg_rating}}</h2>
+	   			</div>
+	   		</div>
+	   		<div class="col-md-6">
+	   			<div class="col-md-5">
+	   				<h2 class="li-item-profile li-item-profile-type">Movies hidden</h2>
+	   			</div>
+	   			<div class="col-md-7">
+	   				<h2 class="li-item-profile li-item-profile-data">{{num_hidden}}</h2>
+	   			</div>
+	   		</div>
+	   	</div>
+	</div>
 
 	<!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1 -->
 	<div class="row">
-		<h2>Movies You Have Rated:</h2>
+		<h2 class="carousel-header">Movies You Have Rated</h2>
 		<slick ref="slick" :options="slickOptions">
 
 			<a  v-if="rated_movies_display.length > 0"
@@ -263,7 +312,11 @@ export default {
 	  for(var i = 0; i < this.rated_movies.length; i++) {
 	  	this.avg_rating += this.rated_movies[i].ratio;
 	  }
-	  this.avg_rating = this.avg_rating / this.rated_movies.length;
+	  if(this.avg_rating != 0){
+	  	this.avg_rating = this.avg_rating / this.rated_movies.length;
+	  	this.avg_rating = (Math.round(this.avg_rating * 100)/100);
+	  }
+
 	},
 
 	// ------------------------------------------------------------------------------------------
