@@ -78,7 +78,6 @@
 							<img
 								v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id,movie.backdrop_path)">
 
-							<!-- the drop-down list with for choosing rating -->
 							<!-- the rating of each film is linked to the corresponding array member -->
 							<div class="slickActions">
 

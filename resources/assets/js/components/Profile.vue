@@ -82,16 +82,16 @@
 	   	</div>
 	   	<div class="row list-group-item">
 	   		<div class="col-md-6">
-   				<div class="col-md-5">
-	   				<h2 class="li-item-profile li-item-profile-type">Email Address</h2>
+   				<div class="col-md-5 noRight">
+	   				<h2 class="li-item-profile li-item-profile-type">Email Address:</h2>
 	   			</div>
-	   			<div class="col-md-7">
+	   			<div class="col-md-7 noLeft">
 	   				<h2 class="li-item-profile li-item-profile-data">{{my_user[0].email}}</h2>
 	   			</div>
 	   		</div>
 	   		<div class="col-md-6">
 	   			<div class="col-md-5">
-	   				<h2 class="li-item-profile li-item-profile-type">Movies Rated</h2>
+	   				<h2 class="li-item-profile li-item-profile-type">Movies Rated:</h2>
 	   			</div>
 	   			<div class="col-md-7">
 	   				<h2 class="li-item-profile li-item-profile-data">{{num_rated}}</h2>
@@ -101,7 +101,7 @@
 	   	<div class="row list-group-item">
 	   		<div class="col-md-6">
 	   			<div class="col-md-5">
-	   				<h2 class="li-item-profile li-item-profile-type">Date of Birth</h2>
+	   				<h2 class="li-item-profile li-item-profile-type">Date of Birth:</h2>
 	   			</div>
 	   			<div class="col-md-7">
 	   				<h2 class="li-item-profile li-item-profile-data">{{my_user[0].dob}}</h2>
@@ -109,7 +109,7 @@
 	   		</div>
 	   		<div class="col-md-6">
 	   			<div class="col-md-5">
-	   				<h2 class="li-item-profile li-item-profile-type">Movies Saved</h2>
+	   				<h2 class="li-item-profile li-item-profile-type">Movies Saved:</h2>
 	   			</div>
 	   			<div class="col-md-7">
 	   				<h2 class="li-item-profile li-item-profile-data">{{num_saved}}</h2>
@@ -119,7 +119,7 @@
 	   	<div class="row list-group-item">
 	   		<div class="col-md-6">
 	   			<div class="col-md-5">
-	   				<h2 class="li-item-profile li-item-profile-type">Average Rating</h2>
+	   				<h2 class="li-item-profile li-item-profile-type">Average Rating:</h2>
 	   			</div>
 	   			<div class="col-md-7">
 	   				<h2 class="li-item-profile li-item-profile-data">{{avg_rating}}</h2>
@@ -127,7 +127,7 @@
 	   		</div>
 	   		<div class="col-md-6">
 	   			<div class="col-md-5">
-	   				<h2 class="li-item-profile li-item-profile-type">Movies hidden</h2>
+	   				<h2 class="li-item-profile li-item-profile-type">Movies hidden:</h2>
 	   			</div>
 	   			<div class="col-md-7">
 	   				<h2 class="li-item-profile li-item-profile-data">{{num_hidden}}</h2>
@@ -314,7 +314,7 @@ export default {
 	  }
 	  if(this.avg_rating != 0){
 	  	this.avg_rating = this.avg_rating / this.rated_movies.length;
-	  	this.avg_rating = (Math.round(this.avg_rating * 100)/100);
+	  	this.avg_rating = (Math.round(this.avg_rating * 100000)/100000);
 	  }
 
 	},
