@@ -31,7 +31,7 @@ Auth::routes();
 // Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
 // Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
-
+Route::get('/my_user', 'UserMovieController@getMyUser');
 Route::get('/my_movies', 'UserMovieController@getMyMovies');
 Route::get('/get_watchlater', 'UserMovieController@getWatchLaterMovies');
 Route::get('/get_hidden', 'UserMovieController@getHiddenMovies');

@@ -173,16 +173,17 @@ nav li.router-link-exact-active {
     color:#74b9ff;
 }
 
-
-
-/* SPACING */
-.space{
-    margin-top:60px;
+.li_item_profile{
+    font-size:2em;
+    margin-bottom:2px;
+    padding:1em;
+    font-family: 'Open Sans', sans-serif;
+    font-weight:600;
+    color:#354850;
+    display:inline-block;
+    border-radius:5px;
+    background-color:rgba(223, 230, 233);
 }
-.noSpace{
-    margin-top:-10px;
-}
-
 
 /* WATCH LATER/HIDE BUTTONS */
 .btnHolder{

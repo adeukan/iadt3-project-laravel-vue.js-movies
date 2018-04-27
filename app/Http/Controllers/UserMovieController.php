@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Movie;
 use App\UserMovie;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use \stdClass;
@@ -28,6 +29,32 @@ class UserMovieController extends Controller
                 'my_movies' => $my_movies,
             ]);
     }
+
+    public function getMyUser() {
+
+        $my_user = User::where([
+                    'id' => Auth::user()->id,
+            ])->get();
+
+        return response()->json([
+                'my_user' => $my_user,
+            ], 200);
+    }
+
+    // // get and return the hidden movies
+    // // #return \Illuminate\Http\Response
+    // public function getHiddenMovies()
+    // {
+    //     $hidden_movies = UserMovie::where([
+    //         'user_id' => Auth::user()->id,
+    //         'hidden' => '1',
+    //         'watchlater' => '0'
+    //     ])->get();
+
+    //     return response()->json([
+    //         'hidden_movies'    => $hidden_movies,
+    //     ], 200);
+    // }
 
 
     // get and return the movies rated by the current user

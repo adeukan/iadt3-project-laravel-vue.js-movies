@@ -45943,6 +45943,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -45970,6 +45981,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 										}
 								}]
 						},
+						num_rated: 0,
+						num_saved: 0,
+						num_hidden: 0,
+						avg_rating: 0,
+						dob_date: 0,
+						my_user: [],
+						later_movies: [],
+						hidden_movies: [],
 						// temporary stores the properties of selected movie, used to display it in a modal window
 						movie: {},
 						// 'rated' movies without full info
@@ -45990,6 +46009,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 		// ------------------------------------------------------------------------------------------
 		mounted: function mounted() {
 				this.getRatedMovies();
+				this.getNumSaved();
+				this.getNumHidden();
+				this.getMyUser();
 		},
 
 
@@ -46031,6 +46053,66 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 												self.rated_movies_display.push(response);
 										});
 								}
+								self.getNumRated();
+						});
+				},
+
+
+				// ------------------------------------------------------------------------------------------
+				getMyUser: function getMyUser() {
+						var _this3 = this;
+
+						axios.get("/my_user").then(function (response) {
+								_this3.my_user = response.data.my_user;
+
+								var name = _this3.my_user[0].name;
+								name = name.charAt(0).toUpperCase() + name.slice(1);
+								_this3.my_user[0].name = name;
+
+								var dob_date = _this3.my_user[0].dob;
+								var new_dob_date = dob_date.split("-").reverse().join("/");
+								_this3.my_user[0].dob = new_dob_date;
+
+								var reg_date = _this3.my_user[0].created_at.substring(0, 10);
+								var new_reg_date = reg_date.split("-").reverse().join("/");
+								_this3.my_user[0].created_at = new_reg_date;
+						});
+				},
+
+
+				// ------------------------------------------------------------------------------------------
+				getNumRated: function getNumRated() {
+						this.num_rated = this.rated_movies.length;
+
+						for (var i = 0; i < this.rated_movies.length; i++) {
+								this.avg_rating += this.rated_movies[i].ratio;
+						}
+						this.avg_rating = this.avg_rating / this.rated_movies.length;
+				},
+
+
+				// ------------------------------------------------------------------------------------------
+				getNumSaved: function getNumSaved() {
+						var _this4 = this;
+
+						// get all movies from DB junction table for current user
+						axios.get("/get_watchlater").then(function (response) {
+								// put all received movie objects into array
+								_this4.later_movies = response.data.later_movies;
+								_this4.num_saved = _this4.later_movies.length;
+						});
+				},
+
+
+				// ------------------------------------------------------------------------------------------
+				getNumHidden: function getNumHidden() {
+						var _this5 = this;
+
+						// get all movies from DB junction table for current user
+						axios.get("/get_hidden").then(function (response) {
+								// put all received movie objects into array
+								_this5.hidden_movies = response.data.hidden_movies;
+								_this5.num_hidden = _this5.hidden_movies.length;
 						});
 				},
 
@@ -46095,7 +46177,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 				// ------------------------------------------------------------------------------------------
 				rateMovie: function rateMovie(tmdb_id, rating) {
-						var _this3 = this;
+						var _this6 = this;
 
 						// mirror the rating value (1 => 5, 2 => 4, ...)
 						rating = 6 - rating;
@@ -46107,7 +46189,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 								})
 								// reflect changes in the local array
 								.then(function (response) {
-										_this3.ratings[tmdb_id] = rating;
+										_this6.ratings[tmdb_id] = rating;
 								});
 						}
 				}
@@ -49501,6 +49583,54 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
+            _vm._v(_vm._s(_vm.my_user[0].name) + " ")
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "col-md-2" }),
+          _vm._v(" "),
+          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
+            _vm._v("Movies Rated: " + _vm._s(_vm.num_rated))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
+            _vm._v("Email: " + _vm._s(_vm.my_user[0].email))
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "col-md-2" }),
+          _vm._v(" "),
+          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
+            _vm._v("Saved: " + _vm._s(_vm.num_saved))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
+            _vm._v("DOB: " + _vm._s(_vm.my_user[0].dob))
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "col-md-2" }),
+          _vm._v(" "),
+          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
+            _vm._v("Hidden: " + _vm._s(_vm.num_hidden))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
+            _vm._v("Registered: " + _vm._s(_vm.my_user[0].created_at))
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "col-md-2" }),
+          _vm._v(" "),
+          _c("h3", { staticClass: "col-md-5 li_item_profile" }, [
+            _vm._v("Average Rating: " + _vm._s(_vm.avg_rating))
+          ])
+        ]),
+        _vm._v(" "),
         _c(
           "div",
           { staticClass: "row" },
@@ -50610,14 +50740,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -50773,7 +50895,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           // get rid of movies that have already been marked by "my"
           for (var i = 0; i < response.results.length; i++) {
             // get rid of the movies which are already in "my_movies" list
-            if (self.my_movies.indexOf(response.results[i].id) !== -1 || self.popular_movies.indexOf(response.results[i].id) !== -1) {
+            if (self.my_movies.indexOf(response.results[i].id) !== -1) {
               // delete only the value, reindexing the array now may destroy the loop
               delete response.results[i];
             }
@@ -51165,19 +51287,7 @@ var render = function() {
                                     [_vm._v("★")]
                                   )
                                 })
-                              ),
-                              _vm._v(" "),
-                              _vm.getRating(movie.id) > 0
-                                ? _c(
-                                    "div",
-                                    { staticClass: "ratingRated" },
-                                    _vm._l(_vm.getRating(movie.id), function(
-                                      i
-                                    ) {
-                                      return _c("span", [_vm._v("★")])
-                                    })
-                                  )
-                                : _vm._e()
+                              )
                             ]),
                             _vm._v(" "),
                             _c("div", { staticClass: "row btnHolder" }, [
@@ -51264,19 +51374,7 @@ var render = function() {
                                     [_vm._v("★")]
                                   )
                                 })
-                              ),
-                              _vm._v(" "),
-                              _vm.getRating(movie.id) > 0
-                                ? _c(
-                                    "div",
-                                    { staticClass: "ratingRated" },
-                                    _vm._l(_vm.getRating(movie.id), function(
-                                      i
-                                    ) {
-                                      return _c("span", [_vm._v("★")])
-                                    })
-                                  )
-                                : _vm._e()
+                              )
                             ]),
                             _vm._v(" "),
                             _c("div", { staticClass: "row btnHolder" }, [

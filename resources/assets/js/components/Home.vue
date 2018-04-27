@@ -83,10 +83,6 @@
                                             <!-- rating stars -->
                                             <a v-for="i in 5" @click="rateMovie(movie.id, i)">★</a>
                                         </div>
-                                        <div v-if="getRating(movie.id) > 0" class="ratingRated">
-                                            <!-- get what the movie has been rated -->
-                                            <span v-for="i in getRating(movie.id)">★</span>
-                                        </div>
                                     </div>
                                     <div class="row btnHolder">
 
@@ -121,10 +117,6 @@
                                     <div class="rating">
                                         <!-- rating stars -->
                                         <a v-for="i in 5" @click="rateMovie(movie.id, i)">★</a>
-                                    </div>
-                                    <div v-if="getRating(movie.id) > 0" class="ratingRated">
-                                        <!-- get what the movie has been rated -->
-                                        <span v-for="i in getRating(movie.id)">★</span>
                                     </div>
                                 </div>
                                 <div class="row btnHolder">
@@ -292,7 +284,7 @@ export default {
           // get rid of movies that have already been marked by "my"
           for (var i = 0; i < response.results.length; i++) {
             // get rid of the movies which are already in "my_movies" list
-            if (self.my_movies.indexOf(response.results[i].id) !== -1  || self.popular_movies.indexOf(response.results[i].id) !== -1) {
+            if (self.my_movies.indexOf(response.results[i].id) !== -1) {
               // delete only the value, reindexing the array now may destroy the loop
               delete response.results[i];
             }

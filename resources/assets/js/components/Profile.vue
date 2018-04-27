@@ -74,7 +74,19 @@
                         </div><!-- modal-content -->
                     </div><!-- modal-dialog -->
                 </div><!-- modal -->
-	
+    <div class="row">
+    	<h3 class="col-md-5 li_item_profile">{{my_user[0].name}} </h3> <p class="col-md-2"></p> <h3 class="col-md-5 li_item_profile">Movies Rated: {{num_rated}}</h3>
+   	</div>
+   	<div class="row">
+   		<h3 class="col-md-5 li_item_profile">Email: {{my_user[0].email}}</h3> <p class="col-md-2"></p> <h3 class="col-md-5 li_item_profile">Saved: {{num_saved}}</h3>
+   	</div>
+   	<div class="row">
+   		<h3 class="col-md-5 li_item_profile">DOB: {{my_user[0].dob}}</h3> <p class="col-md-2"></p> <h3 class="col-md-5 li_item_profile">Hidden: {{num_hidden}}</h3>
+   	</div>
+   	<div class="row">
+   		<h3 class="col-md-5 li_item_profile">Registered: {{my_user[0].created_at}}</h3> <p class="col-md-2"></p> <h3 class="col-md-5 li_item_profile">Average Rating: {{avg_rating}}</h3>
+   	</div>
+
 	<!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1 -->
 	<div class="row">
 		<h2>Movies You Have Rated:</h2>
@@ -101,7 +113,6 @@
 					</div>
 				</div>
 				<div class="row btnHolder">
-
 					<button @click="laterMovie(movie.id)">Save</button>
 					<button @click="hideMovie(movie.id)">Hide</button>
 				</div>
@@ -148,6 +159,14 @@ export default {
 				}
 				]
 			},
+			num_rated: 0,
+			num_saved: 0,
+			num_hidden: 0,
+			avg_rating: 0,
+			dob_date: 0,
+			my_user: [],
+			later_movies: [],
+			hidden_movies: [],
 			// temporary stores the properties of selected movie, used to display it in a modal window
 			movie: {},
 			// 'rated' movies without full info
@@ -168,6 +187,9 @@ export default {
   // ------------------------------------------------------------------------------------------
   mounted() {
 		this.getRatedMovies();
+		this.getNumSaved();
+		this.getNumHidden();
+		this.getMyUser();
   },
 
   // ------------------------------------------------------------------------------------------
@@ -205,7 +227,64 @@ export default {
 					self.rated_movies_display.push(response);
 			  });
 			}
+			self.getNumRated();
 	  });
+	},
+
+	// ------------------------------------------------------------------------------------------
+    getMyUser() {
+	    axios.get("/my_user").then(response => {
+	        this.my_user = response.data.my_user;
+
+	        var name = this.my_user[0].name;
+	        name = name.charAt(0).toUpperCase() + name.slice(1);
+	        this.my_user[0].name = name;
+
+	        var dob_date = this.my_user[0].dob;
+	    	var new_dob_date = dob_date
+	          .split("-")
+	          .reverse()
+	          .join("/");
+	    	this.my_user[0].dob = new_dob_date;
+
+	    	var reg_date = this.my_user[0].created_at.substring(0,10);
+		    var new_reg_date = reg_date
+		          .split("-")
+		          .reverse()
+		          .join("/");
+		    this.my_user[0].created_at = new_reg_date;
+		    });
+    },
+
+	// ------------------------------------------------------------------------------------------
+	getNumRated() {
+	  this.num_rated = this.rated_movies.length;
+
+	  for(var i = 0; i < this.rated_movies.length; i++) {
+	  	this.avg_rating += this.rated_movies[i].ratio;
+	  }
+	  this.avg_rating = this.avg_rating / this.rated_movies.length;
+	},
+
+	// ------------------------------------------------------------------------------------------
+	getNumSaved() {
+		// get all movies from DB junction table for current user
+		axios.get("/get_watchlater").then(response => {
+		// put all received movie objects into array
+		this.later_movies = response.data.later_movies;
+		this.num_saved = this.later_movies.length;
+		});
+	},
+
+	// ------------------------------------------------------------------------------------------
+	getNumHidden() {
+	  	// get all movies from DB junction table for current user
+		axios.get("/get_hidden").then(response => {
+		// put all received movie objects into array
+		this.hidden_movies = response.data.hidden_movies;
+		this.num_hidden = this.hidden_movies.length;
+		});
+
 	},
 
 
