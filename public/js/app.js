@@ -51201,15 +51201,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       axios.post("/hide", {
         tmdb_id: tmdb_id
       });
+      var self = this;
       for (var i = 0; i < this.popular_movies.length; i++) {
         if (tmdb_id = this.popular_movies[i].id) {
-          this.popular_movies[i].fadeOut();
+          this.popular_movies.slice(i);
         }
       }
-
-      this.$http.delete('/some/url/', { some: 'param' }).success(function () {
-        // Do whatever
-      });
     },
 
 
@@ -51426,8 +51423,9 @@ var render = function() {
                     ? _c(
                         "a",
                         {
+                          key: movie.id,
                           staticClass: "smSlickItem",
-                          attrs: { href: "#", id: "movie.id" }
+                          attrs: { id: "popSlick", href: "#" }
                         },
                         [
                           _c("img", {

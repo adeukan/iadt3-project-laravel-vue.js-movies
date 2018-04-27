@@ -71,7 +71,7 @@
                     <h2 class="carousel-header">Popular Movies</h2>
                     <div class="slider-parent">
                         <slick ref="popSlick" :options="slickOptions">
-                          <a v-if="index < 30" v-for="(movie,index) in popular_movies" href="#" id="movie.id"class="smSlickItem">
+                          <a id="popSlick" v-if="index < 30" v-for="(movie,index) in popular_movies" href="#" :key="movie.id" class="smSlickItem">
 
                               <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
                                    @click="showMovie(movie.id,movie.backdrop_path)">
@@ -424,15 +424,12 @@ export default {
       axios.post("/hide", {
         tmdb_id: tmdb_id
       });
+      var self = this;
       for(var i = 0; i < this.popular_movies.length; i++) {
         if(tmdb_id = this.popular_movies[i].id) {
-          this.popular_movies[i].fadeOut();
+          this.popular_movies.slice(i);
         }
       }
-
-      this.$http.delete('/some/url/', {some: 'param'}).success(function() {
-            // Do whatever
-      });
     },
 
 
