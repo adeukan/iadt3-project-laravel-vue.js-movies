@@ -310,6 +310,9 @@ export default {
       axios.get("/check_recommendations").then(response => {
         // if there are no any previously saved recommendations
         if (response.data.recommended === "nothing") {
+
+console.log(response.data.rated);
+
           // if "I" have rated more than 50 movies - try to get new recommendations!
           if (response.data.rated > 50) {
             this.getRecommendations();
@@ -349,7 +352,11 @@ export default {
 
     // get full info for each of recommended movies ---------------------------------------------
     getRecommendedInfo() {
-      this.recommended.forEach(movie => {
+
+      // we can't make all requests at once, it gives error 429 - to many requests to TMDB
+      var recommended_part = this.recommended.slice(0, 20);
+
+      recommended_part.forEach(movie => {
         // url query to find movie by tmdb_id
         var url = "https://api.themoviedb.org/3/movie/" + movie.tmdb_id + "?" + this.api_key;
         // reference to Vue object
