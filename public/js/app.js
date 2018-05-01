@@ -51084,6 +51084,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       axios.get("/check_recommendations").then(function (response) {
         // if there are no any previously saved recommendations
         if (response.data.recommended === "nothing") {
+
+          console.log(response.data.rated);
+
           // if "I" have rated more than 50 movies - try to get new recommendations!
           if (response.data.rated > 50) {
             _this4.getRecommendations();
@@ -51128,7 +51131,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     getRecommendedInfo: function getRecommendedInfo() {
       var _this6 = this;
 
-      this.recommended.forEach(function (movie) {
+      // we can't make all requests at once, it gives error 429 - to many requests to TMDB
+      var recommended_part = this.recommended.slice(0, 20);
+
+      recommended_part.forEach(function (movie) {
         // url query to find movie by tmdb_id
         var url = "https://api.themoviedb.org/3/movie/" + movie.tmdb_id + "?" + _this6.api_key;
         // reference to Vue object

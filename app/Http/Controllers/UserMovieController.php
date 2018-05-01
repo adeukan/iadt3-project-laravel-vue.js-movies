@@ -75,15 +75,15 @@ class UserMovieController extends Controller
     // check the DB for existing recommendations
     public function checkRecommendations() {
         
-        // SQL - get (and count) previously saved recommendations for "me" 
-        $sql =  'SELECT tmdb_id, avg_ratio, COUNT(*) as qty
+        // SQL - get previously saved recommendations for "me" 
+        $sql =  'SELECT tmdb_id, avg_ratio
                 FROM recommendations
                 WHERE user_id = ' . Auth::user()->id ;
 
         $response = DB::select($sql);
 
         // return previously saved recommendations if they exist
-        if($response[0]->qty > 0) {
+        if(count($response) > 0) {
             return response()->json([
                 'recommended' => $response,
             ], 200);
@@ -116,7 +116,7 @@ class UserMovieController extends Controller
              GROUP BY t2.user_id
              HAVING same_movies_num >= 30
              ORDER BY COUNT(t2.tmdb_id) DESC
-             LIMIT 100';  
+             LIMIT 20';  
         
         // get the users with the set of movies most similar to mine (sorted by the number of same movies)
         // each object includes the user_id and the number of same movies
