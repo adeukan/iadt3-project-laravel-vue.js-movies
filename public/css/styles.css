@@ -1,5 +1,5 @@
 body{
-	background-color:#636e72;
+	background-color:#2d3436;
 	color:#dfe6e9;
     font-family: 'Open Sans', sans-serif;
 }
@@ -7,20 +7,21 @@ body{
 
 /* SLICK */
 .smSlickItem {
-    height:379px;
-    width:235px;
-    padding-left:6px;
-    padding-right:6px;
+    height:33vh;
+    width:21vw;
+    padding-left:1px;
+    padding-right:1px;
 }
 a.smSlickItem {
     text-decoration:none;
 }
 .slickImage {
-    height:300px;
-    width:225px;
+    max-height:100%;
+    max-width:100%;
     margin: auto;
 }
 .slickActions{
+    margin-top:-5px;
 	padding-left:5px;
 }
 
@@ -36,14 +37,14 @@ a.smSlickItem {
     padding:0px;
 }
 .navbar-brand {
-    color:#636e72;
+    color:#2d3436;
     margin:0px;
 }
 .navbar-brand:hover {
     color:#b2bec3;
 }
 .navStyle a{
-    color:#636e72;
+    color:#2d3436;
     padding:0px;
 }
 .nav > li > a:hover, .nav > li > a:focus{
@@ -135,7 +136,7 @@ nav li.router-link-exact-active {
     padding:1.5em;
     margin-right:5px;
     border-radius:5px;
-    background-color:rgba(223, 230, 233);
+    background-color:rgba(223, 230, 233,0.9);
 }
 .li_item_main {
     padding:1em;
@@ -266,7 +267,7 @@ h2 {
 .rating a,
 .rating label {
 	float:right;
-	color: #2d3436;
+	color: #b2bec3;
 	opacity:0.25;
 	text-decoration: none;
 	-webkit-transition: color .6s;
@@ -292,7 +293,7 @@ h2 {
     text-decoration: none;
 }
 .rating a {
-	float:none
+	float:center;
     text-decoration: none;
 }
 .modalRating{

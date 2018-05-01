@@ -314,7 +314,7 @@ export default {
 	  }
 	  if(this.avg_rating != 0){
 	  	this.avg_rating = this.avg_rating / this.rated_movies.length;
-	  	this.avg_rating = (Math.round(this.avg_rating * 100000)/100000);
+	  	this.avg_rating = (Math.round(this.avg_rating * 100)/100);
 	  }
 
 	},
