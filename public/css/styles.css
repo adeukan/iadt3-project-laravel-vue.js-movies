@@ -14,8 +14,8 @@ a.smSlickItem {
     text-decoration:none;
 }
 .slickImage {
-    height:85%;
-    max-width:85%;
+    max-height:85%;
+    width:85%;
     margin: auto;
 }
 .slickActions{
