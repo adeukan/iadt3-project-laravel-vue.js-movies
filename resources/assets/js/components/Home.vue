@@ -71,7 +71,7 @@
 </div><!-- modal -->
 
                 <!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1  -->
-                <div class="row" ref="popSlider">
+                <div class="row slide1" ref="popSlider">
                     <h2 class="carousel-header">Popular Movies</h2>
                     <div class="slider-parent">
                         <slick ref="popSlick" :options="slickOptions">
@@ -98,8 +98,10 @@
                     </div>
                 </div>
 
+                <hr>
+
                 <!-- LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2  -->
-                <div class="row" ref="secondSlider">
+                <div class="row slide2" ref="secondSlider">
                     <h2 v-if="recommended_display.length == 0" class="carousel-header">High Rated Movies</h2>
                     <h2 v-else class="carousel-header">Recommended Movies</h2>
                     <div class="slider-parent">

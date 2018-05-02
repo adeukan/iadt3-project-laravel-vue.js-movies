@@ -7,24 +7,41 @@ body{
 
 /* SLICK */
 .smSlickItem {
-    height:39vh;
-    width:23vw;
+    height:40vh;
+    overflow:visible;
 }
 a.smSlickItem {
     text-decoration:none;
 }
 .slickImage {
-    max-height:85%;
-    width:98%;
+    max-height:82%;
+    width:94%;
     margin: auto;
 }
 .slickActions{
     margin-top:-6px;
 }
 
+.carousel-header{
+    font-family:'Roboto', sans-serif;
+    background-color:#2d3436;
+    font-size:1.8em;
+    margin-top:0px;
+    padding:0.5em;
+    margin-bottom:0px;
+    color:#dfe6e9;
+}
+
+hr {
+    margin:0px;
+    margin-top:20px;
+    padding:0px;
+    color:#dfe6e9;
+}
 
 /* NAV */
 .navbar {
+    height:5vh;
 	background-color:#dfe6e9;
 	color:#2d3436;
     border-color:#636e72;
@@ -39,7 +56,7 @@ a.smSlickItem {
     font-size:1.8em;
 }
 .navbar-brand:hover {
-    color:#b2bec3;
+    color:#2d3436;
 }
 .navStyle a{
     color:#2d3436;
@@ -47,7 +64,7 @@ a.smSlickItem {
 }
 .nav > li > a:hover, .nav > li > a:focus{
     color:#dfe6e9;
-    background-color:#636e72;
+    background-color:#2d3436;
 }
 nav li:hover,
 nav li.router-link-active,
@@ -201,44 +218,23 @@ nav li.router-link-exact-active {
     color:#2d3436;
 }
 
-.carousel-header{
-    font-family:'Roboto', sans-serif;
-    display:inline-block;
-    background-color:#2d3436;
-    border-radius:5px;
-    font-size:1.8em;
-    padding:10px;
-    margin-top:10px;
-    margin-bottom:10px;
-    color:#dfe6e9;
-}
-
 /* WATCH LATER/HIDE BUTTONS */
 .btnHolder{
     text-align:center;
 }
 .btnHolder button {
-    min-width:3vw;
+    min-width:4vw;
+    margin-bottom:5px;
     background-color:#dfe6e9;
     border:1px solid #636e72;
-    border-radius:5px;
+    border-radius:2px;
     color:#2d3436;
-    padding-top:0px;
-    margin-top:0px;
 }
 .btnHolder button:hover {
+    border:1px solid #dfe6e9;
     background-color:#2d3436;
     color:#dfe6e9;
 }
-
-
-/* COLOURS */
-h2 {
-	color:#dfe6e9;
-    font-family: 'Roboto', sans-serif;
-    font-weight:400;
-}
-
 
 /*  
  * Rating styles
@@ -262,11 +258,6 @@ h2 {
 	color: #b2bec3;
 	opacity:0.25;
 	text-decoration: none;
-	-webkit-transition: color .6s;
-	-moz-transition: color .6s;
-	-o-transition: color .6s;
-	transition: color .6s;
-    text-decoration: none;
 }
 .rating label:hover ~ label,
 .rating input:focus ~ label,
@@ -287,9 +278,6 @@ h2 {
 .rating a {
 	float:center;
     text-decoration: none;
-}
-.modalRating{
-    font-size:1.8vw;
 }
 /*  
  * Rating styles

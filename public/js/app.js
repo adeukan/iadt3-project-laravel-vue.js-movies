@@ -50108,6 +50108,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -50587,6 +50589,8 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
+        _c("hr"),
+        _vm._v(" "),
         _c(
           "div",
           { staticClass: "row" },
@@ -50761,6 +50765,8 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_slick__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_slick___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_slick__);
+//
+//
 //
 //
 //
@@ -51414,7 +51420,7 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("div", { ref: "popSlider", staticClass: "row" }, [
+        _c("div", { ref: "popSlider", staticClass: "row slide1" }, [
           _c("h2", { staticClass: "carousel-header" }, [
             _vm._v("Popular Movies")
           ]),
@@ -51505,7 +51511,9 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c("div", { ref: "secondSlider", staticClass: "row" }, [
+        _c("hr"),
+        _vm._v(" "),
+        _c("div", { ref: "secondSlider", staticClass: "row slide2" }, [
           _vm.recommended_display.length == 0
             ? _c("h2", { staticClass: "carousel-header" }, [
                 _vm._v("High Rated Movies")

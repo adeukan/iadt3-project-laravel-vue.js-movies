@@ -100,6 +100,8 @@
 					</div>
 				</div>
 
+				<hr>
+
 				<!-- LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2 -->
 				<div class="row">
 					<h2 class="carousel-header">Hidden Movies</h2>
