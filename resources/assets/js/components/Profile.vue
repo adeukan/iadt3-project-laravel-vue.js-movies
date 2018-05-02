@@ -3,177 +3,178 @@
   <div class="row">
 	<div class="col-md-12">
 
-                <!-- MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL -->
-                <div class="modal fade" tabindex="-1" role="dialog" id="movie_info">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <!--
-                            <div class="modal-header">
-                            <h2 class="modal-title">{{movie.title}}
-                                <button type="button" class="modal-close" data-dismiss="modal">
-                                    Close
-                                </button>
-                            </h2>
-                            </div>
-                          -->
-                            <div class="col-md-10">
-                                <div class="list-group">
-                                    <div class="row">
-                                        <div class="list-group-item col-md-12">
-                                            <h2 class="modal-title">{{movie.title}} <span v-if="movie.runtime > 0" class="modal_runtime"> | {{movie.runtime}} minutes</span></h2>
-                                        </div>
-                                        <div class="list-group-item col-md-12 modal_tagline">
-                                            <p v-if="movie.tagline != 0" class="li_item modal_tagline">
-                                                {{movie.tagline}}
-                                            </p>
-                                            <!-- loop to display all production_companies -->
-                                            <p v-if="movie.production_companies != 0" class="li_item modal_tagline">
-                                              <span v-for="(company, index) in movie.production_companies">
-                                                {{company.name}}
-                                                <span v-if="movie.production_companies[index + 1] != null">|</span>
-                                              </span>
-                                            </p>
-                                            <a v-if="movie.homepage != null" class="li_item modal_tagline" v-bind:href="movie.homepage">
-                                                Website Link
-                                            </a>
-                                        </div>
-                                        <!-- countries -->
-                                        <div class="list-group-item col-md-12">
-                                            <p v-if="movie.release_date != null" class="li_item modal_info">
-                                                {{movie.release_date}}
-                                            </p>
-                                            <p v-if="movie.production_countries != 0" class="li_item modal_info">
-                                                <!-- loop to display all involved countries -->
-                                                <span v-for="(country, index) in movie.production_countries">
-											                            {{country.name}}
-											                          <span v-if="movie.production_countries[index + 1] != null">,</span>
-									                              </span>
-                                            </p>
-                                            <!-- loop to display all genres -->
-                                            <p v-if="movie.genres != null" class="li_item modal_info">
-                        											<span v-for="(genre, index) in movie.genres">
-                        												{{genre.name}}
-                        												<span v-if="movie.genres[index + 1] != null">|</span>
-                        											</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <!-- movie overview -->
-                                        <div class="list-group-item">
-                                            <p class="li_item li_item_main"> {{movie.overview}} </p>
-                                        </div>
-                                    </div>
+        <!-- MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL   MODAL -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="movie_info">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <!--
+                    <div class="modal-header">
+                    <h2 class="modal-title">{{movie.title}}
+                        <button type="button" class="modal-close" data-dismiss="modal">
+                            Close
+                        </button>
+                    </h2>
+                    </div>
+                  -->
+                    <div class="col-md-10">
+                        <div class="list-group">
+                            <div class="row">
+                                <div class="list-group-item col-md-12">
+                                    <h2 class="modal-title">{{movie.title}} <span v-if="movie.runtime > 0" class="modal_runtime"> | {{movie.runtime}} minutes</span></h2>
+                                </div>
+                                <div class="list-group-item col-md-12 modal_tagline">
+                                    <p v-if="movie.tagline != 0" class="li_item modal_tagline">
+                                        {{movie.tagline}}
+                                    </p>
+                                    <!-- loop to display all production_companies -->
+                                    <p v-if="movie.production_companies != 0" class="li_item modal_tagline">
+                                      <span v-for="(company, index) in movie.production_companies">
+                                        {{company.name}}
+                                        <span v-if="movie.production_companies[index + 1] != null">|</span>
+                                      </span>
+                                    </p>
+                                    <a v-if="movie.homepage != null" class="li_item modal_tagline" v-bind:href="movie.homepage">
+                                        Website Link
+                                    </a>
+                                </div>
+                                <!-- countries -->
+                                <div class="list-group-item col-md-12">
+                                    <p v-if="movie.release_date != null" class="li_item modal_info">
+                                        {{movie.release_date}}
+                                    </p>
+                                    <p v-if="movie.production_countries != 0" class="li_item modal_info">
+                                        <!-- loop to display all involved countries -->
+                                        <span v-for="(country, index) in movie.production_countries">
+									                            {{country.name}}
+									                          <span v-if="movie.production_countries[index + 1] != null">,</span>
+							                              </span>
+                                    </p>
+                                    <!-- loop to display all genres -->
+                                    <p v-if="movie.genres != null" class="li_item modal_info">
+                											<span v-for="(genre, index) in movie.genres">
+                												{{genre.name}}
+                												<span v-if="movie.genres[index + 1] != null">|</span>
+                											</span>
+                                    </p>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                              <button type="button" class="modal-close" data-dismiss="modal">
-                                  X
-                              </button>
+                            <div class="row">
+                                <!-- movie overview -->
+                                <div class="list-group-item">
+                                    <p class="li_item li_item_main"> {{movie.overview}} </p>
+                                </div>
                             </div>
-                        </div><!-- modal-content -->
-                    </div><!-- modal-dialog -->
-                </div><!-- modal -->
-    <div class="list-group">
-	    <div class="row list-group-item">
-	    	<div class="col-md-12">
-	    		<h1 class="li-item-profile li-item-profile-header">{{my_user[0].name}} </h1>
-	    	</div>
-	   	</div>
-	   	<div class="row list-group-item">
-	   		<div class="col-md-6">
-   				<div class="col-md-5 noRight">
-	   				<h2 class="li-item-profile li-item-profile-type">Email Address:</h2>
-	   			</div>
-	   			<div class="col-md-7 noLeft">
-	   				<h2 class="li-item-profile li-item-profile-data">{{my_user[0].email}}</h2>
-	   			</div>
-	   		</div>
-	   		<div class="col-md-6">
-	   			<div class="col-md-5">
-	   				<h2 class="li-item-profile li-item-profile-type">Movies Rated:</h2>
-	   			</div>
-	   			<div class="col-md-7">
-	   				<h2 class="li-item-profile li-item-profile-data">{{num_rated}}</h2>
-	   			</div>
-	   		</div>
-	   	</div>
-	   	<div class="row list-group-item">
-	   		<div class="col-md-6">
-	   			<div class="col-md-5">
-	   				<h2 class="li-item-profile li-item-profile-type">Date of Birth:</h2>
-	   			</div>
-	   			<div class="col-md-7">
-	   				<h2 class="li-item-profile li-item-profile-data">{{my_user[0].dob}}</h2>
-	   			</div>
-	   		</div>
-	   		<div class="col-md-6">
-	   			<div class="col-md-5">
-	   				<h2 class="li-item-profile li-item-profile-type">Movies Saved:</h2>
-	   			</div>
-	   			<div class="col-md-7">
-	   				<h2 class="li-item-profile li-item-profile-data">{{num_saved}}</h2>
-	   			</div>
-	   		</div>
-	   	</div>
-	   	<div class="row list-group-item">
-	   		<div class="col-md-6">
-	   			<div class="col-md-5">
-	   				<h2 class="li-item-profile li-item-profile-type">Average Rating:</h2>
-	   			</div>
-	   			<div class="col-md-7">
-	   				<h2 class="li-item-profile li-item-profile-data">{{avg_rating}}</h2>
-	   			</div>
-	   		</div>
-	   		<div class="col-md-6">
-	   			<div class="col-md-5">
-	   				<h2 class="li-item-profile li-item-profile-type">Movies hidden:</h2>
-	   			</div>
-	   			<div class="col-md-7">
-	   				<h2 class="li-item-profile li-item-profile-data">{{num_hidden}}</h2>
-	   			</div>
-	   		</div>
-	   	</div>
-	</div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                      <button type="button" class="modal-close" data-dismiss="modal">
+                          X
+                      </button>
+                    </div>
+                </div><!-- modal-content -->
+            </div><!-- modal-dialog -->
+        </div><!-- modal -->
 
-	<!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1 -->
-	<div class="row">
-		<h2 class="carousel-header">Movies You Have Rated</h2>
-		<slick ref="slick" :options="slickOptions">
+        <!-- USERS INFO -->
+	    <div class="list-group">
+		    <div class="row list-group-item">
+		    	<div class="col-md-12">
+		    		<h1 class="li-item-profile li-item-profile-header">{{my_user[0].name}} </h1>
+		    	</div>
+		   	</div>
+		   	<div class="row list-group-item">
+		   		<div class="col-md-6">
+	   				<div class="col-md-5 noRight">
+		   				<h2 class="li-item-profile li-item-profile-type">Email Address:</h2>
+		   			</div>
+		   			<div class="col-md-7 noLeft">
+		   				<h2 class="li-item-profile li-item-profile-data">{{my_user[0].email}}</h2>
+		   			</div>
+		   		</div>
+		   		<div class="col-md-6">
+		   			<div class="col-md-5">
+		   				<h2 class="li-item-profile li-item-profile-type">Movies Rated:</h2>
+		   			</div>
+		   			<div class="col-md-7">
+		   				<h2 class="li-item-profile li-item-profile-data">{{num_rated}}</h2>
+		   			</div>
+		   		</div>
+		   	</div>
+		   	<div class="row list-group-item">
+		   		<div class="col-md-6">
+		   			<div class="col-md-5">
+		   				<h2 class="li-item-profile li-item-profile-type">Date of Birth:</h2>
+		   			</div>
+		   			<div class="col-md-7">
+		   				<h2 class="li-item-profile li-item-profile-data">{{my_user[0].dob}}</h2>
+		   			</div>
+		   		</div>
+		   		<div class="col-md-6">
+		   			<div class="col-md-5">
+		   				<h2 class="li-item-profile li-item-profile-type">Movies Saved:</h2>
+		   			</div>
+		   			<div class="col-md-7">
+		   				<h2 class="li-item-profile li-item-profile-data">{{num_saved}}</h2>
+		   			</div>
+		   		</div>
+		   	</div>
+		   	<div class="row list-group-item">
+		   		<div class="col-md-6">
+		   			<div class="col-md-5">
+		   				<h2 class="li-item-profile li-item-profile-type">Average Rating:</h2>
+		   			</div>
+		   			<div class="col-md-7">
+		   				<h2 class="li-item-profile li-item-profile-data">{{avg_rating}}</h2>
+		   			</div>
+		   		</div>
+		   		<div class="col-md-6">
+		   			<div class="col-md-5">
+		   				<h2 class="li-item-profile li-item-profile-type">Movies hidden:</h2>
+		   			</div>
+		   			<div class="col-md-7">
+		   				<h2 class="li-item-profile li-item-profile-data">{{num_hidden}}</h2>
+		   			</div>
+		   		</div>
+		   	</div>
+		</div><!-- USERS INFO CLOSED -->
 
-			<a  v-if="rated_movies_display.length > 0"
-			  v-for="(movie,i) in rated_movies_display" href="#" class="smSlickItem" >
+		<hr>
 
-			<img
-				v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id,movie.backdrop_path)">
+		<!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1 -->
+		<div class="row">
+			<h2 class="carousel-header">Movies You Have Rated</h2>
+			<slick ref="slick" :options="slickOptions">
 
-			<!-- the drop-down list with for choosing rating -->
-			<!-- the rating of each film is linked to the corresponding array member -->
-			<div class="slickActions">
+				<a  v-if="rated_movies_display.length > 0"
+				  v-for="(movie,i) in rated_movies_display" href="#" class="smSlickItem" >
 
-				<div class="row">
-					<div class="rating">
-						<!-- rating stars -->
-						<a v-for="i in 5" @click="rateMovie(movie.id, i)">★</a>
+				<img
+					v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id,movie.backdrop_path)">
+
+				<!-- the drop-down list with for choosing rating -->
+				<!-- the rating of each film is linked to the corresponding array member -->
+				<div class="slickActions">
+
+					<div class="row">
+						<p class="currentRating"> Current Rating is <span>{{getRating(movie.id)}}</span> </p>
+						<div class="rating">
+							<!-- rating stars -->
+							<a v-for="i in 5" @click="rateMovie(movie.id, i)">★</a>
+						</div>
 					</div>
-					<div class="ratingRated">
-						<!-- get what the movie has been rated -->
-						<span v-for="i in getRating(movie.id)">★</span>
+					<div class="row btnHolder">
+						<button @click="laterMovie(movie.id)">Save</button>
+						<button @click="hideMovie(movie.id)">Hide</button>
 					</div>
 				</div>
-				<div class="row btnHolder">
-					<button @click="laterMovie(movie.id)">Save</button>
-					<button @click="hideMovie(movie.id)">Hide</button>
-				</div>
-			</div>
 
-		  </a>
+			  </a>
 
-		</slick>
+			</slick>
+		  </div>
+		  </div> 
+		</div>
 	  </div>
-	  </div> 
-	</div>
-  </div>
 
 
 </template>

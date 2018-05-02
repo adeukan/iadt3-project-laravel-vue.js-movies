@@ -46003,6 +46003,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -49506,9 +49507,9 @@ var render = function() {
                                   { staticClass: "li_item modal_tagline" },
                                   [
                                     _vm._v(
-                                      "\r\n                                                " +
+                                      "\r\n                                        " +
                                         _vm._s(_vm.movie.tagline) +
-                                        "\r\n                                            "
+                                        "\r\n                                    "
                                     )
                                   ]
                                 )
@@ -49523,9 +49524,9 @@ var render = function() {
                                     function(company, index) {
                                       return _c("span", [
                                         _vm._v(
-                                          "\r\n                                                " +
+                                          "\r\n                                        " +
                                             _vm._s(company.name) +
-                                            "\r\n                                                "
+                                            "\r\n                                        "
                                         ),
                                         _vm.movie.production_companies[
                                           index + 1
@@ -49547,7 +49548,7 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\r\n                                                Website Link\r\n                                            "
+                                      "\r\n                                        Website Link\r\n                                    "
                                     )
                                   ]
                                 )
@@ -49562,9 +49563,9 @@ var render = function() {
                             _vm.movie.release_date != null
                               ? _c("p", { staticClass: "li_item modal_info" }, [
                                   _vm._v(
-                                    "\r\n                                                " +
+                                    "\r\n                                        " +
                                       _vm._s(_vm.movie.release_date) +
-                                      "\r\n                                            "
+                                      "\r\n                                    "
                                   )
                                 ])
                               : _vm._e(),
@@ -49578,9 +49579,9 @@ var render = function() {
                                     function(country, index) {
                                       return _c("span", [
                                         _vm._v(
-                                          "\r\n\t\t\t\t\t\t\t\t\t\t\t                            " +
+                                          "\r\n\t\t\t\t\t\t\t\t\t                            " +
                                             _vm._s(country.name) +
-                                            "\r\n\t\t\t\t\t\t\t\t\t\t\t                          "
+                                            "\r\n\t\t\t\t\t\t\t\t\t                          "
                                         ),
                                         _vm.movie.production_countries[
                                           index + 1
@@ -49603,9 +49604,9 @@ var render = function() {
                                   ) {
                                     return _c("span", [
                                       _vm._v(
-                                        "\r\n                        \t\t\t\t\t\t\t\t\t\t\t\t" +
+                                        "\r\n                \t\t\t\t\t\t\t\t\t\t\t\t" +
                                           _vm._s(genre.name) +
-                                          "\r\n                        \t\t\t\t\t\t\t\t\t\t\t\t"
+                                          "\r\n                \t\t\t\t\t\t\t\t\t\t\t\t"
                                       ),
                                       _vm.movie.genres[index + 1] != null
                                         ? _c("span", [_vm._v("|")])
@@ -49725,6 +49726,8 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
+        _c("hr"),
+        _vm._v(" "),
         _c(
           "div",
           { staticClass: "row" },
@@ -49756,6 +49759,13 @@ var render = function() {
                         _vm._v(" "),
                         _c("div", { staticClass: "slickActions" }, [
                           _c("div", { staticClass: "row" }, [
+                            _c("p", { staticClass: "currentRating" }, [
+                              _vm._v(" Current Rating is "),
+                              _c("span", [
+                                _vm._v(_vm._s(_vm.getRating(movie.id)))
+                              ])
+                            ]),
+                            _vm._v(" "),
                             _c(
                               "div",
                               { staticClass: "rating" },
@@ -49771,14 +49781,6 @@ var render = function() {
                                   },
                                   [_vm._v("★")]
                                 )
-                              })
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "ratingRated" },
-                              _vm._l(_vm.getRating(movie.id), function(i) {
-                                return _c("span", [_vm._v("★")])
                               })
                             )
                           ]),
@@ -49833,11 +49835,7 @@ var staticRenderFns = [
           staticClass: "modal-close",
           attrs: { type: "button", "data-dismiss": "modal" }
         },
-        [
-          _vm._v(
-            "\r\n                                  X\r\n                              "
-          )
-        ]
+        [_vm._v("\r\n                          X\r\n                      ")]
       )
     ])
   },

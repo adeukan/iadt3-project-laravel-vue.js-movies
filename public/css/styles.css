@@ -224,7 +224,6 @@ nav li.router-link-exact-active {
 }
 .btnHolder button {
     min-width:4vw;
-    margin-bottom:5px;
     background-color:#dfe6e9;
     border:1px solid #636e72;
     border-radius:2px;
@@ -279,19 +278,13 @@ nav li.router-link-exact-active {
 	float:center;
     text-decoration: none;
 }
-/*  
- * Rating styles
- */
-.ratingRated {
-    position:relative;
-    margin:0px;
+.currentRating {
+    font-family: 'Open Sans', sans-serif;
+    font-size:1.2em;
+    color:#dfe6e9;
+    text-align:center;
     padding:0px;
-    color: #dfe6e9;
-    bottom: 50px;
-    margin-bottom:-50px;
-    width: 75%;
-    padding-left:23%;
-    font-size: 2.2em;
-    overflow:hidden;
-    text-decoration: none;
+    margin:0px;
+    margin-bottom:-15px;
+    margin-top:10px;
 }
