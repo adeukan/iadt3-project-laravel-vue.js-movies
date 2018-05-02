@@ -141,11 +141,11 @@
 		<hr>
 
 		<!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1 -->
-		<div class="row">
+		<div class="row slide1" ref="ratedMovies">
 			<h2 class="carousel-header">Movies You Have Rated</h2>
-			<slick ref="slick" :options="slickOptions">
+			<slick ref="ratedMovies" :options="slickOptions">
 
-				<a  v-if="rated_movies_display.length > 0"
+				<a  id="ratedMovies" v-if="rated_movies_display.length > 0"
 				  v-for="(movie,i) in rated_movies_display" href="#" class="smSlickItem" >
 
 				<img
@@ -156,10 +156,14 @@
 				<div class="slickActions">
 
 					<div class="row">
-						<p class="currentRating"> Current Rating is <span>{{getRating(movie.id)}}</span> </p>
 						<div class="rating">
-							<!-- rating stars -->
-							<a v-for="i in 5" @click="rateMovie(movie.id, i)">★</a>
+							<star-rating 	:rating="getRating(movie.id)"
+											@rating-selected="setRating($event, id)"
+											inactive-color="#636e72"
+											active-color="#dfe6e9"
+											:star-size="25"
+											:show-rating="false">
+							</star-rating>
 						</div>
 					</div>
 					<div class="row btnHolder">
@@ -169,6 +173,8 @@
 				</div>
 
 			  </a>
+
+			  <h2 v-else class="carousel-header">You Have Not Rated Any Movies Yet. </h2>
 
 			</slick>
 		  </div>
@@ -181,13 +187,17 @@
 
 <script>
 import Slick from "vue-slick";
+import StarRating from "vue-star-rating";
 
 export default {
   components: {
-	Slick
+	Slick,
+	StarRating
   },
   data() {
 		return {
+			rating: 0,
+			id: 0,
 		  	slickOptions: {
 				dots: false,
 				slidesToShow: 5,
@@ -253,12 +263,26 @@ export default {
 			this.$refs.slick.create();
 			this.$refs.slick.goTo(currIndex, true);
 			});
-		}
+		},
+		rating: function(newRating) {
+        	axios.post("/rate", {
+	            tmdb_id: this.id,
+	            user_rating: this.rating
+ 			})
+ 		}
+		
   },
 
   methods: {
 
-  // ------------------------------------------------------------------------------------------
+  	// ------------------------------------------------------------------------------------------
+  	setRating: function(rating, id){
+  		this.rating = rating;
+  		this.id = id;
+  		console.log(this.rating, this.id);
+   	},
+
+  	// ------------------------------------------------------------------------------------------
 	getRatedMovies() {
 	  // get all "my" rated movies
 	  axios.get("/get_rated").then(response => {
@@ -401,24 +425,6 @@ export default {
       axios.post("/watchlater", {
         tmdb_id: tmdb_id
       });
-    },
-
-    // ------------------------------------------------------------------------------------------
-    rateMovie(tmdb_id, rating) {
-      // mirror the rating value (1 => 5, 2 => 4, ...)
-      rating = 6 - rating;
-
-      if (this.ratings[tmdb_id] !== rating) {
-        axios
-          .post("/rate", {
-            tmdb_id: tmdb_id,
-            user_rating: rating
-          })
-          // reflect changes in the local array
-          .then(response => {
-            this.ratings[tmdb_id] = rating;
-          });
-      }
     },
 
   }

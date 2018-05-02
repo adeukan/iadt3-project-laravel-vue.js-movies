@@ -235,56 +235,9 @@ nav li.router-link-exact-active {
     color:#dfe6e9;
 }
 
-/*  
- * Rating styles
- */
-.rating {
-	width: 75%;
-    text-align:center;
-	font-size: 2.2em;
-	overflow:hidden;
-    text-decoration: none;
-}
-.rating input {
-      float: right;
-      opacity: 0;
-      position: absolute;
-      text-decoration: none;
-}
-.rating a,
-.rating label {
-	float:right;
-	color: #b2bec3;
-	opacity:0.25;
-	text-decoration: none;
-}
-.rating label:hover ~ label,
-.rating input:focus ~ label,
-.rating label:hover,
-.rating a:hover,
-.rating a:hover ~ a,
-.rating a:focus,
-.rating a:focus ~ a		{
-	opacity:1;
-	color: #dfe6e9;
-	cursor: pointer;
-    text-decoration: none;
-}
-.rating {
-	direction: ltr;
-    text-decoration: none;
-}
-.rating a {
-	float:center;
-    text-decoration: none;
-}
-.currentRating {
-    font-family: 'Open Sans', sans-serif;
-    font-size:1.2em;
-    color:#dfe6e9;
-    text-align:center;
-    padding:0px;
-    margin:0px;
-    margin-bottom:-15px;
+.vue-star-rating{
     margin-top:10px;
+    margin-bottom:5px;
+    margin-left:auto;
+    margin-right:auto;
 }
