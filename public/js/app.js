@@ -50987,6 +50987,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   data: function data() {
     return {
+      pop: "pop",
+      sec: "sec",
       rating: 0,
       id: 0,
       slickOptions: {
@@ -51031,6 +51033,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   // functions triggered when Vue object is mounted
   mounted: function mounted() {
     // get the list of "my" movies and then start next method
+    this.getPopularMovies();
     this.getMyMovies();
   },
 
@@ -51274,48 +51277,61 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     // ------------------------------------------------------------------------------------------
-    hideMovie: function hideMovie(tmdb_id) {
-      var _this7 = this;
+    hideMovie: function hideMovie(array, id, index) {
 
-      for (var i = 0; i < this.popular_movies.length; i++) {
+      if (array === 'pop') {
+        array = this.popular_movies;
+      } else if (array === 'sec') {
+        array = this.second_line_movies;
+      }
 
-        if (tmdb_id === this.popular_movies[i].id) {
-          var styleChange;
-          var spliceThis;
-          var popArray;
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
 
-          (function () {
-            var popSplice = function popSplice(popArray, spliceThis) {
-              popArray.splice(spliceThis, 1);
-            };
+      var spliceThis = index;
+      var spliceArray = array;
 
-            styleChange = document.getElementById(i);
+      console.log(spliceThis, spliceArray);
 
-            styleChange.classList.add("fadeTransition");
-
-            spliceThis = i;
-            popArray = _this7.popular_movies;
-
-
-            console.log(spliceThis, popArray);
-
-            setTimeout(function () {
-              popSplice(popArray, spliceThis);
-            }, 2000);
-          })();
-        }
+      setTimeout(function () {
+        popSplice(spliceArray, spliceThis);
+      }, 2000);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
       }
 
       axios.post("/hide", {
-        tmdb_id: tmdb_id
+        tmdb_id: id
       });
     },
 
 
     // ------------------------------------------------------------------------------------------
-    laterMovie: function laterMovie(tmdb_id) {
+    laterMovie: function laterMovie(array, id, index) {
+
+      if (array === 'pop') {
+        array = this.popular_movies;
+      } else if (array === 'sec') {
+        array = this.second_line_movies;
+      }
+
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
+
+      var spliceThis = index;
+      var spliceArray = array;
+
+      console.log(spliceThis, spliceArray);
+
+      setTimeout(function () {
+        popSplice(spliceArray, spliceThis);
+      }, 2000);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
+      }
+
       axios.post("/watchlater", {
-        tmdb_id: tmdb_id
+        tmdb_id: id
       });
     }
   }
@@ -51527,7 +51543,7 @@ var render = function() {
                         {
                           key: movie.id,
                           staticClass: "smSlickItem",
-                          attrs: { id: "popSlick", id: index, href: "#" }
+                          attrs: { id: movie.id, href: "#" }
                         },
                         [
                           _c("img", {
@@ -51572,7 +51588,7 @@ var render = function() {
                                 {
                                   on: {
                                     click: function($event) {
-                                      _vm.laterMovie(movie.id)
+                                      _vm.laterMovie("pop", movie.id, index)
                                     }
                                   }
                                 },
@@ -51584,7 +51600,7 @@ var render = function() {
                                 {
                                   on: {
                                     click: function($event) {
-                                      _vm.hideMovie(movie.id)
+                                      _vm.hideMovie("pop", movie.id, index)
                                     }
                                   }
                                 },
@@ -51625,8 +51641,9 @@ var render = function() {
                     ? _c(
                         "a",
                         {
+                          key: movie.id,
                           staticClass: "smSlickItem",
-                          attrs: { href: "#", id: "movie.id" }
+                          attrs: { href: "#", id: movie.id }
                         },
                         [
                           _c("img", {
@@ -51671,7 +51688,7 @@ var render = function() {
                                 {
                                   on: {
                                     click: function($event) {
-                                      _vm.laterMovie(movie.id)
+                                      _vm.laterMovie("sec", movie.id, index)
                                     }
                                   }
                                 },
@@ -51683,7 +51700,7 @@ var render = function() {
                                 {
                                   on: {
                                     click: function($event) {
-                                      _vm.hideMovie(movie.id)
+                                      _vm.hideMovie("sec", movie.id, index)
                                     }
                                   }
                                 },

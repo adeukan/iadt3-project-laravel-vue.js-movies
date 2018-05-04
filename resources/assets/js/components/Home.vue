@@ -75,7 +75,7 @@
                     <h2 class="carousel-header">Popular Movies</h2>
                     <div class="slider-parent">
                         <slick ref="popSlick" :options="slickOptions">
-                          <a id="popSlick" v-if="index < 30" v-for="(movie,index) in popular_movies" v-bind:id="index" href="#" :key="movie.id" class="smSlickItem">
+                          <a v-if="index < 30" v-for="(movie,index) in popular_movies" v-bind:id="movie.id" href="#" :key="movie.id" class="smSlickItem">
 
                               <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
                                    @click="showMovie(movie.id,movie.backdrop_path)">
@@ -94,8 +94,8 @@
                                   </div>
                                   <div class="row btnHolder">
 
-                                      <button @click="laterMovie(movie.id)">Save</button>
-                                      <button @click="hideMovie(movie.id)">Hide</button>
+                                      <button @click="laterMovie('pop', movie.id, index)">Save</button>
+                                      <button @click="hideMovie('pop', movie.id, index)">Hide</button>
                                   </div>
                               </div>
                           </a>
@@ -113,7 +113,7 @@
                         <slick ref="secondSlick" :options="slickOptions">
 
                             <a v-if="index < 30"
-                           v-for="(movie,index) in second_line_movies" href="#" id="movie.id" class="smSlickItem">
+                           v-for="(movie,index) in second_line_movies" href="#" v-bind:id="movie.id" :key="movie.id" class="smSlickItem">
 
                             <img
                                     v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
@@ -135,8 +135,8 @@
                                 </div>
                                 <div class="row btnHolder">
 
-                                    <button @click="laterMovie(movie.id)">Save</button>
-                                    <button @click="hideMovie(movie.id)">Hide</button>
+                                    <button @click="laterMovie('sec', movie.id, index)">Save</button>
+                                    <button @click="hideMovie('sec', movie.id, index)">Hide</button>
                                 </div>
                             </div>
                         </a>
@@ -161,6 +161,8 @@ export default {
   },
   data() {
     return {
+      pop: "pop",
+      sec: "sec",
       rating: 0,
       id: 0,
       slickOptions: {
@@ -207,6 +209,7 @@ export default {
   // functions triggered when Vue object is mounted
   mounted() {
     // get the list of "my" movies and then start next method
+    this.getPopularMovies();
     this.getMyMovies();
   },
 
@@ -436,39 +439,63 @@ export default {
 
 
     // ------------------------------------------------------------------------------------------
-    hideMovie(tmdb_id) {
-      for(var i = 0; i < this.popular_movies.length; i++) {
+    hideMovie(array, id, index) {
 
-        if(tmdb_id === this.popular_movies[i].id) {
-          var styleChange = document.getElementById(i);
-          styleChange.classList.add("fadeTransition");
+      if(array === 'pop') {
+        array = this.popular_movies;
+      } else if (array === 'sec') {
+        array = this.second_line_movies;
+      }
 
-          var spliceThis = i;
-          var popArray = this.popular_movies;
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
 
-          console.log(spliceThis,popArray);
+      var spliceThis = index;
+      var spliceArray = array;
 
-          setTimeout(function() {
-            popSplice(popArray, spliceThis)
-          }, 2000);
-          function popSplice(popArray, spliceThis) {
-            popArray.splice(spliceThis, 1);
-          }
+      console.log(spliceThis,spliceArray);
 
-        }
+      setTimeout(function() {
+        popSplice(spliceArray, spliceThis)
+      }, 2000);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
       }
       
       axios.post("/hide", {
-        tmdb_id: tmdb_id
+        tmdb_id: id
       });
       
     },
 
     // ------------------------------------------------------------------------------------------
-    laterMovie(tmdb_id) {
+    laterMovie(array, id, index) {
+
+      if(array === 'pop') {
+        array = this.popular_movies;
+      } else if (array === 'sec') {
+        array = this.second_line_movies;
+      }
+
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
+
+      var spliceThis = index;
+      var spliceArray = array;
+
+      console.log(spliceThis,spliceArray);
+
+      setTimeout(function() {
+        popSplice(spliceArray, spliceThis)
+      }, 2000);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
+      }
+      
       axios.post("/watchlater", {
-        tmdb_id: tmdb_id
+        tmdb_id: id
       });
+      
     },
 
   }
