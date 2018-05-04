@@ -142,7 +142,8 @@
 
 		<!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1 -->
 		<div class="row slide1" ref="ratedMovies">
-			<h2 class="carousel-header">Movies You Have Rated</h2>
+			<h2 v-if="rated_movies_display.length > 0" class="carousel-header">Movies You Have Rated</h2>
+			<h2 v-else class="carousel-header" style="margin:150px 0px 0px 0px; text-align:center;">You Have Not Rated Any Movies Yet. </h2>
 			<slick ref="ratedMovies" :options="slickOptions">
 
 				<a  id="ratedMovies" v-if="rated_movies_display.length > 0"
@@ -174,13 +175,11 @@
 
 			  </a>
 
-			  <h2 v-else class="carousel-header">You Have Not Rated Any Movies Yet. </h2>
-
 			</slick>
-		  </div>
-		  </div> 
 		</div>
-	  </div>
+  	</div> 
+  </div>
+</div>
 
 
 </template>

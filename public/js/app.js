@@ -46011,7 +46011,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -49744,9 +49743,21 @@ var render = function() {
           "div",
           { ref: "ratedMovies", staticClass: "row slide1" },
           [
-            _c("h2", { staticClass: "carousel-header" }, [
-              _vm._v("Movies You Have Rated")
-            ]),
+            _vm.rated_movies_display.length > 0
+              ? _c("h2", { staticClass: "carousel-header" }, [
+                  _vm._v("Movies You Have Rated")
+                ])
+              : _c(
+                  "h2",
+                  {
+                    staticClass: "carousel-header",
+                    staticStyle: {
+                      margin: "150px 0px 0px 0px",
+                      "text-align": "center"
+                    }
+                  },
+                  [_vm._v("You Have Not Rated Any Movies Yet. ")]
+                ),
             _vm._v(" "),
             _c(
               "slick",
@@ -49825,9 +49836,7 @@ var render = function() {
                         ])
                       ]
                     )
-                  : _c("h2", { staticClass: "carousel-header" }, [
-                      _vm._v("You Have Not Rated Any Movies Yet. ")
-                    ])
+                  : _vm._e()
               })
             )
           ],
@@ -49981,6 +49990,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_slick___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_slick__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_star_rating__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_star_rating___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_star_rating__);
+//
+//
 //
 //
 //
@@ -50521,9 +50532,21 @@ var render = function() {
         ),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
-          _c("h2", { staticClass: "carousel-header" }, [
-            _vm._v("Saved Movies")
-          ]),
+          _vm.later_movies_display.length > 0
+            ? _c("h2", { staticClass: "carousel-header" }, [
+                _vm._v("Saved Movies")
+              ])
+            : _c(
+                "h2",
+                {
+                  staticClass: "carousel-header",
+                  staticStyle: {
+                    margin: "150px 0px 150px 0px",
+                    "text-align": "center"
+                  }
+                },
+                [_vm._v("You Have Not Saved Any Videos Yet. ")]
+              ),
           _vm._v(" "),
           _c(
             "div",
@@ -50616,9 +50639,21 @@ var render = function() {
           "div",
           { staticClass: "row" },
           [
-            _c("h2", { staticClass: "carousel-header" }, [
-              _vm._v("Hidden Movies")
-            ]),
+            _vm.hidden_movies_display.length > 0
+              ? _c("h2", { staticClass: "carousel-header" }, [
+                  _vm._v("Hidden Movies")
+                ])
+              : _c(
+                  "h2",
+                  {
+                    staticClass: "carousel-header",
+                    staticStyle: {
+                      margin: "150px 0px 150px 0px",
+                      "text-align": "center"
+                    }
+                  },
+                  [_vm._v("You Have Not Hidden Any Videos Yet. ")]
+                ),
             _vm._v(" "),
             _c(
               "slick",

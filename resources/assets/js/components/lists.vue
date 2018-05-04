@@ -68,7 +68,8 @@
 
 				<!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1 -->
 				<div class="row">
-					<h2 class="carousel-header">Saved Movies</h2>
+					<h2 v-if="later_movies_display.length > 0" class="carousel-header">Saved Movies</h2>
+					<h2 v-else class="carousel-header" style="margin:150px 0px 150px 0px; text-align:center;">You Have Not Saved Any Videos Yet. </h2>
 					<div class="slider-parent">
 						<slick ref="saveSlick" :options="slickOptions">
 
@@ -109,7 +110,8 @@
 
 				<!-- LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2 -->
 				<div class="row">
-					<h2 class="carousel-header">Hidden Movies</h2>
+					<h2 v-if="hidden_movies_display.length > 0" class="carousel-header">Hidden Movies</h2>
+					<h2 v-else class="carousel-header" style="margin:150px 0px 150px 0px; text-align:center;">You Have Not Hidden Any Videos Yet. </h2>
 					<slick ref="hideSlick" :options="slickOptions">
 
 						<a  v-if="hidden_movies_display.length > 0"
