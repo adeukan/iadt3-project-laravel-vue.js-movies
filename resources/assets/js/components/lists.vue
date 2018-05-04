@@ -83,8 +83,13 @@
 
 								<div class="row">
 									<div class="rating">
-										<!-- rating stars -->
-										<a v-for="i in 5" @click="rateMovie(movie.id, i)">★</a>
+                                        <star-rating
+                                                @rating-selected="setRating($event, movie.id)"
+                                                inactive-color="#636e72"
+                                                active-color="#dfe6e9"
+                                                :star-size="25"
+                                                :show-rating="false">
+                                        </star-rating>
 									</div>
 								</div>
 								<div class="row btnHolder">
@@ -118,10 +123,14 @@
 						<div class="slickActions">
 
 							<div class="row">
-								<div class="rating">
-									<!-- rating stars -->
-									<a v-for="i in 5" @click="rateMovie(movie.id, i)">★</a>
-								</div>
+                                <star-rating
+                                        @rating-selected="setRating($event, movie.id)"
+                                        inactive-color="#636e72"
+                                        active-color="#dfe6e9"
+                                        :star-size="25"
+                                        :show-rating="false">
+                                </star-rating>
+							</div>
 							</div>
 							<div class="row btnHolder">
 
@@ -143,13 +152,17 @@
 
 <script>
 import Slick from "vue-slick";
+import StarRating from "vue-star-rating";
 
 export default {
   components: {
-	Slick
+	Slick,
+	StarRating
   },
   data() {
 	return {
+		rating: 0,
+      id: 0,
 	  slickOptions: {
 		dots: false,
 		slidesToShow: 5,
@@ -215,18 +228,32 @@ export default {
 		this.$refs.hideSlick.create();
 		this.$refs.hideSlick.goTo(currIndex, true);
 	  });
-	}
+	},
+
+	rating: function(newRating) {
+        axios.post("/rate", {
+            tmdb_id: this.id,
+            user_rating: this.rating
+      })
+    }
   },
 
   // ------------------------------------------------------------------------------------------
   mounted() {
 	// get most popular and highest rated movies to display them in the first line
-	this.getWatchLaterMovies(), this.getHiddenMovies();
+	this.getWatchLaterMovies(),
+	this.getHiddenMovies()
   },
 
   methods: {
 
-  // ------------------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------------------
+	setRating: function(rating, id){
+		this.rating = rating;
+		this.id = id;
+	},
+
+  	// ------------------------------------------------------------------------------------------
 	getWatchLaterMovies() {
 	  // get all movies from DB junction table for current user
 	  axios.get("/get_watchlater").then(response => {

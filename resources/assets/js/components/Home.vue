@@ -83,8 +83,13 @@
                               <div class="slickActions">
                                   <div class="row">
                                       <div class="rating">
-                                          <!-- rating stars -->
-                                          <a v-for="i in 5" @click="rateMovie(movie.id, i)">★</a>
+                                        <star-rating
+                                                @rating-selected="setRating($event, movie.id)"
+                                                inactive-color="#636e72"
+                                                active-color="#dfe6e9"
+                                                :star-size="25"
+                                                :show-rating="false">
+                                        </star-rating>
                                       </div>
                                   </div>
                                   <div class="row btnHolder">
@@ -119,8 +124,13 @@
 
                                 <div class="row">
                                     <div class="rating">
-                                        <!-- rating stars -->
-                                        <a v-for="i in 5" @click="rateMovie(movie.id, i)">★</a>
+                                      <star-rating
+                                              @rating-selected="setRating($event, movie.id)"
+                                              inactive-color="#636e72"
+                                              active-color="#dfe6e9"
+                                              :star-size="25"
+                                              :show-rating="false">
+                                      </star-rating>
                                     </div>
                                 </div>
                                 <div class="row btnHolder">
@@ -142,13 +152,17 @@
 
 <script>
 import Slick from "vue-slick";
+import StarRating from "vue-star-rating";
 
 export default {
   components: {
-    Slick
+    Slick,
+    StarRating
   },
   data() {
     return {
+      rating: 0,
+      id: 0,
       slickOptions: {
         slidesToShow: 5,
         slidesToScroll: 4,
@@ -217,10 +231,22 @@ export default {
         this.$refs.popSlick.create();
         this.$refs.popSlick.goTo(currIndex, true);
       });
+    },
+    rating: function(newRating) {
+          axios.post("/rate", {
+              tmdb_id: this.id,
+              user_rating: this.rating
+      })
     }
   },
 
   methods: {
+
+    // ------------------------------------------------------------------------------------------
+    setRating: function(rating, id){
+      this.rating = rating;
+      this.id = id;
+    },
 
 
     // ------------------------------------------------------------------------------------------
@@ -313,8 +339,6 @@ export default {
         // if there are no any previously saved recommendations
         if (response.data.recommended === "nothing") {
 
-console.log(response.data.rated);
-
           // if "I" have rated more than 50 movies - try to get new recommendations!
           if (response.data.rated > 50) {
             this.getRecommendations();
@@ -373,26 +397,6 @@ console.log(response.data.rated);
           // set the second line to show recommended movies 
           .then((this.second_line_movies = this.recommended_display));
       });
-    },
-
-
-
-    // ------------------------------------------------------------------------------------------
-    rateMovie(tmdb_id, rating) {
-      // mirror the rating value (1 => 5, 2 => 4, ...)
-      rating = 6 - rating;
-
-      if (this.ratings[tmdb_id] !== rating) {
-        axios
-          .post("/rate", {
-            tmdb_id: tmdb_id,
-            user_rating: rating
-          })
-          // reflect changes in the local array
-          .then(response => {
-            this.ratings[tmdb_id] = rating;
-          });
-      }
     },
 
     // show selected movie info in modal window ------------------------------------------------

@@ -158,7 +158,7 @@
 					<div class="row">
 						<div class="rating">
 							<star-rating 	:rating="getRating(movie.id)"
-											@rating-selected="setRating($event, id)"
+											@rating-selected="setRating($event, movie.id)"
 											inactive-color="#636e72"
 											active-color="#dfe6e9"
 											:star-size="25"
@@ -279,7 +279,6 @@ export default {
   	setRating: function(rating, id){
   		this.rating = rating;
   		this.id = id;
-  		console.log(this.rating, this.id);
    	},
 
   	// ------------------------------------------------------------------------------------------
