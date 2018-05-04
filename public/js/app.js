@@ -51275,15 +51275,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // ------------------------------------------------------------------------------------------
     hideMovie: function hideMovie(tmdb_id) {
+      var spliceThis = 5;
+
+      for (var i = 0; i < this.popular_movies.length; i++) {
+
+        if (tmdb_id === this.popular_movies[i].id) {
+          var styleChange = document.getElementById(i);
+          styleChange.classList.add("fadeTransition");
+
+          spliceThis = i;
+
+          setTimeout(this.spliceFun(this.popular_movies, spliceThis), 4000);
+        }
+      }
+      /*
       axios.post("/hide", {
         tmdb_id: tmdb_id
       });
-      var self = this;
-      for (var i = 0; i < this.popular_movies.length; i++) {
-        if (tmdb_id = this.popular_movies[i].id) {
-          this.popular_movies.slice(i);
-        }
-      }
+      */
+    },
+    spliceFun: function spliceFun(array, spliceThis) {
+      array.splice(spliceThis, 1);
     },
 
 
@@ -51502,7 +51514,7 @@ var render = function() {
                         {
                           key: movie.id,
                           staticClass: "smSlickItem",
-                          attrs: { id: "popSlick", href: "#" }
+                          attrs: { id: "popSlick", id: index, href: "#" }
                         },
                         [
                           _c("img", {
@@ -51599,7 +51611,10 @@ var render = function() {
                   return index < 30
                     ? _c(
                         "a",
-                        { staticClass: "smSlickItem", attrs: { href: "#" } },
+                        {
+                          staticClass: "smSlickItem",
+                          attrs: { href: "#", id: "movie.id" }
+                        },
                         [
                           _c("img", {
                             staticClass: "slickImage",

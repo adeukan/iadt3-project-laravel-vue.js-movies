@@ -75,7 +75,7 @@
                     <h2 class="carousel-header">Popular Movies</h2>
                     <div class="slider-parent">
                         <slick ref="popSlick" :options="slickOptions">
-                          <a id="popSlick" v-if="index < 30" v-for="(movie,index) in popular_movies" href="#" :key="movie.id" class="smSlickItem">
+                          <a id="popSlick" v-if="index < 30" v-for="(movie,index) in popular_movies" v-bind:id="index" href="#" :key="movie.id" class="smSlickItem">
 
                               <img v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
                                    @click="showMovie(movie.id,movie.backdrop_path)">
@@ -113,7 +113,7 @@
                         <slick ref="secondSlick" :options="slickOptions">
 
                             <a v-if="index < 30"
-                           v-for="(movie,index) in second_line_movies" href="#" class="smSlickItem">
+                           v-for="(movie,index) in second_line_movies" href="#" id="movie.id" class="smSlickItem">
 
                             <img
                                     v-bind:src="image_prefix_url + movie.poster_path" class="slickImage"
@@ -437,17 +437,30 @@ export default {
 
     // ------------------------------------------------------------------------------------------
     hideMovie(tmdb_id) {
+      var spliceThis = 5;
+
+      for(var i = 0; i < this.popular_movies.length; i++) {
+
+        if(tmdb_id === this.popular_movies[i].id) {
+          var styleChange = document.getElementById(i);
+          styleChange.classList.add("fadeTransition");
+
+          spliceThis = i;
+
+          setTimeout(this.spliceFun(this.popular_movies,spliceThis), 4000);
+
+        }
+      }
+      /*
       axios.post("/hide", {
         tmdb_id: tmdb_id
       });
-      var self = this;
-      for(var i = 0; i < this.popular_movies.length; i++) {
-        if(tmdb_id = this.popular_movies[i].id) {
-          this.popular_movies.slice(i);
-        }
-      }
+      */
     },
 
+    spliceFun(array,spliceThis) {
+      array.splice(spliceThis, 1);
+    },
 
     // ------------------------------------------------------------------------------------------
     laterMovie(tmdb_id) {
