@@ -46016,241 +46016,285 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		Slick: __WEBPACK_IMPORTED_MODULE_0_vue_slick___default.a,
-		StarRating: __WEBPACK_IMPORTED_MODULE_1_vue_star_rating___default.a
-	},
-	data: function data() {
-		return {
-			rating: 0,
-			id: 0,
-			slickOptions: {
-				dots: false,
-				slidesToShow: 5,
-				slidesToScroll: 4,
-				responsive: [{
-					breakpoint: 1300,
-					settings: {
-						slidesToShow: 3,
-						slidesToScroll: 2
-					}
-				}, {
-					breakpoint: 480,
-					settings: {
-						slidesToShow: 1,
-						slidesToScroll: 1
-					}
-				}]
-			},
-			num_rated: 0,
-			num_saved: 0,
-			num_hidden: 0,
-			avg_rating: 0,
-			dob_date: 0,
-			my_user: [],
-			later_movies: [],
-			hidden_movies: [],
-			// temporary stores the properties of selected movie, used to display it in a modal window
-			movie: {},
-			// 'rated' movies without full info
-			rated_movies: [],
-			// 'rated' movies with full info
-			rated_movies_display: [],
-			// TMDb api key
-			api_key: "?api_key=a3abe9699d800e588cb2a57107b4179c",
-			backdrop_api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
-			// TMDb api key url prefix
-			api_key_prefix: "https://api.themoviedb.org/3/movie/",
-			// TMDb url prefix for posters
-			image_prefix_url: "http://image.tmdb.org/t/p/w500"
-		};
-	},
-
-
-	// ------------------------------------------------------------------------------------------
-	mounted: function mounted() {
-		this.getRatedMovies();
-		this.getNumSaved();
-		this.getNumHidden();
-		this.getMyUser();
-	},
-
-
-	// ------------------------------------------------------------------------------------------
-	watch: {
-		//https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
-		rated_movies_display: function rated_movies_display(newMovies) {
-			var _this = this;
-
-			var currIndex = this.$refs.slick.currentSlide();
-
-			this.$refs.slick.destroy();
-			this.$nextTick(function () {
-				_this.$refs.slick.create();
-				_this.$refs.slick.goTo(currIndex, true);
-			});
+		components: {
+				Slick: __WEBPACK_IMPORTED_MODULE_0_vue_slick___default.a,
+				StarRating: __WEBPACK_IMPORTED_MODULE_1_vue_star_rating___default.a
 		},
-		rating: function rating(newRating) {
-			axios.post("/rate", {
-				tmdb_id: this.id,
-				user_rating: this.rating
-			});
+		data: function data() {
+				return {
+						rating: 0,
+						id: 0,
+						slickOptions: {
+								dots: false,
+								slidesToShow: 5,
+								slidesToScroll: 4,
+								responsive: [{
+										breakpoint: 1300,
+										settings: {
+												slidesToShow: 3,
+												slidesToScroll: 2
+										}
+								}, {
+										breakpoint: 480,
+										settings: {
+												slidesToShow: 1,
+												slidesToScroll: 1
+										}
+								}]
+						},
+						num_rated: 0,
+						num_saved: 0,
+						num_hidden: 0,
+						avg_rating: 0,
+						dob_date: 0,
+						my_user: [],
+						later_movies: [],
+						hidden_movies: [],
+						// temporary stores the properties of selected movie, used to display it in a modal window
+						movie: {},
+						// 'rated' movies without full info
+						rated_movies: [],
+						// 'rated' movies with full info
+						rated_movies_display: [],
+						// TMDb api key
+						api_key: "?api_key=a3abe9699d800e588cb2a57107b4179c",
+						backdrop_api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
+						// TMDb api key url prefix
+						api_key_prefix: "https://api.themoviedb.org/3/movie/",
+						// TMDb url prefix for posters
+						image_prefix_url: "http://image.tmdb.org/t/p/w500"
+				};
+		},
+
+
+		// ------------------------------------------------------------------------------------------
+		mounted: function mounted() {
+				this.getRatedMovies();
+				this.getNumSaved();
+				this.getNumHidden();
+				this.getMyUser();
+		},
+
+
+		// ------------------------------------------------------------------------------------------
+		watch: {
+				//https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
+				rated_movies_display: function rated_movies_display(newMovies) {
+						var _this = this;
+
+						var currIndex = this.$refs.slick.currentSlide();
+
+						this.$refs.slick.destroy();
+						this.$nextTick(function () {
+								_this.$refs.slick.create();
+								_this.$refs.slick.goTo(currIndex, true);
+						});
+				},
+				rating: function rating(newRating) {
+						axios.post("/rate", {
+								tmdb_id: this.id,
+								user_rating: this.rating
+						});
+				}
+
+		},
+
+		methods: {
+
+				// ------------------------------------------------------------------------------------------
+				setRating: function setRating(rating, id) {
+						this.rating = rating;
+						this.id = id;
+				},
+
+				// ------------------------------------------------------------------------------------------
+				getRatedMovies: function getRatedMovies() {
+						var _this2 = this;
+
+						// get all "my" rated movies
+						axios.get("/get_rated").then(function (response) {
+
+								_this2.rated_movies = response.data.rated_movies;
+								// reference to Vue object
+								var self = _this2;
+								// loop to obtain full movie details from TMDb for each movie from user list
+								for (var i = 0; i < _this2.rated_movies.length; i++) {
+										// url query string with movie id
+										var url = _this2.api_key_prefix + _this2.rated_movies[i].tmdb_id + _this2.api_key;
+										// get movie object from TMDb by tmdb_id
+										$.getJSON(url).done(function (response) {
+												// put the received movie object into array
+												self.rated_movies_display.push(response);
+										});
+								}
+								self.getNumRated();
+						});
+				},
+
+
+				// ------------------------------------------------------------------------------------------
+				getMyUser: function getMyUser() {
+						var _this3 = this;
+
+						axios.get("/my_user").then(function (response) {
+								_this3.my_user = response.data.my_user;
+
+								var name = _this3.my_user[0].name;
+								name = name.charAt(0).toUpperCase() + name.slice(1);
+								_this3.my_user[0].name = name;
+
+								var dob_date = _this3.my_user[0].dob;
+								var new_dob_date = dob_date.split("-").reverse().join("/");
+								_this3.my_user[0].dob = new_dob_date;
+
+								var reg_date = _this3.my_user[0].created_at.substring(0, 10);
+								var new_reg_date = reg_date.split("-").reverse().join("/");
+								_this3.my_user[0].created_at = new_reg_date;
+						});
+				},
+
+
+				// ------------------------------------------------------------------------------------------
+				getNumRated: function getNumRated() {
+						this.num_rated = this.rated_movies.length;
+
+						for (var i = 0; i < this.rated_movies.length; i++) {
+								this.avg_rating += this.rated_movies[i].ratio;
+						}
+						if (this.avg_rating != 0) {
+								this.avg_rating = this.avg_rating / this.rated_movies.length;
+								this.avg_rating = Math.round(this.avg_rating * 100) / 100;
+						}
+				},
+
+
+				// ------------------------------------------------------------------------------------------
+				getNumSaved: function getNumSaved() {
+						var _this4 = this;
+
+						// get all movies from DB junction table for current user
+						axios.get("/get_watchlater").then(function (response) {
+								// put all received movie objects into array
+								_this4.later_movies = response.data.later_movies;
+								_this4.num_saved = _this4.later_movies.length;
+						});
+				},
+
+
+				// ------------------------------------------------------------------------------------------
+				getNumHidden: function getNumHidden() {
+						var _this5 = this;
+
+						// get all movies from DB junction table for current user
+						axios.get("/get_hidden").then(function (response) {
+								// put all received movie objects into array
+								_this5.hidden_movies = response.data.hidden_movies;
+								_this5.num_hidden = _this5.hidden_movies.length;
+						});
+				},
+
+
+				// show selected movie info in modal window ------------------------------------------------
+				showMovie: function showMovie(tmdb_id, backgroundPath) {
+
+						// url query to find movie by tmdb_id
+						var url = "https://api.themoviedb.org/3/movie/" + tmdb_id + "?" + this.backdrop_api_key;
+						// reference to Vue object
+						var self = this;
+						// search movie by tmdb_id
+						fetch(url).then(function (r) {
+								return r.json();
+						}).then(function (json) {
+								// local reference to movie object
+								self.movie = json;
+
+								if (self.movie.release_date != null) {
+										var date = self.movie.release_date;
+										var newdate = date.split("-").reverse().join("/");
+										self.movie.release_date = newdate;
+								}
+						});
+
+						var urlImage = "http://image.tmdb.org/t/p/";
+						if (backgroundPath != null) {
+								var backgroundImage = urlImage + "original" + backgroundPath;
+								$(".modal").css("background-image", "url(" + backgroundImage + ")");
+						} else {
+								$(".modal").css("background", "#636e72");
+						}
+
+						$("#movie_info").modal("show");
+				},
+				getRating: function getRating(tmdb_id) {
+						var self = this;
+						for (var i = 0; i < this.rated_movies.length; i++) {
+								if (tmdb_id == this.rated_movies[i].tmdb_id) {
+										var rating = this.rated_movies[i].ratio;
+										return rating;
+								}
+						}
+				},
+
+
+				// ------------------------------------------------------------------------------------------
+				hideMovie: function hideMovie(array, id, index) {
+
+						if (array === 'pop') {
+								array = this.popular_movies;
+						} else if (array === 'sec') {
+								array = this.second_line_movies;
+						}
+
+						var styleChange = document.getElementById(id);
+						styleChange.classList.add("fadeTransition");
+
+						var spliceThis = index;
+						var spliceArray = array;
+
+						console.log(spliceThis, spliceArray);
+
+						setTimeout(function () {
+								popSplice(spliceArray, spliceThis);
+						}, 2000);
+						function popSplice(spliceArray, spliceThis) {
+								spliceArray.splice(spliceThis, 1);
+						}
+
+						axios.post("/hide", {
+								tmdb_id: id
+						});
+				},
+
+
+				// ------------------------------------------------------------------------------------------
+				laterMovie: function laterMovie(array, id, index) {
+
+						if (array === 'pop') {
+								array = this.popular_movies;
+						} else if (array === 'sec') {
+								array = this.second_line_movies;
+						}
+
+						var styleChange = document.getElementById(id);
+						styleChange.classList.add("fadeTransition");
+
+						var spliceThis = index;
+						var spliceArray = array;
+
+						console.log(spliceThis, spliceArray);
+
+						setTimeout(function () {
+								popSplice(spliceArray, spliceThis);
+						}, 2000);
+						function popSplice(spliceArray, spliceThis) {
+								spliceArray.splice(spliceThis, 1);
+						}
+
+						axios.post("/watchlater", {
+								tmdb_id: id
+						});
+				}
 		}
-
-	},
-
-	methods: {
-
-		// ------------------------------------------------------------------------------------------
-		setRating: function setRating(rating, id) {
-			this.rating = rating;
-			this.id = id;
-		},
-
-		// ------------------------------------------------------------------------------------------
-		getRatedMovies: function getRatedMovies() {
-			var _this2 = this;
-
-			// get all "my" rated movies
-			axios.get("/get_rated").then(function (response) {
-
-				_this2.rated_movies = response.data.rated_movies;
-				// reference to Vue object
-				var self = _this2;
-				// loop to obtain full movie details from TMDb for each movie from user list
-				for (var i = 0; i < _this2.rated_movies.length; i++) {
-					// url query string with movie id
-					var url = _this2.api_key_prefix + _this2.rated_movies[i].tmdb_id + _this2.api_key;
-					// get movie object from TMDb by tmdb_id
-					$.getJSON(url).done(function (response) {
-						// put the received movie object into array
-						self.rated_movies_display.push(response);
-					});
-				}
-				self.getNumRated();
-			});
-		},
-
-
-		// ------------------------------------------------------------------------------------------
-		getMyUser: function getMyUser() {
-			var _this3 = this;
-
-			axios.get("/my_user").then(function (response) {
-				_this3.my_user = response.data.my_user;
-
-				var name = _this3.my_user[0].name;
-				name = name.charAt(0).toUpperCase() + name.slice(1);
-				_this3.my_user[0].name = name;
-
-				var dob_date = _this3.my_user[0].dob;
-				var new_dob_date = dob_date.split("-").reverse().join("/");
-				_this3.my_user[0].dob = new_dob_date;
-
-				var reg_date = _this3.my_user[0].created_at.substring(0, 10);
-				var new_reg_date = reg_date.split("-").reverse().join("/");
-				_this3.my_user[0].created_at = new_reg_date;
-			});
-		},
-
-
-		// ------------------------------------------------------------------------------------------
-		getNumRated: function getNumRated() {
-			this.num_rated = this.rated_movies.length;
-
-			for (var i = 0; i < this.rated_movies.length; i++) {
-				this.avg_rating += this.rated_movies[i].ratio;
-			}
-			if (this.avg_rating != 0) {
-				this.avg_rating = this.avg_rating / this.rated_movies.length;
-				this.avg_rating = Math.round(this.avg_rating * 100) / 100;
-			}
-		},
-
-
-		// ------------------------------------------------------------------------------------------
-		getNumSaved: function getNumSaved() {
-			var _this4 = this;
-
-			// get all movies from DB junction table for current user
-			axios.get("/get_watchlater").then(function (response) {
-				// put all received movie objects into array
-				_this4.later_movies = response.data.later_movies;
-				_this4.num_saved = _this4.later_movies.length;
-			});
-		},
-
-
-		// ------------------------------------------------------------------------------------------
-		getNumHidden: function getNumHidden() {
-			var _this5 = this;
-
-			// get all movies from DB junction table for current user
-			axios.get("/get_hidden").then(function (response) {
-				// put all received movie objects into array
-				_this5.hidden_movies = response.data.hidden_movies;
-				_this5.num_hidden = _this5.hidden_movies.length;
-			});
-		},
-
-
-		// show selected movie info in modal window ------------------------------------------------
-		showMovie: function showMovie(tmdb_id, backgroundPath) {
-
-			// url query to find movie by tmdb_id
-			var url = "https://api.themoviedb.org/3/movie/" + tmdb_id + "?" + this.backdrop_api_key;
-			// reference to Vue object
-			var self = this;
-			// search movie by tmdb_id
-			fetch(url).then(function (r) {
-				return r.json();
-			}).then(function (json) {
-				// local reference to movie object
-				self.movie = json;
-
-				if (self.movie.release_date != null) {
-					var date = self.movie.release_date;
-					var newdate = date.split("-").reverse().join("/");
-					self.movie.release_date = newdate;
-				}
-			});
-
-			var urlImage = "http://image.tmdb.org/t/p/";
-			if (backgroundPath != null) {
-				var backgroundImage = urlImage + "original" + backgroundPath;
-				$(".modal").css("background-image", "url(" + backgroundImage + ")");
-			} else {
-				$(".modal").css("background", "#636e72");
-			}
-
-			$("#movie_info").modal("show");
-		},
-		getRating: function getRating(tmdb_id) {
-			var self = this;
-			for (var i = 0; i < this.rated_movies.length; i++) {
-				if (tmdb_id == this.rated_movies[i].tmdb_id) {
-					var rating = this.rated_movies[i].ratio;
-					return rating;
-				}
-			}
-		},
-
-
-		// ------------------------------------------------------------------------------------------
-		hideMovie: function hideMovie(tmdb_id) {
-			axios.post("/hide", {
-				tmdb_id: tmdb_id
-			});
-		},
-
-
-		// ------------------------------------------------------------------------------------------
-		laterMovie: function laterMovie(tmdb_id) {
-			axios.post("/watchlater", {
-				tmdb_id: tmdb_id
-			});
-		}
-	}
 });
 
 /***/ }),
@@ -50147,201 +50191,277 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-	components: {
-		Slick: __WEBPACK_IMPORTED_MODULE_0_vue_slick___default.a,
-		StarRating: __WEBPACK_IMPORTED_MODULE_1_vue_star_rating___default.a
-	},
-	data: function data() {
-		return {
-			rating: 0,
-			id: 0,
-			slickOptions: {
-				dots: false,
-				slidesToShow: 5,
-				slidesToScroll: 4,
-				responsive: [{
-					breakpoint: 1300,
-					settings: {
-						slidesToShow: 3,
-						slidesToScroll: 2
-					}
-				}, {
-					breakpoint: 480,
-					settings: {
-						slidesToShow: 1,
-						slidesToScroll: 1
-					}
-				}]
-			},
-			// temporary stores the properties of selected movie, used to display it in a modal window
-			movie: {},
-			// array with user ratings
-			ratings: {},
-			// 'watchlater' movies without full info
-			later_movies: [],
-			// 'watchlater' movies with full info
-			later_movies_display: [],
-			// 'hidden' movies without full info
-			hidden_movies: [],
-			// 'hidden' movies without full info
-			hidden_movies_display: [],
-			// tmdb api key value
-			api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
+  components: {
+    Slick: __WEBPACK_IMPORTED_MODULE_0_vue_slick___default.a,
+    StarRating: __WEBPACK_IMPORTED_MODULE_1_vue_star_rating___default.a
+  },
+  data: function data() {
+    return {
+      rating: 0,
+      id: 0,
+      slickOptions: {
+        dots: false,
+        slidesToShow: 5,
+        slidesToScroll: 4,
+        responsive: [{
+          breakpoint: 1300,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 2
+          }
+        }, {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }]
+      },
+      // temporary stores the properties of selected movie, used to display it in a modal window
+      movie: {},
+      // array with user ratings
+      ratings: {},
+      // 'watchlater' movies without full info
+      later_movies: [],
+      // 'watchlater' movies with full info
+      later_movies_display: [],
+      // 'hidden' movies without full info
+      hidden_movies: [],
+      // 'hidden' movies without full info
+      hidden_movies_display: [],
+      // tmdb api key value
+      api_key: "api_key=a3abe9699d800e588cb2a57107b4179c",
 
-			// TMDb api key url prefix
-			api_key_prefix: "https://api.themoviedb.org/3/movie/",
-			// url prefix for getting posters
-			image_prefix_url: "http://image.tmdb.org/t/p/w500"
-		};
-	},
-
-
-	// ------------------------------------------------------------------------------------------
-	watch: {
-
-		//https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
-		later_movies_display: function later_movies_display(newMovies) {
-			var _this = this;
-
-			var currIndex = this.$refs.saveSlick.currentSlide();
-
-			this.$refs.saveSlick.destroy();
-			this.$nextTick(function () {
-				_this.$refs.saveSlick.create();
-				_this.$refs.saveSlick.goTo(currIndex, true);
-			});
-		},
-
-		hidden_movies_display: function hidden_movies_display(newMovies) {
-			var _this2 = this;
-
-			var currIndex = this.$refs.hideSlick.currentSlide();
-
-			this.$refs.hideSlick.destroy();
-			this.$nextTick(function () {
-				_this2.$refs.hideSlick.create();
-				_this2.$refs.hideSlick.goTo(currIndex, true);
-			});
-		},
-
-		rating: function rating(newRating) {
-			axios.post("/rate", {
-				tmdb_id: this.id,
-				user_rating: this.rating
-			});
-		}
-	},
-
-	// ------------------------------------------------------------------------------------------
-	mounted: function mounted() {
-		// get most popular and highest rated movies to display them in the first line
-		this.getWatchLaterMovies(), this.getHiddenMovies();
-	},
+      // TMDb api key url prefix
+      api_key_prefix: "https://api.themoviedb.org/3/movie/",
+      // url prefix for getting posters
+      image_prefix_url: "http://image.tmdb.org/t/p/w500"
+    };
+  },
 
 
-	methods: {
+  // ------------------------------------------------------------------------------------------
+  watch: {
 
-		// ------------------------------------------------------------------------------------------
-		setRating: function setRating(rating, id) {
-			this.rating = rating;
-			this.id = id;
-		},
+    //https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
+    later_movies_display: function later_movies_display(newMovies) {
+      var _this = this;
 
-		// ------------------------------------------------------------------------------------------
-		getWatchLaterMovies: function getWatchLaterMovies() {
-			var _this3 = this;
+      var currIndex = this.$refs.saveSlick.currentSlide();
 
-			// get all movies from DB junction table for current user
-			axios.get("/get_watchlater").then(function (response) {
-				// put all received movie objects into array
-				_this3.later_movies = response.data.later_movies;
-				// reference to Vue object
-				var self = _this3;
-				// loop to obtain full movie details from TMDb for each movie from user list
-				for (var i = 0; i < _this3.later_movies.length; i++) {
-					// url query string with movie id
-					var url = _this3.api_key_prefix + _this3.later_movies[i].tmdb_id + "?" + _this3.api_key;
-					// get movie object from TMDb by tmdb_id
-					$.getJSON(url).done(function (response) {
-						// put the received movie object into array
-						self.later_movies_display.push(response);
-					});
-				}
-			});
-		},
+      this.$refs.saveSlick.destroy();
+      this.$nextTick(function () {
+        _this.$refs.saveSlick.create();
+        _this.$refs.saveSlick.goTo(currIndex, true);
+      });
+    },
 
+    hidden_movies_display: function hidden_movies_display(newMovies) {
+      var _this2 = this;
 
-		// ------------------------------------------------------------------------------------------
-		getHiddenMovies: function getHiddenMovies() {
-			var _this4 = this;
+      var currIndex = this.$refs.hideSlick.currentSlide();
 
-			// get all movies from DB junction table for current user
-			axios.get("/get_hidden").then(function (response) {
-				// put all received movie objects into array
-				_this4.hidden_movies = response.data.hidden_movies;
-				// reference to Vue object
-				var self = _this4;
-				// loop to obtain full movie details from TMDb for each movie from user list
-				for (var i = 0; i < _this4.hidden_movies.length; i++) {
-					// url query string with movie id
-					var url = _this4.api_key_prefix + _this4.hidden_movies[i].tmdb_id + "?" + _this4.api_key;
-					// get movie object from TMDb by tmdb_id
-					$.getJSON(url).done(function (response) {
-						// put the received movie object into array
-						self.hidden_movies_display.push(response);
-					});
-				}
-			});
-		},
+      this.$refs.hideSlick.destroy();
+      this.$nextTick(function () {
+        _this2.$refs.hideSlick.create();
+        _this2.$refs.hideSlick.goTo(currIndex, true);
+      });
+    },
+
+    rating: function rating(newRating) {
+      axios.post("/rate", {
+        tmdb_id: this.id,
+        user_rating: this.rating
+      });
+    }
+  },
+
+  // ------------------------------------------------------------------------------------------
+  mounted: function mounted() {
+    // get most popular and highest rated movies to display them in the first line
+    this.getWatchLaterMovies(), this.getHiddenMovies();
+  },
 
 
-		// show selected movie info in modal window ------------------------------------------------
-		showMovie: function showMovie(tmdb_id, backgroundPath) {
-			// url query to find movie by tmdb_id
-			var url = "https://api.themoviedb.org/3/movie/" + tmdb_id + "?" + this.api_key;
-			// reference to Vue object
-			var self = this;
-			// search movie by tmdb_id
-			fetch(url).then(function (r) {
-				return r.json();
-			}).then(function (json) {
-				// local reference to movie object
-				self.movie = json;
+  methods: {
 
-				if (self.movie.release_date != null) {
-					var date = self.movie.release_date;
-					var newdate = date.split("-").reverse().join("/");
-					self.movie.release_date = newdate;
-				}
-			});
+    // ------------------------------------------------------------------------------------------
+    setRating: function setRating(rating, id) {
+      this.rating = rating;
+      this.id = id;
+    },
 
-			var urlImage = "http://image.tmdb.org/t/p/";
-			if (backgroundPath != null) {
-				var backgroundImage = urlImage + "original" + backgroundPath;
-				$(".modal").css("background-image", "url(" + backgroundImage + ")");
-			} else {
-				$(".modal").css("background", "#636e72");
-			}
+    // ------------------------------------------------------------------------------------------
+    getWatchLaterMovies: function getWatchLaterMovies() {
+      var _this3 = this;
 
-			$("#movie_info").modal("show");
-		},
-
-
-		// ------------------------------------------------------------------------------------------
-		hideMovie: function hideMovie(tmdb_id) {
-			axios.post("/hide", {
-				tmdb_id: tmdb_id
-			});
-		},
+      // get all movies from DB junction table for current user
+      axios.get("/get_watchlater").then(function (response) {
+        // put all received movie objects into array
+        _this3.later_movies = response.data.later_movies;
+        // reference to Vue object
+        var self = _this3;
+        // loop to obtain full movie details from TMDb for each movie from user list
+        for (var i = 0; i < _this3.later_movies.length; i++) {
+          // url query string with movie id
+          var url = _this3.api_key_prefix + _this3.later_movies[i].tmdb_id + "?" + _this3.api_key;
+          // get movie object from TMDb by tmdb_id
+          $.getJSON(url).done(function (response) {
+            // put the received movie object into array
+            self.later_movies_display.push(response);
+          });
+        }
+      });
+    },
 
 
-		// ------------------------------------------------------------------------------------------
-		laterMovie: function laterMovie(tmdb_id) {
-			axios.post("/watchlater", {
-				tmdb_id: tmdb_id
-			});
-		}
-	}
+    // ------------------------------------------------------------------------------------------
+    getHiddenMovies: function getHiddenMovies() {
+      var _this4 = this;
+
+      // get all movies from DB junction table for current user
+      axios.get("/get_hidden").then(function (response) {
+        // put all received movie objects into array
+        _this4.hidden_movies = response.data.hidden_movies;
+        // reference to Vue object
+        var self = _this4;
+        // loop to obtain full movie details from TMDb for each movie from user list
+        for (var i = 0; i < _this4.hidden_movies.length; i++) {
+          // url query string with movie id
+          var url = _this4.api_key_prefix + _this4.hidden_movies[i].tmdb_id + "?" + _this4.api_key;
+          // get movie object from TMDb by tmdb_id
+          $.getJSON(url).done(function (response) {
+            // put the received movie object into array
+            self.hidden_movies_display.push(response);
+          });
+        }
+      });
+    },
+
+
+    // show selected movie info in modal window ------------------------------------------------
+    showMovie: function showMovie(tmdb_id, backgroundPath) {
+      // url query to find movie by tmdb_id
+      var url = "https://api.themoviedb.org/3/movie/" + tmdb_id + "?" + this.api_key;
+      // reference to Vue object
+      var self = this;
+      // search movie by tmdb_id
+      fetch(url).then(function (r) {
+        return r.json();
+      }).then(function (json) {
+        // local reference to movie object
+        self.movie = json;
+
+        if (self.movie.release_date != null) {
+          var date = self.movie.release_date;
+          var newdate = date.split("-").reverse().join("/");
+          self.movie.release_date = newdate;
+        }
+      });
+
+      var urlImage = "http://image.tmdb.org/t/p/";
+      if (backgroundPath != null) {
+        var backgroundImage = urlImage + "original" + backgroundPath;
+        $(".modal").css("background-image", "url(" + backgroundImage + ")");
+      } else {
+        $(".modal").css("background", "#636e72");
+      }
+
+      $("#movie_info").modal("show");
+    },
+
+
+    // ------------------------------------------------------------------------------------------
+    hideMovie: function hideMovie(array, id) {
+      var spliceThis;
+      var id = id;
+
+      if (array = 'pop') {
+        array = this.later_movies_display;
+        for (var i = 0; i < this.later_movies.length; i++) {
+          console.log(i);
+          if (id === this.later_movies.id) {
+            console.log(i);
+            spliceThis = i;
+          }
+        }
+      }
+      if (array = 'sec') {
+        array = this.hidden_movies_display;
+        for (var i = 0; i < this.hidden_movies.length; i++) {
+          if (id === this.hidden_movies.id) {
+            console.log(i);
+            spliceThis = i;
+          }
+        }
+      }
+
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
+
+      var spliceArray = array;
+
+      console.log(spliceThis, spliceArray);
+
+      setTimeout(function () {
+        popSplice(spliceArray, spliceThis);
+      }, 2000);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
+      }
+      /*
+      axios.post("/hide", {
+        tmdb_id: id
+      });
+      */
+    },
+
+
+    // ------------------------------------------------------------------------------------------
+    laterMovie: function laterMovie(array, id, index) {
+      var spliceThis;
+      var id = id;
+
+      if (array = 'pop') {
+        array = this.later_movies_display;
+        for (var i = 0; i < this.later_movies.length; i++) {
+          console.log(i);
+          if (id === this.later_movies.id) {
+            console.log(i);
+            spliceThis = i;
+          }
+        }
+      }
+      if (array = 'sec') {
+        array = this.hidden_movies_display;
+        for (var i = 0; i < this.hidden_movies.length; i++) {
+          if (id === this.hidden_movies.id) {
+            console.log(i);
+            spliceThis = i;
+          }
+        }
+      }
+
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
+
+      var spliceArray = array;
+
+      console.log(spliceThis, spliceArray);
+
+      setTimeout(function () {
+        popSplice(spliceArray, spliceThis);
+      }, 2000);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
+      }
+      /*
+      axios.post("/watchlater", {
+        tmdb_id: id
+      });
+      */
+    }
+  }
 });
 
 /***/ }),
@@ -50559,7 +50679,10 @@ var render = function() {
                   return _vm.later_movies_display.length > 0
                     ? _c(
                         "a",
-                        { staticClass: "smSlickItem", attrs: { href: "#" } },
+                        {
+                          staticClass: "smSlickItem",
+                          attrs: { id: movie.id, href: "#" }
+                        },
                         [
                           _c("img", {
                             staticClass: "slickImage",
@@ -50603,7 +50726,7 @@ var render = function() {
                                 {
                                   on: {
                                     click: function($event) {
-                                      _vm.laterMovie(movie.id)
+                                      _vm.laterMovie("pop", movie.id)
                                     }
                                   }
                                 },
@@ -50615,7 +50738,7 @@ var render = function() {
                                 {
                                   on: {
                                     click: function($event) {
-                                      _vm.hideMovie(movie.id)
+                                      _vm.hideMovie("pop", movie.id)
                                     }
                                   }
                                 },
@@ -50662,7 +50785,10 @@ var render = function() {
                 return _vm.hidden_movies_display.length > 0
                   ? _c(
                       "a",
-                      { staticClass: "smSlickItem", attrs: { href: "#" } },
+                      {
+                        staticClass: "smSlickItem",
+                        attrs: { id: movie.id, href: "#" }
+                      },
                       [
                         _c("img", {
                           staticClass: "slickImage",
@@ -50704,7 +50830,7 @@ var render = function() {
                               {
                                 on: {
                                   click: function($event) {
-                                    _vm.laterMovie(movie.id)
+                                    _vm.laterMovie("sec", movie.id)
                                   }
                                 }
                               },
@@ -50716,7 +50842,7 @@ var render = function() {
                               {
                                 on: {
                                   click: function($event) {
-                                    _vm.hideMovie(movie.id)
+                                    _vm.hideMovie("sec", movie.id)
                                   }
                                 }
                               },
@@ -51075,7 +51201,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {
 
     // ------------------------------------------------------------------------------------------
-    setRating: function setRating(rating, id) {
+    setRating: function setRating(rating, id, index, array) {
+
+      if (array === 'pop') {
+        array = this.popular_movies;
+      } else if (array === 'sec') {
+        array = this.second_line_movies;
+      }
+
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
+
+      var spliceThis = index;
+      var spliceArray = array;
+
+      console.log(spliceThis, spliceArray);
+
+      setTimeout(function () {
+        popSplice(spliceArray, spliceThis);
+      }, 1500);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
+      }
+
       this.rating = rating;
       this.id = id;
     },
@@ -51295,7 +51443,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       setTimeout(function () {
         popSplice(spliceArray, spliceThis);
-      }, 2000);
+      }, 1500);
       function popSplice(spliceArray, spliceThis) {
         spliceArray.splice(spliceThis, 1);
       }
@@ -51325,7 +51473,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       setTimeout(function () {
         popSplice(spliceArray, spliceThis);
-      }, 2000);
+      }, 1500);
       function popSplice(spliceArray, spliceThis) {
         spliceArray.splice(spliceThis, 1);
       }
@@ -51573,7 +51721,12 @@ var render = function() {
                                     },
                                     on: {
                                       "rating-selected": function($event) {
-                                        _vm.setRating($event, movie.id)
+                                        _vm.setRating(
+                                          $event,
+                                          movie.id,
+                                          index,
+                                          "pop"
+                                        )
                                       }
                                     }
                                   })
@@ -51673,7 +51826,12 @@ var render = function() {
                                     },
                                     on: {
                                       "rating-selected": function($event) {
-                                        _vm.setRating($event, movie.id)
+                                        _vm.setRating(
+                                          $event,
+                                          movie.id,
+                                          index,
+                                          "sec"
+                                        )
                                       }
                                     }
                                   })

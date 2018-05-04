@@ -411,18 +411,63 @@ export default {
 	},
 
     // ------------------------------------------------------------------------------------------
-    hideMovie(tmdb_id) {
+    hideMovie(array, id, index) {
+
+      if(array === 'pop') {
+        array = this.popular_movies;
+      } else if (array === 'sec') {
+        array = this.second_line_movies;
+      }
+
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
+
+      var spliceThis = index;
+      var spliceArray = array;
+
+      console.log(spliceThis,spliceArray);
+
+      setTimeout(function() {
+        popSplice(spliceArray, spliceThis)
+      }, 2000);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
+      }
+      
       axios.post("/hide", {
-        tmdb_id: tmdb_id
+        tmdb_id: id
       });
+      
     },
 
-
     // ------------------------------------------------------------------------------------------
-    laterMovie(tmdb_id) {
+    laterMovie(array, id, index) {
+
+      if(array === 'pop') {
+        array = this.popular_movies;
+      } else if (array === 'sec') {
+        array = this.second_line_movies;
+      }
+
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
+
+      var spliceThis = index;
+      var spliceArray = array;
+
+      console.log(spliceThis,spliceArray);
+
+      setTimeout(function() {
+        popSplice(spliceArray, spliceThis)
+      }, 2000);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
+      }
+      
       axios.post("/watchlater", {
-        tmdb_id: tmdb_id
+        tmdb_id: id
       });
+      
     },
 
   }

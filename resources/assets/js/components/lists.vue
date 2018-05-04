@@ -74,7 +74,7 @@
 						<slick ref="saveSlick" :options="slickOptions">
 
 							<a  v-if="later_movies_display.length > 0"
-							  v-for="(movie,i) in later_movies_display" href="#" class="smSlickItem" >
+							  v-for="(movie,i) in later_movies_display" v-bind:id="movie.id" href="#" class="smSlickItem" >
 
 							<img
 								v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id,movie.backdrop_path)">
@@ -95,8 +95,8 @@
 								</div>
 								<div class="row btnHolder">
 
-									<button @click="laterMovie(movie.id)">Save</button>
-									<button @click="hideMovie(movie.id)">Hide</button>
+									<button @click="laterMovie('pop', movie.id)">Save</button>
+                                    <button @click="hideMovie('pop', movie.id)">Hide</button>
 								</div>
 							</div>
 
@@ -115,7 +115,7 @@
 					<slick ref="hideSlick" :options="slickOptions">
 
 						<a  v-if="hidden_movies_display.length > 0"
-						  v-for="(movie,i) in hidden_movies_display" href="#" class="smSlickItem" >
+						  v-for="(movie,i) in hidden_movies_display" v-bind:id="movie.id" href="#" class="smSlickItem" >
 
 						<img
 							v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id,movie.backdrop_path)">
@@ -135,8 +135,8 @@
 							</div>
 							<div class="row btnHolder">
 
-								<button @click="laterMovie(movie.id)">Save</button>
-								<button @click="hideMovie(movie.id)">Hide</button>
+								<button @click="laterMovie('sec', movie.id)">Save</button>
+                                <button @click="hideMovie('sec', movie.id)">Hide</button>
 							</div>
 						</div>
 
@@ -335,18 +335,93 @@ export default {
 
 
     // ------------------------------------------------------------------------------------------
-    hideMovie(tmdb_id) {
+    hideMovie(array, id) {
+    	var spliceThis;
+    	var id = id;
+
+      if(array = 'pop') {
+        array = this.later_movies_display;
+        for(var i = 0; i < this.later_movies.length; i++) {
+        	console.log(i);
+        	if(id === this.later_movies.id){
+        		console.log(i);
+        		spliceThis = i;
+        	}
+        }
+	  } 
+	  if (array = 'sec') {
+        array = this.hidden_movies_display;
+        for(var i = 0; i < this.hidden_movies.length; i++) {
+        	if(id === this.hidden_movies.id){
+        		console.log(i);
+        		spliceThis = i;
+        	}
+        }
+      }
+
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
+
+      var spliceArray = array;
+
+      console.log(spliceThis,spliceArray);
+
+      setTimeout(function() {
+        popSplice(spliceArray, spliceThis)
+      }, 2000);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
+      }
+      /*
       axios.post("/hide", {
-        tmdb_id: tmdb_id
+        tmdb_id: id
       });
+      */
     },
 
-
     // ------------------------------------------------------------------------------------------
-    laterMovie(tmdb_id) {
+    laterMovie(array, id, index) {
+    	var spliceThis;
+    	var id = id;
+
+      if(array = 'pop') {
+        array = this.later_movies_display;
+        for(var i = 0; i < this.later_movies.length; i++) {
+        	console.log(i);
+        	if(id === this.later_movies.id){
+        		console.log(i);
+        		spliceThis = i;
+        	}
+        }
+	  } 
+	  if (array = 'sec') {
+        array = this.hidden_movies_display;
+        for(var i = 0; i < this.hidden_movies.length; i++) {
+        	if(id === this.hidden_movies.id){
+        		console.log(i);
+        		spliceThis = i;
+        	}
+        }
+      }
+
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
+
+      var spliceArray = array;
+
+      console.log(spliceThis,spliceArray);
+
+      setTimeout(function() {
+        popSplice(spliceArray, spliceThis)
+      }, 2000);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
+      }
+      /*
       axios.post("/watchlater", {
-        tmdb_id: tmdb_id
+        tmdb_id: id
       });
+      */
     },
   }
 };

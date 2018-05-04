@@ -84,7 +84,7 @@
                                   <div class="row">
                                       <div class="rating">
                                         <star-rating
-                                                @rating-selected="setRating($event, movie.id)"
+                                                @rating-selected="setRating($event,movie.id,index,'pop')"
                                                 inactive-color="#636e72"
                                                 active-color="#dfe6e9"
                                                 :star-size="25"
@@ -125,7 +125,7 @@
                                 <div class="row">
                                     <div class="rating">
                                       <star-rating
-                                              @rating-selected="setRating($event, movie.id)"
+                                              @rating-selected="setRating($event,movie.id,index,'sec')"
                                               inactive-color="#636e72"
                                               active-color="#dfe6e9"
                                               :star-size="25"
@@ -246,7 +246,29 @@ export default {
   methods: {
 
     // ------------------------------------------------------------------------------------------
-    setRating: function(rating, id){
+    setRating: function(rating, id, index, array){
+
+      if(array === 'pop') {
+        array = this.popular_movies;
+      } else if (array === 'sec') {
+        array = this.second_line_movies;
+      }
+
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
+
+      var spliceThis = index;
+      var spliceArray = array;
+
+      console.log(spliceThis,spliceArray);
+
+      setTimeout(function() {
+        popSplice(spliceArray, spliceThis)
+      }, 1500);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
+      }
+
       this.rating = rating;
       this.id = id;
     },
@@ -457,7 +479,7 @@ export default {
 
       setTimeout(function() {
         popSplice(spliceArray, spliceThis)
-      }, 2000);
+      }, 1500);
       function popSplice(spliceArray, spliceThis) {
         spliceArray.splice(spliceThis, 1);
       }
@@ -487,7 +509,7 @@ export default {
 
       setTimeout(function() {
         popSplice(spliceArray, spliceThis)
-      }, 2000);
+      }, 1500);
       function popSplice(spliceArray, spliceThis) {
         spliceArray.splice(spliceThis, 1);
       }
