@@ -83,13 +83,13 @@
 
 								<div class="row">
 									<div class="rating">
-                                        <star-rating
-                                                @rating-selected="setRating($event, movie.id)"
-                                                inactive-color="#636e72"
-                                                active-color="#dfe6e9"
-                                                :star-size="25"
-                                                :show-rating="false">
-                                        </star-rating>
+                                      <star-rating
+                                              @rating-selected="setRating($event, movie.id)"
+                                              inactive-color="#636e72"
+                                              active-color="#dfe6e9"
+                                              :star-size="25"
+                                              :show-rating="false">
+                                      </star-rating>
 									</div>
 								</div>
 								<div class="row btnHolder">
@@ -123,14 +123,13 @@
 						<div class="slickActions">
 
 							<div class="row">
-                                <star-rating
-                                        @rating-selected="setRating($event, movie.id)"
-                                        inactive-color="#636e72"
-                                        active-color="#dfe6e9"
-                                        :star-size="25"
-                                        :show-rating="false">
-                                </star-rating>
-							</div>
+                                      <star-rating
+                                              @rating-selected="setRating($event, movie.id)"
+                                              inactive-color="#636e72"
+                                              active-color="#dfe6e9"
+                                              :star-size="25"
+                                              :show-rating="false">
+                                      </star-rating>
 							</div>
 							<div class="row btnHolder">
 
@@ -142,7 +141,6 @@
 					  </a>
 
 					</slick>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -161,7 +159,7 @@ export default {
   },
   data() {
 	return {
-		rating: 0,
+	  rating: 0,
       id: 0,
 	  slickOptions: {
 		dots: false,
@@ -348,25 +346,6 @@ export default {
         tmdb_id: tmdb_id
       });
     },
-
-    // ------------------------------------------------------------------------------------------
-    rateMovie(tmdb_id, rating) {
-      // mirror the rating value (1 => 5, 2 => 4, ...)
-      rating = 6 - rating;
-
-      if (this.ratings[tmdb_id] !== rating) {
-        axios
-          .post("/rate", {
-            tmdb_id: tmdb_id,
-            user_rating: rating
-          })
-          // reflect changes in the local array
-          .then(response => {
-            this.ratings[tmdb_id] = rating;
-          });
-      }
-    },
-
   }
 };
 </script>
