@@ -51275,27 +51275,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     // ------------------------------------------------------------------------------------------
     hideMovie: function hideMovie(tmdb_id) {
-      var spliceThis = 5;
+      var _this7 = this;
 
       for (var i = 0; i < this.popular_movies.length; i++) {
 
         if (tmdb_id === this.popular_movies[i].id) {
-          var styleChange = document.getElementById(i);
-          styleChange.classList.add("fadeTransition");
+          var styleChange;
+          var spliceThis;
+          var popArray;
 
-          spliceThis = i;
+          (function () {
+            var popSplice = function popSplice(popArray, spliceThis) {
+              popArray.splice(spliceThis, 1);
+            };
 
-          setTimeout(this.spliceFun(this.popular_movies, spliceThis), 4000);
+            styleChange = document.getElementById(i);
+
+            styleChange.classList.add("fadeTransition");
+
+            spliceThis = i;
+            popArray = _this7.popular_movies;
+
+
+            console.log(spliceThis, popArray);
+
+            setTimeout(function () {
+              popSplice(popArray, spliceThis);
+            }, 2000);
+          })();
         }
       }
-      /*
+
       axios.post("/hide", {
         tmdb_id: tmdb_id
       });
-      */
-    },
-    spliceFun: function spliceFun(array, spliceThis) {
-      array.splice(spliceThis, 1);
     },
 
 

@@ -437,29 +437,31 @@ export default {
 
     // ------------------------------------------------------------------------------------------
     hideMovie(tmdb_id) {
-      var spliceThis = 5;
-
       for(var i = 0; i < this.popular_movies.length; i++) {
 
         if(tmdb_id === this.popular_movies[i].id) {
           var styleChange = document.getElementById(i);
           styleChange.classList.add("fadeTransition");
 
-          spliceThis = i;
+          var spliceThis = i;
+          var popArray = this.popular_movies;
 
-          setTimeout(this.spliceFun(this.popular_movies,spliceThis), 4000);
+          console.log(spliceThis,popArray);
+
+          setTimeout(function() {
+            popSplice(popArray, spliceThis)
+          }, 2000);
+          function popSplice(popArray, spliceThis) {
+            popArray.splice(spliceThis, 1);
+          }
 
         }
       }
-      /*
+      
       axios.post("/hide", {
         tmdb_id: tmdb_id
       });
-      */
-    },
-
-    spliceFun(array,spliceThis) {
-      array.splice(spliceThis, 1);
+      
     },
 
     // ------------------------------------------------------------------------------------------
