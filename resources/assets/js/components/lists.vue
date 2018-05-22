@@ -67,14 +67,14 @@
                 </div><!-- modal -->
 
 				<!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1 -->
-				<div class="row">
+				<div class="row slide1" ref="saveSlider">
 					<h2 v-if="later_movies_display.length > 0" class="carousel-header">Saved Movies</h2>
 					<h2 v-else class="carousel-header" style="margin:150px 0px 150px 0px; text-align:center;">You Have Not Saved Any Videos Yet. </h2>
 					<div class="slider-parent">
 						<slick ref="saveSlick" :options="slickOptions">
 
 							<a  v-if="later_movies_display.length > 0"
-							  v-for="(movie,i) in later_movies_display" v-bind:id="movie.id" href="#" class="smSlickItem" >
+							  v-for="(movie,i) in later_movies_display" v-bind:id="movie.id" :key="movie.id" href="#" class="smSlickItem" >
 
 							<img
 								v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id,movie.backdrop_path)">
@@ -85,7 +85,7 @@
 								<div class="row">
 									<div class="rating">
                                       <star-rating
-                                              @rating-selected="setRating($event, movie.id)"
+                                              @rating-selected="setRating($event, movie.id, i, 'save')"
                                               inactive-color="#636e72"
                                               active-color="#dfe6e9"
                                               :star-size="25"
@@ -95,8 +95,8 @@
 								</div>
 								<div class="row btnHolder">
 
-									<button @click="laterMovie('pop', movie.id)">Save</button>
-                                    <button @click="hideMovie('pop', movie.id)">Hide</button>
+									<button @click="laterMovie('save', movie.id, i)">Save</button>
+                                    <button @click="hideMovie('save', movie.id, i)">Hide</button>
 								</div>
 							</div>
 
@@ -109,13 +109,13 @@
 				<hr>
 
 				<!-- LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2   LINE_2 -->
-				<div class="row">
+				<div class="row slide2" ref="hideSlider">
 					<h2 v-if="hidden_movies_display.length > 0" class="carousel-header">Hidden Movies</h2>
 					<h2 v-else class="carousel-header" style="margin:150px 0px 150px 0px; text-align:center;">You Have Not Hidden Any Videos Yet. </h2>
 					<slick ref="hideSlick" :options="slickOptions">
 
 						<a  v-if="hidden_movies_display.length > 0"
-						  v-for="(movie,i) in hidden_movies_display" v-bind:id="movie.id" href="#" class="smSlickItem" >
+						  v-for="(movie,i) in hidden_movies_display" :key="movie.id" v-bind:id="movie.id" href="#" class="smSlickItem" >
 
 						<img
 							v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id,movie.backdrop_path)">
@@ -126,7 +126,7 @@
 
 							<div class="row">
                                       <star-rating
-                                              @rating-selected="setRating($event, movie.id)"
+                                              @rating-selected="setRating($event, movie.id, i, 'hide')"
                                               inactive-color="#636e72"
                                               active-color="#dfe6e9"
                                               :star-size="25"
@@ -135,8 +135,8 @@
 							</div>
 							<div class="row btnHolder">
 
-								<button @click="laterMovie('sec', movie.id)">Save</button>
-                                <button @click="hideMovie('sec', movie.id)">Hide</button>
+								<button @click="laterMovie('hide', movie.id, i)">Save</button>
+                                <button @click="hideMovie('hide', movie.id, i)">Hide</button>
 							</div>
 						</div>
 
@@ -161,6 +161,8 @@ export default {
   },
   data() {
 	return {
+	  save: "save",
+	  hide: "hide",
 	  rating: 0,
       id: 0,
 	  slickOptions: {
@@ -248,9 +250,28 @@ export default {
   methods: {
 
 	// ------------------------------------------------------------------------------------------
-	setRating: function(rating, id){
-		this.rating = rating;
-		this.id = id;
+	setRating: function(rating, id, index, array){
+	  if(array === 'save') {
+        array = this.later_movies_display;
+      } else if (array === 'hide') {
+        array = this.hidden_movies_display;
+      }
+
+      var styleChange = document.getElementById(id);
+      styleChange.classList.add("fadeTransition");
+
+      var spliceThis = index;
+      var spliceArray = array;
+
+      setTimeout(function() {
+        popSplice(spliceArray, spliceThis)
+      }, 1500);
+      function popSplice(spliceArray, spliceThis) {
+        spliceArray.splice(spliceThis, 1);
+      }
+
+      this.rating = rating;
+      this.id = id;
 	},
 
   	// ------------------------------------------------------------------------------------------
@@ -335,93 +356,61 @@ export default {
 
 
     // ------------------------------------------------------------------------------------------
-    hideMovie(array, id) {
-    	var spliceThis;
-    	var id = id;
-
-      if(array = 'pop') {
+    hideMovie(array, id, index) {
+      if(array === 'save') {
         array = this.later_movies_display;
-        for(var i = 0; i < this.later_movies.length; i++) {
-        	console.log(i);
-        	if(id === this.later_movies.id){
-        		console.log(i);
-        		spliceThis = i;
-        	}
-        }
-	  } 
-	  if (array = 'sec') {
+      } else if (array === 'hide') {
         array = this.hidden_movies_display;
-        for(var i = 0; i < this.hidden_movies.length; i++) {
-        	if(id === this.hidden_movies.id){
-        		console.log(i);
-        		spliceThis = i;
-        	}
-        }
       }
 
       var styleChange = document.getElementById(id);
       styleChange.classList.add("fadeTransition");
 
+      var spliceThis = index;
       var spliceArray = array;
 
       console.log(spliceThis,spliceArray);
 
       setTimeout(function() {
         popSplice(spliceArray, spliceThis)
-      }, 2000);
+      }, 1500);
       function popSplice(spliceArray, spliceThis) {
         spliceArray.splice(spliceThis, 1);
       }
-      /*
+      
       axios.post("/hide", {
         tmdb_id: id
       });
-      */
+      
     },
 
     // ------------------------------------------------------------------------------------------
     laterMovie(array, id, index) {
-    	var spliceThis;
-    	var id = id;
-
-      if(array = 'pop') {
+      if(array === 'save') {
         array = this.later_movies_display;
-        for(var i = 0; i < this.later_movies.length; i++) {
-        	console.log(i);
-        	if(id === this.later_movies.id){
-        		console.log(i);
-        		spliceThis = i;
-        	}
-        }
-	  } 
-	  if (array = 'sec') {
+      } else if (array === 'hide') {
         array = this.hidden_movies_display;
-        for(var i = 0; i < this.hidden_movies.length; i++) {
-        	if(id === this.hidden_movies.id){
-        		console.log(i);
-        		spliceThis = i;
-        	}
-        }
       }
 
       var styleChange = document.getElementById(id);
       styleChange.classList.add("fadeTransition");
 
+      var spliceThis = index;
       var spliceArray = array;
 
       console.log(spliceThis,spliceArray);
 
       setTimeout(function() {
         popSplice(spliceArray, spliceThis)
-      }, 2000);
+      }, 1500);
       function popSplice(spliceArray, spliceThis) {
         spliceArray.splice(spliceThis, 1);
       }
-      /*
+      
       axios.post("/watchlater", {
         tmdb_id: id
       });
-      */
+      
     },
   }
 };

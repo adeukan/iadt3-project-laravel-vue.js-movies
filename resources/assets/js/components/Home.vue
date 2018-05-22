@@ -258,10 +258,8 @@ export default {
       styleChange.classList.add("fadeTransition");
 
       var spliceThis = index;
-      var spliceArray = array;
-
-      console.log(spliceThis,spliceArray);
-
+      var spliceArray = array; 
+      
       setTimeout(function() {
         popSplice(spliceArray, spliceThis)
       }, 1500);

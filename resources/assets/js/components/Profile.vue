@@ -141,13 +141,13 @@
 		<hr>
 
 		<!-- LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1   LINE_1 -->
-		<div class="row slide1" ref="ratedMovies">
+		<div class="row slide1" ref="mainSlide">
 			<h2 v-if="rated_movies_display.length > 0" class="carousel-header">Movies You Have Rated</h2>
 			<h2 v-else class="carousel-header" style="margin:150px 0px 0px 0px; text-align:center;">You Have Not Rated Any Movies Yet. </h2>
 			<slick ref="ratedMovies" :options="slickOptions">
 
-				<a  id="ratedMovies" v-if="rated_movies_display.length > 0"
-				  v-for="(movie,i) in rated_movies_display" href="#" class="smSlickItem" >
+				<a  v-if="rated_movies_display.length > 0"
+				  v-for="(movie,index) in rated_movies_display" v-bind:id="movie.id" :key="movie.id" href="#" class="smSlickItem" >
 
 				<img
 					v-bind:src="image_prefix_url + movie.poster_path" class="slickImage" @click="showMovie(movie.id,movie.backdrop_path)">
@@ -168,8 +168,8 @@
 						</div>
 					</div>
 					<div class="row btnHolder">
-						<button @click="laterMovie(movie.id)">Save</button>
-						<button @click="hideMovie(movie.id)">Hide</button>
+						<button @click="laterMovie(movie.id, index)">Save</button>
+						<button @click="hideMovie(movie.id, index)">Hide</button>
 					</div>
 				</div>
 
@@ -255,12 +255,12 @@ export default {
   watch: {
 		//https://github.com/staskjs/vue-slick/issues/45 -- answer to slick not working
 		rated_movies_display: function(newMovies) {
-			let currIndex = this.$refs.slick.currentSlide();
+			let currIndex = this.$refs.ratedMovies.currentSlide();
 
-			this.$refs.slick.destroy();
+			this.$refs.ratedMovies.destroy();
 			this.$nextTick(() => {
-			this.$refs.slick.create();
-			this.$refs.slick.goTo(currIndex, true);
+				this.$refs.ratedMovies.create();
+				this.$refs.ratedMovies.goTo(currIndex, true);
 			});
 		},
 		rating: function(newRating) {
@@ -278,6 +278,7 @@ export default {
   	setRating: function(rating, id){
   		this.rating = rating;
   		this.id = id;
+  		this.getNumRated();
    	},
 
   	// ------------------------------------------------------------------------------------------
@@ -411,21 +412,12 @@ export default {
 	},
 
     // ------------------------------------------------------------------------------------------
-    hideMovie(array, id, index) {
-
-      if(array === 'pop') {
-        array = this.popular_movies;
-      } else if (array === 'sec') {
-        array = this.second_line_movies;
-      }
-
+    hideMovie(id, index) {
       var styleChange = document.getElementById(id);
       styleChange.classList.add("fadeTransition");
 
       var spliceThis = index;
-      var spliceArray = array;
-
-      console.log(spliceThis,spliceArray);
+      var spliceArray = this.rated_movies_display;
 
       setTimeout(function() {
         popSplice(spliceArray, spliceThis)
@@ -438,24 +430,17 @@ export default {
         tmdb_id: id
       });
       
+      this.getNumRated();
+
     },
 
     // ------------------------------------------------------------------------------------------
-    laterMovie(array, id, index) {
-
-      if(array === 'pop') {
-        array = this.popular_movies;
-      } else if (array === 'sec') {
-        array = this.second_line_movies;
-      }
-
+    laterMovie(id, index) {
       var styleChange = document.getElementById(id);
       styleChange.classList.add("fadeTransition");
 
       var spliceThis = index;
-      var spliceArray = array;
-
-      console.log(spliceThis,spliceArray);
+      var spliceArray = this.rated_movies_display;
 
       setTimeout(function() {
         popSplice(spliceArray, spliceThis)
@@ -468,6 +453,8 @@ export default {
         tmdb_id: id
       });
       
+      this.getNumRated();
+
     },
 
   }
