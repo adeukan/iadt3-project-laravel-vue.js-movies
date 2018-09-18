@@ -6,7 +6,7 @@
                 <li><router-link to="/" exact>Home</router-link></li>
                 <li><router-link to="/profile">Profile</router-link></li>
                 <li><router-link to="/lists">Lists</router-link></li>
-                <li><router-link to="/logout">Logout</router-link></li>
+                <li><a href="" @click="makeLogout()">Logout</a></li>
             </ul>
         </div>
     </div>
@@ -25,6 +25,14 @@
 	                newVar: ''
 	            }
 	        }
-	    }
+        },
+        
+        methods: {
+            // when logout link is clicked in the navigation menu
+            makeLogout() {
+                // when first, use 
+                axios.post("logout").then(axios.post("login"));
+            }
+        }
 	}
 </script>

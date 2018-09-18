@@ -43019,15 +43019,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
-    components: {},
+				components: {},
 
-    data: function data() {
-        return {
-            new: {
-                newVar: ''
-            }
-        };
-    }
+				data: function data() {
+								return {
+												new: {
+																newVar: ''
+												}
+								};
+				},
+
+
+				methods: {
+								// when logout link is clicked in the navigation menu
+								makeLogout: function makeLogout() {
+												// when first, use 
+												axios.post("logout").then(axios.post("login"));
+								}
+				}
 });
 
 /***/ }),
@@ -43071,11 +43080,20 @@ var render = function() {
           1
         ),
         _vm._v(" "),
-        _c(
-          "li",
-          [_c("router-link", { attrs: { to: "/logout" } }, [_vm._v("Logout")])],
-          1
-        )
+        _c("li", [
+          _c(
+            "a",
+            {
+              attrs: { href: "" },
+              on: {
+                click: function($event) {
+                  _vm.makeLogout()
+                }
+              }
+            },
+            [_vm._v("Logout")]
+          )
+        ])
       ])
     ])
   ])
@@ -43139,7 +43157,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 // define the VueRouter object
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
 	mode: 'history',
-	routes: [{ path: '/', component: __WEBPACK_IMPORTED_MODULE_4__components_Home_vue___default.a }, { path: '/profile', component: __WEBPACK_IMPORTED_MODULE_2__components_Profile_vue___default.a }, { path: '/lists', component: __WEBPACK_IMPORTED_MODULE_3__components_lists_vue___default.a }, { path: '/logout', component: __WEBPACK_IMPORTED_MODULE_4__components_Home_vue___default.a }]
+	routes: [{ path: '/', component: __WEBPACK_IMPORTED_MODULE_4__components_Home_vue___default.a }, { path: '/profile', component: __WEBPACK_IMPORTED_MODULE_2__components_Profile_vue___default.a }, { path: '/lists', component: __WEBPACK_IMPORTED_MODULE_3__components_lists_vue___default.a }]
 });
 
 /* harmony default export */ __webpack_exports__["a"] = (router);
